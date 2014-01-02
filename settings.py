@@ -133,7 +133,12 @@ DJANGO_CONTRIB_APPS = (
 )
 
 PROJECT_APPS = (
+    'blog',
     'common',
+    'contact',
+    'quote',
+    'student',
+    'tutor',
 )
 
 THIRD_PARTY_APPS = (
