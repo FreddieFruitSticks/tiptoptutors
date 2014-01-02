@@ -1,13 +1,18 @@
+from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from contact.forms import ContactForm
+from django.http import HttpResponseRedirect
 
-
-class Contactview(FormView):
+class ContactView(FormView):
 
     form_class = ContactForm
-    success_url = ('success')
     template_name = "contact/contact.html"
+    success_url = ('/success')
 
     def form_valid(self, form):
-        form.save(commit=True)
-        return super(Contactview, self).form_valid(form)
+        super(ContactView,self).form_valid(form)
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class SuccessView(TemplateView):
+    template_name = "contact/success.html"

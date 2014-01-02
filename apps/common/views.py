@@ -8,3 +8,6 @@ class AboutView(TemplateView):
 
 class HowThisWorksView(TemplateView):
     template_name = "common/how-this-works.html"
+
+class SubjectsView(TemplateView):
+    template_name = "common/subjects.html"

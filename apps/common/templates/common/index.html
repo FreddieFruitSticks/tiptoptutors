@@ -1,147 +1,6 @@
 {% extends "common/base.html" %}
 {%  block content %}
 
-<!--Sign Up Window-->
-<div id="signUp" class="reveal-modal small" data-reveal>
-    <h2>Sign Up<br/>
-        <small>Sign up to create you Tip Top account</small>
-    </h2>
-    <div class="signup">
-        <form>
-            <div class="row">
-                <div class="large-8 columns">
-                    <div class="row collapse">
-                        <div class="small-3 columns">
-                            <span class="prefix"><i class="icon-cool"></i></span>
-                        </div>
-                        <div class="small-13 columns">
-                            <input type="text" placeholder="First Name" required/>
-                        </div>
-                    </div>
-                </div>
-                <div class="large-8 columns">
-                    <div class="row collapse">
-                        <div class="small-3 columns">
-                            <span class="prefix"><i class="icon-grin"></i></span>
-                        </div>
-                        <div class="small-13 columns">
-                            <input type="text" placeholder="Last Name" required/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-8 columns">
-                    <div class="row collapse">
-                        <div class="small-3 columns">
-                            <span class="prefix"><i class="icon-location"></i></span>
-                        </div>
-                        <div class="small-13 columns">
-                            <input type="text" placeholder="Location"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="large-8 columns">
-                    <div class="row collapse">
-                        <div class="small-3 columns">
-                            <span class="prefix"><i class="icon-mail"></i></span>
-                        </div>
-                        <div class="small-13 columns">
-                            <input type="email" placeholder="Email" required/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-8 columns">
-                    <div class="row collapse">
-                        <div class="small-3 columns">
-                            <span class="prefix"><i class="icon-mobile"></i></span>
-                        </div>
-                        <div class="small-13 columns">
-                            <input type="number" placeholder="Contact Number"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="large-8 columns">
-                    <div class="row collapse">
-                        <div class="small-3 columns">
-                            <span class="prefix"><i class="icon-lock"></i></span>
-                        </div>
-                        <div class="small-13 columns">
-                            <input type="password" placeholder="Password" required/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-16 columns">
-                    <button class="button expand radius">submit</button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-7 columns large-centered text-center">
-                    <a href="#" data-reveal-id="signIn">I already have an Account</a>
-                </div>
-            </div>
-
-        </form>
-    </div>
-
-    <a class="close-reveal-modal">&#215;</a>
-</div>
-
-<!--Sign In / Login Window-->
-
-<div id="signIn" class="reveal-modal small" data-reveal>
-    <h2>Sign In<br/>
-        <small>Welcome Back! please login in here</small>
-    </h2>
-    <div class="signup">
-        <form>
-            <div class="row">
-                <div class="large-8 columns large-centered">
-                    <div class="row collapse">
-                        <div class="small-3 columns">
-                            <span class="prefix"><i class="icon-cool"></i></span>
-                        </div>
-                        <div class="small-13 columns">
-                            <input type="text" placeholder="First Name" required/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-8 columns large-centered">
-                    <div class="row collapse">
-                        <div class="small-3 columns">
-                            <span class="prefix"><i class="icon-lock"></i></span>
-                        </div>
-                        <div class="small-13 columns">
-                            <input type="password" placeholder="Password" required/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-8 columns large-centered">
-                    <button class="button expand radius">login</button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-7 columns large-centered text-center">
-                    <a href="#" data-reveal-id="signUp">Oops! I need to sign up.</a>
-                </div>
-            </div>
-        </form>
-    </div>
-    <a class="close-reveal-modal">&#215;</a>
-</div>
-
-
-
-
-
 <section id="imageBannerContainer">
     <div class="row">
         <div class="large-10 columns">
@@ -157,13 +16,13 @@
         <div class="small-10 columns ">
             <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-2">
                 <li class="selector">
-                    <a href="#" class="button radius expand">
+                    <a href="{% url "student" %}" class="button radius expand">
                         <span class="iconBlock"><img src="/static/img/student-icon.png"></span>
                         <span class="textBlock">I’m a<br/> student</span>
                     </a>
                 </li>
                 <li class="selector">
-                    <a href="#" class="button radius expand secondary">
+                    <a href="{% url "tutor" %}" class="button radius expand secondary">
                         <span class="iconBlock"><img src="/static/img/tutor-icon.png"></span>
                         <span class="textBlock">I’m a<br/> tutor</span>
                     </a>
@@ -184,7 +43,7 @@
                             <h4>get a <span>Tutor</span></h4>
                             <p class="text-center">Proin gravida nibh vel velit auctor aliquet.</p>
                         </a>
-                        <a href="#" class="button expand">request a tutor</a>
+                        <a href="{% url "student" %}" class="button expand">request a tutor</a>
                     </li>
                     <li>
                         <a href="#">
@@ -192,7 +51,7 @@
                             <h4>become a <span>Tutor</span></h4>
                             <p class="text-center">Proin gravida nibh vel velit auctor aliquet.</p>
                         </a>
-                        <a href="#" class="button expand">aPPLY TO BE A TUTOR</a>
+                        <a href="{% url "tutor" %}" class="button expand">aPPLY TO BE A TUTOR</a>
                     </li>
                     <li>
                         <a href="#">
