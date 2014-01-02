@@ -1,0 +1,13 @@
+@import "base/fonts";
+@import "base/colors";
+@import "base/mixins";
+
+// each sections
+
+@import "base/sections/all";
+
+
+// main scss that will be converted in css NB: must always be the last scss file
+@import "base/mediaQueries";
+@import "base/base";
+

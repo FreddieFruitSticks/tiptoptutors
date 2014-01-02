@@ -1,0 +1,28 @@
+@mixin greyGradient() {
+  background: rgb(236, 235, 235);
+  background: -moz-linear-gradient(90deg, rgb(236, 235, 235) 0%, rgb(221, 221, 221) 100%);
+  background: -webkit-linear-gradient(90deg, rgb(236, 235, 235) 0%, rgb(221, 221, 221) 100%);
+  background: -o-linear-gradient(90deg, rgb(236, 235, 235) 0%, rgb(221, 221, 221) 100%);
+  background: -ms-linear-gradient(90deg, rgb(236, 235, 235) 0%, rgb(221, 221, 221) 100%);
+  background: linear-gradient(180deg, rgb(236, 235, 235) 0%, rgb(221, 221, 221) 100%);
+}
+
+@mixin boxShadow() {
+  -webkit-box-shadow: 0px 2px 3px rgba(50, 50, 50, 0.34);
+  -moz-box-shadow: 0px 2px 3px rgba(50, 50, 50, 0.34);
+  box-shadow: 0px 2px 3px rgba(50, 50, 50, 0.34);
+}
+
+@mixin container($padding:2em,$color1:rgba(50, 50, 50, 0.4)) {
+  display: block;
+  background-color: $white;
+  -webkit-box-shadow: 0px 2px 3px $color1;
+  -moz-box-shadow: 0px 2px 3px $color1;
+  box-shadow: 0px 2px 3px $color1;
+
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+
+  padding: $padding;
+}

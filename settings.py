@@ -1,0 +1,204 @@
+import os.path, sys, site
+
+sys.path.append(os.path.join(os.path.dirname(__file__), 'apps'))
+
+# ==============================================================================
+# django
+# ==============================================================================
+
+PROJECT_ROOT = os.path.dirname(__file__)
+PROJECT_DIR = PROJECT_ROOT
+
+USE_DJANGO_JQUERY = False
+
+PROJECT_FOLDER = 'tiptoptutors'
+PROJECT_NAME = 'tiptoptutors'
+PROJECT_DOMAIN = "tiptoptutors.co.za"
+
+SITE_DOMAIN = "http://%s" % PROJECT_DOMAIN
+
+ROOT_URLCONF = "urls"
+
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
+DATETIME_FORMAT = "d/m/Y H:i:s"
+DATE_FORMAT = "d/m/Y"
+
+
+# ==============================================================================
+# mail settings
+# ==============================================================================
+
+MAIL_WRITE_TO_HDD = False
+
+FROM_EMAIL = "support@tiptoptutors.co.za"
+
+ADMINS = (
+    ('tiptoptutors', 'admin@tiptoptutors.co.za'),
+)
+
+MANAGERS = ADMINS
+
+WEBCONTACT_RECIPIENTS = (
+    'admin@tiptoptutors.co.za',
+)
+
+SERVER_EMAIL = 'support@tiptoptutors.co.za'
+
+EMAIL_TEST_MODE = True
+EMAIL_HOST = 'localhost'
+EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_USER = ''
+EMAIL_PORT = 25
+EMAIL_USE_TLS = False
+EMAIL_SYSTEM_SENDER = "%s <support@%s>" % (PROJECT_NAME, PROJECT_DOMAIN)
+
+TEST_EMAIL_DIR = os.path.join(os.path.dirname(__file__), 'tmp', 'test_emails')
+
+# ==============================================================================
+# project settings
+# ==============================================================================
+
+LOGIN_URL = "/admin/"
+
+TIME_ZONE = 'Africa/Johannesburg'
+LANGUAGE_CODE = 'en_uk'
+
+SECRET_KEY = 'zi@=&o6gf&5g4g7%s4wxcr!^z$d!o$3#s_u7)mp9qa)$p7^&in'
+
+SITE_ID = 1
+USE_L10N = False
+USE_I18N = False
+USE_TZ = False
+
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
+MEDIA_URL = '/media/'
+STATIC_ROOT = '/static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = ( PROJECT_DIR + '/static/', )
+
+ADMIN_TOOLS_MEDIA_URL = ''
+ADMIN_MEDIA_PREFIX = '/static/admin/'
+
+INTERNAL_IPS = ('127.0.0.1',)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.contrib.auth.context_processors.auth',
+    'django.contrib.messages.context_processors.messages',
+
+)
+
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+)
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'django.contrib.staticfiles.storage.StaticFilesStorage',
+)
+
+#MIDDLEWARE_CLASSES = (
+#
+#    'django.middleware.common.CommonMiddleware',
+#    'django.contrib.sessions.middleware.SessionMiddleware',
+#    'django.middleware.csrf.CsrfViewMiddleware',
+#    'django.contrib.auth.middleware.AuthenticationMiddleware',
+#    'debug_toolbar.middleware.DebugToolbarMiddleware',
+#    'django.contrib.messages.middleware.MessageMiddleware',
+#    )
+
+
+
+DJANGO_CONTRIB_APPS = (
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django.contrib.comments',
+    'django.contrib.admin',
+    'django.contrib.admindocs',
+    'django.contrib.humanize',
+    'django.contrib.webdesign',
+)
+
+PROJECT_APPS = (
+    'common',
+)
+
+THIRD_PARTY_APPS = (
+)
+
+INSTALLED_APPS = DJANGO_CONTRIB_APPS + PROJECT_APPS + THIRD_PARTY_APPS
+
+# ==============================================================================
+# Template directories
+# ==============================================================================
+
+TEMPLATE_DIRS = (os.path.join(PROJECT_DIR, 'templates'),)
+
+for app in PROJECT_APPS:
+    if os.path.isdir(os.path.join(PROJECT_DIR, app, 'templates')):
+        TEMPLATE_DIRS += (os.path.join(PROJECT_DIR, app, 'templates'),)
+
+    if os.path.isdir(os.path.join(PROJECT_DIR, app, 'templates/partials')):
+        TEMPLATE_DIRS += (os.path.join(PROJECT_DIR, app, 'templates/partials'),)
+
+    if os.path.isdir(os.path.join(PROJECT_DIR, app, 'templates/text')):
+        TEMPLATE_DIRS += (os.path.join(PROJECT_DIR, app, 'templates/text'),)
+
+
+# ==============================================================================
+# Logging
+# ==============================================================================
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    #'handlers': {
+    #    'mail_admins': {
+    #        'level': 'ERROR',
+    #        'class': 'django.utils.log.AdminEmailHandler'
+    #    }
+    #},
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+            }
+    },
+
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    }
+
+# ==============================================================================
+#  overrides settings
+# ==============================================================================
+
+try:
+    from settings_local import *
+    print "import settings local"
+except ImportError:
+    pass

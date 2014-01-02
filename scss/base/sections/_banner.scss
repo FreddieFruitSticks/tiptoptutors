@@ -1,0 +1,51 @@
+#imageBannerContainer {
+  background-image: url('../../static/img/img-banner.png');
+  background-position: top center;
+  background-repeat: repeat-x;
+  padding-top: 90px;
+  height: 560px;//remove for responsive
+
+}
+
+.payoffLine {
+  position: relative;
+  vertical-align: middle;
+
+
+    h1 {
+      font-size: 40px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: $primary-color;
+      padding-bottom: 0;
+      margin-bottom: 0;
+      line-height: 1em;
+      span {
+        color: $secondary-color;
+      }
+      small {
+        color: $text-color;
+        text-transform: none;
+        font-weight: normal;
+        font-size: 30px;
+      }
+    }
+    h4 {
+      color: $text-color;
+        text-transform: none;
+        font-weight: normal;
+      margin-bottom: 1.3em;
+    }
+  }
+
+li.selector {
+  a.button {
+    font-family: 'tr_avalon_plain';
+    text-transform: uppercase;
+    font-size: 30px;
+    text-align: left;
+    padding: 18px 15px;
+    vertical-align: baseline;
+    text-align: center;
+  }
+}

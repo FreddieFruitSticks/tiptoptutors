@@ -1,0 +1,40 @@
+#footer {
+  margin-top: 2em;
+  width: 100%;
+  min-height: 300px;
+  display: block;
+  background-color: $white;
+  padding-top: 2em;
+  h3 {
+    line-height: 2;
+    margin-left: 0.5em;
+  }
+
+  .area {
+    color: $grey-dark;
+    padding-bottom: 10px;
+    border-bottom: 1px solid $grey-mid-dark;
+  }
+
+  ul.side-nav {
+    li {
+      font-size: 11px;
+      a {
+        color: $grey-dark;
+        transition: 0.2s linear 0.2s;
+        /* Safari */
+        -webkit-transition: 0.2s linear 0.2s;
+        &:hover {
+          color: $primary-color
+        }
+      }
+    }
+  }
+
+  .footer-base {
+    border-top: 1px solid $grey-mid-dark;
+    font-size: 11px;
+    color: $grey-dark;
+    padding: 1em;
+  }
+}

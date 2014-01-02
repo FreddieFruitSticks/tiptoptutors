@@ -1,0 +1,52 @@
+.reveal-modal {
+  h2 {
+    background-color: $secondary-color;
+    padding: 14px 10px 10px;
+    color: $white;
+    text-align: center;
+    line-height: 0.8;
+    small {
+      color: $white;
+    }
+  }
+  padding: 0;
+  .close-reveal-modal {
+    color: $white;
+  }
+
+  .signup {
+    padding: 1em;
+    a {
+      text-align: center !important;
+      font-family: 'tr_avalon_plain';
+    }
+
+    span.prefix, label.prefix {
+      background: $white;
+      border: 1px solid $secondary-color;
+      border-right: none;
+      height: 48px;
+      padding-top: 3px;
+      padding-left: 10px;
+      vertical-align: middle;
+      color: $secondary-color;
+    }
+    input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], textarea {
+      -moz-box-sizing: border-box;
+      background-color: #FFFFFF;
+      border: 1px solid $secondary-color;
+      border-left: none;
+      border-radius: 0;
+      box-shadow: 0 1px 2px $white inset;
+      color: rgba(0, 0, 0, 0.75);
+      display: block;
+      font-family: inherit;
+      font-size: 0.875rem;
+      height: 3rem;
+      margin: 0 0 1rem;
+      padding: 0.5rem;
+      transition: box-shadow 0.45s ease 0s, border-color 0.45s ease-in-out 0s;
+      width: 100%;
+    }
+  }
+}

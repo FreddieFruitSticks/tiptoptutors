@@ -1,0 +1,49 @@
+.contain-to-grid {
+  border-top: 3px solid $secondary-color;
+  @include greyGradient();
+  @include boxShadow();
+}
+
+.top-bar {
+  @include greyGradient();
+}
+.top-bar.expanded .title-area {
+  @include greyGradient();
+}
+
+.top-bar .name a {
+  color: $grey-dark;
+  padding-left: 1em;
+}
+.top-bar-section {
+/*  margin-top: 20px;*/
+  ul {
+    text-transform: uppercase;
+    font-family: 'PT Sans', sans-serif;
+    text-shadow: 0px 1px 0px rgba(255, 255, 255, 1);
+  }
+}
+.top-bar-section ul li > a {
+  font-family: 'PT Sans', sans-serif;
+  font-size: 1em;
+
+}
+.top-bar-section .has-form {
+  background-color: none;
+}
+
+.top-bar .toggle-topbar.menu-icon a {
+    text-indent: -60px;
+    width: 34px;
+    height: 34px;
+    line-height: 33px;
+    padding: 0;
+    color: $grey-dark;
+  font-size: 1em;
+  margin-top: -20px;
+  span {
+     -webkit-box-shadow: 0 10px 0 1px $grey-dark, 0 16px 0 1px $grey-dark, 0 22px 0 1px $grey-dark;
+    box-shadow: 0 10px 0 1px $grey-dark, 0 16px 0 1px $grey-dark, 0 22px 0 1px $grey-dark;
+
+  }
+}
