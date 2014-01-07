@@ -139,6 +139,7 @@ PROJECT_APPS = (
     'quote',
     'student',
     'tutor',
+    'option',
 )
 
 THIRD_PARTY_APPS = (

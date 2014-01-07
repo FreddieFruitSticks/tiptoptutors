@@ -1,5 +1,4 @@
 from django.conf.urls import *
-from contact import views
 from contact.views import ContactView, SuccessView
 
 urlpatterns = patterns('',

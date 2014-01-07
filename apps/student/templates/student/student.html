@@ -15,42 +15,86 @@
                         We love getting email all day <em>all day</em>.</p>
 
                     <section class="section">
-                        <h5 class="title">Let Us Know What You Need!</h5>
+                        <h5 class="title">Your details</h5>
 
                         <div class="content" data-slug="panel1">
-                            <form  action="/contact/" method="post">
-
-                                {% csrf_token %}
-                                <div class="row collapse">
-                                    <div class="large-2 columns">
-                                        <label class="inline">Your Name</label>
-                                    </div>
-                                    <div class="large-10 columns left">
-                                        <div id="yourName" placeholder="Jane Smith" required>
-                                            {{ form.name}}
+                           <form action="{% url "student" %}" method="post">{% csrf_token %}
+                                    <div class="row collapse">
+                                        <div class="large-2 columns">
+                                            <label class="inline">First name</label>
+                                        </div>
+                                        <div class="large-10 columns left">
+                                            {{ form.name }}
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row collapse">
-                                    <div class="large-2 columns">
-                                        <label class="inline"> Your Email</label>
+                                    <div class="row collapse">
+                                        <div class="large-2 columns">
+                                            <label class="inline">Surname</label>
+                                        </div>
+                                        <div class="large-10 columns left">
+                                            {{ form.name }}
+                                        </div>
                                     </div>
-                                    <div class="large-10 columns left">
-                                        <input type="text" id="yourEmail" placeholder="jane@smithco.com" required>
+                                    <div class="row collapse">
+                                        <div class="large-2 columns">
+                                            <label class="inline">Email</label>
+                                        </div>
+                                        <div class="large-10 columns left">
+                                            {{ form.email }}
+                                        </div>
                                     </div>
-                                </div>
-
-                                <div class="row collapse">
-                                    <div class="large-2 columns">
-                                        <label class="inline">Subjects</label>
+                                    <div class="row collapse">
+                                        <div class="large-2 columns">
+                                            <label class="inline"> Contact Number</label>
+                                        </div>
+                                        <div class="large-10 columns left">
+                                            {{ form.contact_number }}
+                                        </div>
                                     </div>
-                                    <div class="large-10 columns left">
-                                        <input type="text" id="yourSubjects" placeholder="Subjects" required>
+                                    <div class="row collapse">
+                                        <div class="large-2 columns">
+                                            <label class="inline"> Subjects</label>
+                                        </div>
+                                        <div class="large-10 columns left">
+                                            {{ form.subject }}
+                                        </div>
                                     </div>
-                                </div>
-
-                                <button class="radius button" type="submit" value="Submit" />
-                            </form>
+                                    <div class="row collapse">
+                                        <div class="large-2 columns">
+                                            <label class="inline"> Level Of Study</label>
+                                        </div>
+                                        <div class="large-10 columns left">
+                                            {{ form.level_of_study }}
+                                        </div>
+                                    </div>
+                                    <div class="row collapse">
+                                        <div class="large-2 columns">
+                                            <label class="inline"> Street</label>
+                                        </div>
+                                        <div class="large-10 columns left">
+                                            {{ form.street }}
+                                        </div>
+                                    </div>
+                                    <div class="row collapse">
+                                        <div class="large-2 columns">
+                                            <label class="inline"> Suburb</label>
+                                        </div>
+                                        <div class="large-10 columns left">
+                                            {{ form.suburb }}
+                                        </div>
+                                    </div>
+                                    <div class="row collapse">
+                                        <div class="large-2 columns">
+                                            <label class="inline"> City</label>
+                                        </div>
+                                        <div class="large-10 columns left">
+                                            {{ form.city }}
+                                        </div>
+                                    </div>
+                                    <label>Personal Requirements</label>
+                                    {{ form.requirement }}
+                                    <input type="submit" class="radius button" value="Submit">
+                                </form>
                         </div>
                     </section>
                 </div>
