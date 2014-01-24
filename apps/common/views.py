@@ -11,3 +11,6 @@ class HowThisWorksView(TemplateView):
 
 class SubjectsView(TemplateView):
     template_name = "common/subjects.html"
+
+class LibraryView(TemplateView):
+    template_name = "common/library.html"
