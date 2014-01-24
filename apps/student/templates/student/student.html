@@ -18,83 +18,9 @@
                         <h5 class="title">Your details</h5>
 
                         <div class="content" data-slug="panel1">
-                           <form action="{% url "student" %}" method="post">{% csrf_token %}
-                                    <div class="row collapse">
-                                        <div class="large-2 columns">
-                                            <label class="inline">First name</label>
-                                        </div>
-                                        <div class="large-10 columns left">
-                                            {{ form.name }}
-                                        </div>
-                                    </div>
-                                    <div class="row collapse">
-                                        <div class="large-2 columns">
-                                            <label class="inline">Surname</label>
-                                        </div>
-                                        <div class="large-10 columns left">
-                                            {{ form.name }}
-                                        </div>
-                                    </div>
-                                    <div class="row collapse">
-                                        <div class="large-2 columns">
-                                            <label class="inline">Email</label>
-                                        </div>
-                                        <div class="large-10 columns left">
-                                            {{ form.email }}
-                                        </div>
-                                    </div>
-                                    <div class="row collapse">
-                                        <div class="large-2 columns">
-                                            <label class="inline"> Contact Number</label>
-                                        </div>
-                                        <div class="large-10 columns left">
-                                            {{ form.contact_number }}
-                                        </div>
-                                    </div>
-                                    <div class="row collapse">
-                                        <div class="large-2 columns">
-                                            <label class="inline"> Subjects</label>
-                                        </div>
-                                        <div class="large-10 columns left">
-                                            {{ form.subject }}
-                                        </div>
-                                    </div>
-                                    <div class="row collapse">
-                                        <div class="large-2 columns">
-                                            <label class="inline"> Level Of Study</label>
-                                        </div>
-                                        <div class="large-10 columns left">
-                                            {{ form.level_of_study }}
-                                        </div>
-                                    </div>
-                                    <div class="row collapse">
-                                        <div class="large-2 columns">
-                                            <label class="inline"> Street</label>
-                                        </div>
-                                        <div class="large-10 columns left">
-                                            {{ form.street }}
-                                        </div>
-                                    </div>
-                                    <div class="row collapse">
-                                        <div class="large-2 columns">
-                                            <label class="inline"> Suburb</label>
-                                        </div>
-                                        <div class="large-10 columns left">
-                                            {{ form.suburb }}
-                                        </div>
-                                    </div>
-                                    <div class="row collapse">
-                                        <div class="large-2 columns">
-                                            <label class="inline"> City</label>
-                                        </div>
-                                        <div class="large-10 columns left">
-                                            {{ form.city }}
-                                        </div>
-                                    </div>
-                                    <label>Personal Requirements</label>
-                                    {{ form.requirement }}
-                                    <input type="submit" class="radius button" value="Submit">
-                                </form>
+                            <form method="post" action="{% url "student" %}">{% csrf_token %}
+                                {% include "common/form.html" %}
+                            </form>
                         </div>
                     </section>
                 </div>
