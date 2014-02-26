@@ -1,7 +1,48 @@
 {% extends "tutor/base.html" %}
 {% block content %}
-<!--BODY/MAIN-->
-NIGGA NIGGA NIGGA
+    <!--BODY/MAIN-->
+    <section id="contact">
+        <div class="row">
+            <div class="large-16 columns container">
+                <div class="row">
+                    <!-- Contact Details -->
+                    <div class="large-12 columns">
+
+                        <h3>Get in Touch!</h3>
+
+                        <p>We'd love to hear from you. You can either reach out to us as a whole and one of our awesome team
+                            members will get back to you, or if you have a specific question reach out to one of our staff.
+                            We love getting email all day <em>all day</em>.</p>
 
 
+                        <section class="section">
+                            <h5 class="title">Contact Our Company</h5>
+                            <div class="content" data-slug="panel1">
+                                <form action="{% url "tutor" %}" method="post">{% csrf_token %}
+                                    <div class="row collapse">
+                                        <div class="large-2 columns">
+                                            <label class="inline">Your Name</label>
+                                        </div>
+                                        <div class="large-10 columns left">
+                                            {{ form.name }}
+                                        </div>
+                                    </div>
+
+                                    <input type="submit" class="radius button" value="Submit">
+                                </form>
+                            </div>
+                        </section>
+
+                    </div>
+                    <!-- End Contact Details -->
+
+                    <!-- Sidebar -->
+
+                    <!-- End Sidebar -->
+                </div>
+
+                <!-- End Main Content and Sidebar -->
+            </div>
+        </div>
+    </section>
 {% endblock %}

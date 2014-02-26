@@ -1,14 +1,14 @@
 from django.views.generic import TemplateView
-from django.views.generic.edit import FormView
+from django.views.generic.edit import CreateView
 from django.http import HttpResponseRedirect
 from tutor.forms import TutorForm
 
 
-class TutorView(FormView):
+class TutorView(CreateView):
 
     form_class = TutorForm
     template_name = "tutor/tutor.html"
-    success_url = ('/tutor-success')
+    success_url = ('/tutor/tutor-success')
 
     def form_valid(self, form):
         super(TutorView,self).form_valid(form)
