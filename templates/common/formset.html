@@ -1,0 +1,9 @@
+{% load i18n %}
+{% csrf_token %}
+
+{% for form in formset %}
+    {{ form }}
+    <hr />
+{% endfor %}
+
+

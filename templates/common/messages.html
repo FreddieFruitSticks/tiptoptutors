@@ -1,0 +1,15 @@
+{% if messages %}
+    <div id="message">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <div class="center">
+                    <div class="msgicon"></div>
+                     <span>
+                        {{ message|safe }}
+                        <div id="msg_close"><span data-icon="&#x51;"></span></div>
+                    </span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
