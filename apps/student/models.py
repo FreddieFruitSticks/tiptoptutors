@@ -9,9 +9,10 @@ class Student(models.Model):
     contact_number  = models.CharField(max_length=15)
     subject         = models.CharField(max_length=50)
     level_of_study  = models.ForeignKey(LevelOfStudy)
-    street          = models.CharField(max_length=20)
+    street          = models.CharField(max_length=20, verbose_name=" address")
     suburb          = models.CharField(max_length=20)
     city            = models.ForeignKey(City)
+    # available_times = models.TextField(blank=True, null=True)
     requirement     = models.TextField(verbose_name="personal requirements", blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now=True)

@@ -3,8 +3,8 @@ from models import Student
 
 
 class StudentAdmin(admin.ModelAdmin):
-    search_fields = [ "name", ]
-    list_display =  ("name",)
+    search_fields = [ "name", "email" ]
+    list_display =  ("name","email")
 
 
 admin.site.register(Student, StudentAdmin)
