@@ -12,3 +12,9 @@ class LevelOfStudy(models.Model):
     def __unicode__(self):
         return self.name
 #
+class AvailableTutorSubject(models.Model):
+    name               = models.CharField(max_length=255, blank=False, null=False)
+
+    def __unicode__(self):
+        return self.name
+

@@ -1,6 +1,12 @@
 {% extends "student/base.html" %}
 {% block content %}
+   <section id="tutor">
 
+        <div class="row">
+            <div class="large-16 columns container">
+                <div class="row">
+                    <!-- Contact Details -->
+                    <div class="large-12 columns">
 
                     <h3>Request A Tutor Now!</h3>
 
@@ -12,20 +18,19 @@
                         <h5 class="title">Your details</h5>
 
                         <div class="content" data-slug="panel1">
-                            <form method="post" action="{% url "student" %}">{% csrf_token %}
+                            <form method="post" action={% url "student" %}">{% csrf_token %}
                                 {% include "common/form.html" %}
                             </form>
-                        </div>
+                            </div>
                     </section>
+                    </div>
+                    <!-- End Contact Details -->
+                </div>
 
-                <!-- End Contact Details -->
-
-
-            <!-- End Main Content and Sidebar -->
-
-
-    <p><input type="submit" value="Send message" /></p>
-
+                <!-- End Main Content and Sidebar -->
+            </div>
+        </div>
+    </section>
 
 
 {% endblock %}
