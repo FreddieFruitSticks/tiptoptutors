@@ -1,1 +1,1 @@
-web: gunicorn tiptoptutors.wsgi_heroku
+web: gunicorn wsgi_heroku
