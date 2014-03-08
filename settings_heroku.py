@@ -2,7 +2,7 @@ import os
 
 import dj_database_url
 
-from tiptoptutors.settings import *
+from settings import *
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
