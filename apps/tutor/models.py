@@ -1,12 +1,13 @@
 from django.db import models
 from option.models import AvailableTutorSubject
-from student.models import Student
-
 
 class Tutor(models.Model):
+    TUTOR_STATUS = (
+    ('Accepted', 'Accepted'),
+    ('Declined', 'Declined'),
+    ('Pending', 'Pending'),
+    )
     #admin tools
-    student     = models.ManyToManyField(Student)
-    lesson      = models.CharField(verbose_name='lessons remaining', max_length=20)
     comment     = models.TextField()
     #front end display
     name        = models.CharField(max_length=20, verbose_name="first name")
@@ -19,8 +20,7 @@ class Tutor(models.Model):
     id_doc      = models.FileField(verbose_name="id", upload_to="media/cv")
     cv          = models.FileField(blank=True, null=True, upload_to="media/cv")
     academic    = models.FileField(verbose_name="academic transcript",blank=True, null=True, upload_to="media/academic/")
-
-
+    status = models.CharField(max_length=10, choices=TUTOR_STATUS, default='2')
     created_at = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):

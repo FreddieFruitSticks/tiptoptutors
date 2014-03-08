@@ -1,9 +1,10 @@
 from django.db import models
 from option.models import City, LevelOfStudy, AvailableTutorSubject
+from tutor.models import Tutor
 
 
-class Student(models.Model):
-
+class Pupil(models.Model):
+    tutor           = models.ForeignKey(Tutor)
     name            = models.CharField(max_length=20)
     surname         = models.CharField(max_length=20)
     email           = models.EmailField()

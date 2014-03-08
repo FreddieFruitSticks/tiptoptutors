@@ -1,0 +1,2 @@
+import settings local
+[{"pk": 1, "model": "option.city", "fields": {"name": "Cape Town"}}, {"pk": 1, "model": "option.levelofstudy", "fields": {"name": "Varsity"}}, {"pk": 2, "model": "option.levelofstudy", "fields": {"name": "Matric"}}, {"pk": 1, "model": "option.availabletutorsubject", "fields": {"name": "Math"}}, {"pk": 2, "model": "option.availabletutorsubject", "fields": {"name": "Science"}}]

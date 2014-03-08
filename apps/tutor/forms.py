@@ -13,4 +13,4 @@ class TutorForm(forms.ModelForm):
 
     class Meta:
         model = Tutor
-        exclude = ('student', 'lesson', 'comment')
+        exclude = ('lesson', 'comment', 'status')

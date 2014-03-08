@@ -1,4 +1,4 @@
-{% extends "student/base.html" %}
+{% extends "pupil/base.html" %}
 {% block content %}
    <section id="tutor">
 
@@ -18,7 +18,7 @@
                         <h5 class="title">Your details</h5>
 
                         <div class="content" data-slug="panel1">
-                            <form method="post" action={% url "student" %}">{% csrf_token %}
+                            <form method="post" action="{% url "pupil" %}" >{% csrf_token %}
                                 {% include "common/form.html" %}
                             </form>
                             </div>
