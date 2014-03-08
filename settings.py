@@ -171,6 +171,8 @@ THIRD_PARTY_APPS = (
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
+
 # ==============================================================================
 # Template directories
 # ==============================================================================
