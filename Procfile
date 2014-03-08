@@ -1,0 +1,1 @@
+web: gunicorn tiptoptutors.wsgi_heroku

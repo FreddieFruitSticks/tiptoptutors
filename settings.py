@@ -6,7 +6,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'apps'))
 # django
 # ==============================================================================
 
-PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = PROJECT_ROOT
 
 USE_DJANGO_JQUERY = False
@@ -129,7 +129,6 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'django.contrib.staticfiles.finders.DefaultStorageFinder',
-    'django.contrib.staticfiles.storage.StaticFilesStorage',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -167,6 +166,7 @@ PROJECT_APPS = (
 
 THIRD_PARTY_APPS = (
     'south',
+    'debug_toolbar'
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + PROJECT_APPS + THIRD_PARTY_APPS
@@ -208,7 +208,6 @@ LOGGING = {
             'propagate': True,
             }
     },
-
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
