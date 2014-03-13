@@ -8,8 +8,8 @@ class PupilProxy(Pupil):
 
     class Meta:
         proxy = True
-        verbose_name = 'pupil to match'
-        verbose_name_plural = 'pupils to match'
+        verbose_name = 'pupil'
+        verbose_name_plural = 'pupils'
         ordering = ('-created_at', 'surname', 'name')
 
     def __unicode__(self):
@@ -20,6 +20,10 @@ class PupilProxy(Pupil):
     @property
     def subject_str(self):
         return ', '.join(self.subject.values_list('name', flat=True))
+
+    @property
+    def has_tutor(self):
+        return (self.tutor_id is not None)
 
 
 class TutorProxy(Tutor):
