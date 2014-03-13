@@ -162,6 +162,7 @@ PROJECT_APPS = (
     'pupil',
     'tutor',
     'option',
+    'matchmaker',
 )
 
 THIRD_PARTY_APPS = (
