@@ -5,10 +5,10 @@
     <div class="row">
         <div class="large-10 columns">
             <div class="payoffLine">
-                <h1>Find the <span>TUTOR</span> to help you<br/>
-                    <small>Offer your private tuition services</small>
+                <h1>Get the <span>RIGHT TUTOR</span> to help you<br/>
+                    <small>Results Guaranteed,</small>
                 </h1>
-                <h4>Begin tutoring immediately.</h4>
+                <h4>or we tutor for free.</h4>
             </div>
         </div>
     </div>
@@ -16,15 +16,15 @@
         <div class="small-10 columns ">
             <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-2">
                 <li class="selector">
-                    <a href="{% url "student" %}" class="button radius expand">
-                        <span class="iconBlock"></span>
-                        <span class="textBlock">Find A Tutor!</span>
+                    <a href="{% url "pupil" %}" class="button radius expand">
+                        <span class="iconBlock"><img src="static/img/student-icon.png"></span>
+                        <span class="textBlock">Get A<br /> Tutor!</span>
                     </a>
                 </li>
                 <li class="selector">
                     <a href="{% url "tutor" %}" class="button radius expand secondary">
-                        <span class="iconBlock"></span>
-                        <span class="textBlock">Get A Quote!</span>
+                        <span class="iconBlock"><img src="static/img/tutor-icon.png"></span>
+                        <span class="textBlock">Get A<br /> Quote!</span>
                     </a>
                 </li>
             </ul>
@@ -42,8 +42,10 @@
                             <img src="/static/img/student-icon-blue.png">
                             <h4>get a <span>Tutor</span></h4>
                             <p class="text-center">Proin gravida nibh vel velit auctor aliquet.</p>
+                              <p class="text-center">Proin gravida nibh vel velit auctor aliquet.</p>
+                              <p class="text-center">Proin gravida nibh vel velit auctor aliquet.</p>
                         </a>
-                        <a href="{% url "student" %}" class="button expand">request a tutor</a>
+                        <a href="{% url "pupil" %}" class="button expand">request a tutor</a>
                     </li>
                     <li>
                         <a href="#">
@@ -74,15 +76,15 @@
                     <a class="th [radius]" href="#"> <img src="/static/img/blog/thumb.png"> </a>
                 </div>
                 <div class="small-12 columns">
-                    <h5>This is Photoshop's version  of Lorem Ipsum. </h5>
-                    <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris. Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt auctor a ornare odio.</p>
-                    <a href="blog.html" class="button radius">Read more</a>
+                    <h5>Where we came from </h5>
+                    <p>Tip Top Tutors was founded due to an ever-increasing need for tuition in mathematical-based subjects. We are specialised in these subjects and as such our tutors know exactly how to increase the pupil's marks.</p>
+                    <a href="{% url "about" %}" class="button radius">Read more</a>
                 </div>
             </div>
             <hr/>
             <div class="row">
                 <div class="small-12 small-centered columns">
-                    <h5 class="text-center" style="font-style: italic;">"I am now confident I am receiving quality Education in just a few seconds each morning. One less thing to worry about when I start my day."</h5>
+                    <h5 class="text-center" style="font-style: italic;">"I am now confident I am receiving quality Education. One less thing to worry about when I start my day."</h5>
                 </div>
             </div>
         </div>

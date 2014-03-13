@@ -159,7 +159,7 @@ PROJECT_APPS = (
     'common',
     'contact',
     'quote',
-    'student',
+    'pupil',
     'tutor',
     'option',
 )
