@@ -36,8 +36,19 @@
     </p>
     {{ form.non_field_errors }}
 {% endif %}
+<div class="pupil-info">
+    <p class="name">{{ form.pupil_obj.name }}</p>
+    <p class="level-of-study">{{ form.pupil_obj.level_of_study }}</p>
+    <ul class="subjects">
+        {% for subject in form.pupil_obj.subject.all %}
+            <li>{{ subject.name }}</li>
+        {% endfor %}
+    </ul>
+    <p class="requirements">Special requirements: {{ form.pupil_obj.requirement|default:"N/A" }}</p>
+</div>
 <fieldset class="module aligned">
-{% for field in form %}
+{% for field in form.hidden_fields %}{{ field }}{% endfor %}
+{% for field in form.visible_fields %}
 <div class="form-row">
 	<div>
     {{ field.label_tag }}{{ field }}

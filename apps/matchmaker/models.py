@@ -4,7 +4,25 @@ from pupil.models import Pupil
 from tutor.models import Tutor
 
 
-class PupilProxy(Pupil):
+class SubjectManager(models.Manager):
+
+    def get_queryset(self):
+        qs = super(SubjectManager, self).get_queryset()
+        return qs.select_related('subject')
+
+
+class SubjectMixin(object):
+
+    @property
+    def subject_str(self):
+        return ', '.join(self.subject.values_list('name', flat=True))
+
+    def matching_subjects(self, subject_ids):
+        return self.subject.filter(id__in=subject_ids)
+
+
+class PupilProxy(Pupil, SubjectMixin):
+    default_manager = SubjectManager()
 
     class Meta:
         proxy = True
@@ -18,17 +36,17 @@ class PupilProxy(Pupil):
                                        self.level_of_study)
 
     @property
-    def subject_str(self):
-        return ', '.join(self.subject.values_list('name', flat=True))
-
-    @property
     def has_tutor(self):
         return (self.tutor_id is not None)
 
 
-class TutorProxy(Tutor):
-    
+class TutorProxy(Tutor, SubjectMixin):
+    default_manager = SubjectManager()
+
     class Meta:
         proxy = True
         verbose_name = 'available tutor'
         verbose_name_plural = 'available tutors'
+
+    def __unicode__(self):
+        return '%s %s' % (self.name, self.surname)
