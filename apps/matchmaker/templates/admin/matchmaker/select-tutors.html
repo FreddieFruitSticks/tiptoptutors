@@ -40,7 +40,7 @@
     <p class="name">{{ form.pupil_obj.name }}</p>
     <p class="level-of-study">{{ form.pupil_obj.level_of_study }}</p>
     <ul class="subjects">
-        {% for subject in form.pupil_obj.subject.all %}
+        {% for subject in form.pupil_obj.unmatched_subjects %}
             <li>{{ subject.name }}</li>
         {% endfor %}
     </ul>
@@ -60,7 +60,7 @@
 {% endfor %}
 </fieldset>
 </div>
-<div class="submit-row"><input type="submit" value="{% trans 'Send SMSes' %}" class="default" name="_save"/></div>
+<div class="submit-row"><input type="submit" value="{% trans 'Request tutors' %}" class="default" name="_save"/></div>
 </form>
 </div>
 {% endblock %}

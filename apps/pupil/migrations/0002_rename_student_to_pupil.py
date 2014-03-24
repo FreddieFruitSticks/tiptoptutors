@@ -9,6 +9,7 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         db.rename_table('student_student', 'pupil_pupil')
+        db.send_create_signal(u'pupil', ['Pupil'])
 
     def backwards(self, orm):
         db.rename_table('pupil_pupil', 'student_student')

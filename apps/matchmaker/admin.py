@@ -6,6 +6,7 @@ from django import forms
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
+from pupil.admin import PupilTutorMatchAdmin
 from matchmaker import models
 
 
@@ -14,14 +15,14 @@ class FilterByTutorStatus(SimpleListFilter):
     parameter_name = 'has_tutor'
 
     def lookups(self, request, model_admin):
-        return (('1', 'Has a tutor'),
-                ('0', 'Does not have a tutor'))
+        return (('1', 'Has tutor(s) for all subjects'),
+                ('0', 'Needs a tutor for one or more subjects'))
 
     def queryset(self, request, queryset):
         if self.value() == '1':
-            return queryset.filter(tutor_id__isnull=False)
+            return queryset.all_matched()
         else:
-            return queryset.filter(tutor_id__isnull=True)
+            return queryset.some_unmatched()
 
 
 def label_from_tutor_instance(pupil_subject_pks):
@@ -52,7 +53,8 @@ class SMSTutorsForm(forms.Form):
         super(SMSTutorsForm, self).__init__(*args, initial=initial, **new_kwargs)
 
         self.pupil_obj = pupil
-        self.pupil_subject_pks = list(pupil.subject.values_list('pk', flat=True))
+        # NB: only show unmatched subjects
+        self.pupil_subject_pks = list(pupil.unmatched_subjects.values_list('pk', flat=True))
         self.fields['matching_tutors'].queryset = models.TutorProxy.objects \
                 .filter(subject__in=self.pupil_subject_pks) \
                 .filter(status__iexact='Accepted') \
@@ -65,9 +67,10 @@ class SMSTutorsForm(forms.Form):
 
 
 class PupilMatchingAdmin(admin.ModelAdmin):
-    list_display = ['__unicode__', 'has_tutor', 'per_pupil_actions']
+    list_display = ['__unicode__', 'needs_tutor', 'per_pupil_actions']
     list_filter = [FilterByTutorStatus]
     actions = None
+    inlines = [PupilTutorMatchAdmin]
 
     def select_tutors(self, request, pk):
         pupil = models.PupilProxy.objects.get(pk=pk)

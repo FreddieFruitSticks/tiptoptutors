@@ -1,10 +1,12 @@
+from datetime import datetime
 import random
 
 from django.db import models
+from django.db.models import Count, F, Q
 
-from pupil.models import Pupil
-from tutor.models import Tutor
 from option.models import AvailableTutorSubject
+from pupil.models import Pupil, PupilTutorMatch
+from tutor.models import Tutor
 
 
 # numbers + lowercase + uppercase
@@ -12,26 +14,52 @@ REQUEST_CODE_CHARSET = [chr(i) for i in range(ord('0'), ord('9') + 1)] + \
                        [chr(i) for i in range(ord('a'), ord('z') + 1)] + \
                        [chr(i) for i in range(ord('A'), ord('Z') + 1)]
 
+# Change with care. These WHERE clauses should work on MySQL, SQLite and Postgres.
+WHERE_PUPILS_WITH_UNMATCHED_SUBJECTS = (
+    "NOT EXISTS (SELECT * FROM pupil_pupiltutormatch "
+    "WHERE pupil_pupiltutormatch.pupil_id = pupil_pupil.id AND "
+    "option_availabletutorsubject.id = pupil_pupiltutormatch.subject_id AND "
+    "pupil_pupiltutormatch.start_date <= %s AND (pupil_pupiltutormatch.end_date "
+    "IS NULL OR pupil_pupiltutormatch.end_date >= %s))"
+)
+WHERE_PUPILS_WITHOUT_UNMATCHED_SUBJECTS = (
+    "NOT EXISTS (SELECT pupil_pupil_subject.availabletutorsubject_id FROM "
+    "pupil_pupil_subject WHERE pupil_pupil_subject.pupil_id = pupil_pupil.id "
+    "AND NOT EXISTS (SELECT * FROM pupil_pupiltutormatch WHERE "
+    "pupil_pupiltutormatch.subject_id = pupil_pupil_subject.availabletutorsubject_id "
+    "AND pupil_pupiltutormatch.pupil_id = pupil_pupil.id AND pupil_pupiltutormatch.start_date "
+    "<= %s AND (pupil_pupiltutormatch.end_date IS NULL OR pupil_pupiltutormatch.end_date >= %s)))"
+)
 
-class SubjectManager(models.Manager):
+
+class PupilQuerySet(models.query.QuerySet):
+
+    def some_unmatched(self):
+        date_now = datetime.utcnow().date()
+        return self.extra(tables=['option_availabletutorsubject'],
+                          where=[WHERE_PUPILS_WITH_UNMATCHED_SUBJECTS],
+                          params=[date_now, date_now]).distinct()
+
+    def all_matched(self):
+        date_now = datetime.utcnow().date()
+        return self.extra(where=[WHERE_PUPILS_WITHOUT_UNMATCHED_SUBJECTS],
+                          params=[date_now, date_now])
+
+
+class PupilManager(models.Manager):
 
     def get_queryset(self):
-        qs = super(SubjectManager, self).get_queryset()
-        return qs.select_related('subject')
+        return PupilQuerySet(self.model, using=self._db)
+
+    def some_unmatched(self):
+        return self.get_queryset().some_unmatched()
+
+    def all_matched(self):
+        return self.get_queryset().all_matched()
 
 
-class SubjectMixin(object):
-
-    @property
-    def subject_str(self):
-        return ', '.join(self.subject.values_list('name', flat=True))
-
-    def matching_subjects(self, subject_ids):
-        return self.subject.filter(id__in=subject_ids)
-
-
-class PupilProxy(Pupil, SubjectMixin):
-    default_manager = SubjectManager()
+class PupilProxy(Pupil):
+    objects = PupilManager()
 
     class Meta:
         proxy = True
@@ -40,17 +68,29 @@ class PupilProxy(Pupil, SubjectMixin):
         ordering = ('-created_at', 'surname', 'name')
 
     def __unicode__(self):
-        return '%s: %s for %s (%s)' % (self.created_at.strftime('%d-%m-%Y %H:%M'),
-                                       self.name, self.subject_str,
-                                       self.level_of_study)
+        return '%s: %s for %s (%s)' % (
+            self.created_at.strftime('%d-%m-%Y %H:%M'),
+            self.name,
+            ', '.join(s.name for s in self.unmatched_subjects),
+            self.level_of_study
+        )
 
     @property
-    def has_tutor(self):
-        return (self.tutor_id is not None)
+    def needs_tutor(self):
+        return self.unmatched_subjects.exists()
+
+    @property
+    def unmatched_subjects(self):
+        date_now = datetime.utcnow().date()
+        # get subjects actively being tutored
+        matched_subject_ids = list(PupilTutorMatch.objects.filter(
+            Q(end_date__isnull=True)|Q(end_date__gte=date_now),
+            pupil=self,
+            start_date__lte=date_now).values_list('subject_id', flat=True))
+        return self.subject.exclude(id__in=matched_subject_ids)
 
 
-class TutorProxy(Tutor, SubjectMixin):
-    default_manager = SubjectManager()
+class TutorProxy(Tutor):
 
     class Meta:
         proxy = True
@@ -59,6 +99,13 @@ class TutorProxy(Tutor, SubjectMixin):
 
     def __unicode__(self):
         return '%s %s' % (self.name, self.surname)
+
+    @property
+    def subject_str(self):
+        return ', '.join(self.subject.values_list('name', flat=True))
+
+    def matching_subjects(self, subject_ids):
+        return self.subject.filter(id__in=subject_ids)
 
 
 class RequestForTutor(models.Model):

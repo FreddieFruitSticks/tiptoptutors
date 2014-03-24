@@ -27,7 +27,8 @@ class Migration(SchemaMigration):
             ('requirement', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
             ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
         ))
-        db.send_create_signal(u'student', ['Student'])
+        # don't send the signal since the app doesn't exist anymore
+        #db.send_create_signal(u'student', ['Student'])
 
 
     def backwards(self, orm):

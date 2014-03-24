@@ -13,13 +13,16 @@ class PupilTutorMatch(models.Model):
     '''
     pupil = models.ForeignKey('Pupil')
     tutor = models.ForeignKey(Tutor)
-    subject = models.ManyToManyField(AvailableTutorSubject)
-    start_date = models.DateField(null=True, blank=True)
-    end_date = models.DateField(null=True, blank=True)
+    # a matchup must be create per subject
+    subject = models.ForeignKey(AvailableTutorSubject)
+    start_date = models.DateField(null=True, blank=True, db_index=True)
+    end_date = models.DateField(null=True, blank=True, db_index=True)
 
     @property
     def is_active(self):
-        return (self.start_date <= datetime.utcnow().date() <= self.end_date)
+        date_now = datetime.utcnow().date()
+        return (self.start_date <= date_now) and \
+               (not self.end_date or date_now <= self.end_date)
 
     def end_now(self):
         self.end_date = datetime.utcnow().date()
