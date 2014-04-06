@@ -51,6 +51,7 @@
 {% for field in form.visible_fields %}
 <div class="form-row">
 	<div>
+    {{ field.errors }}
     {{ field.label_tag }}{{ field }}
     {% if field.help_text %}
         <p class="help">{{ field.help_text|safe }}</p>

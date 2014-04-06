@@ -115,7 +115,7 @@ class RequestForTutor(models.Model):
     generic functionality should go here.
     '''
     pupil = models.ForeignKey(PupilProxy)
-    subjects = models.ManyToManyField(AvailableTutorSubject)
+    subject = models.ForeignKey(AvailableTutorSubject)
     # active: initial state, tutors can apply for this matchup
     # inactive: probably after a tutor has been selected, applications
     # will be ignored
@@ -129,7 +129,7 @@ class RequestForTutor(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     @staticmethod
-    def generate_unique_code(length=12, charset=REQUEST_CODE_CHARSET):
+    def generate_unique_code(length=6, charset=REQUEST_CODE_CHARSET):
         code = None
         while not code:
             code = ''.join(random.choice(charset) for i in range(length))
@@ -144,13 +144,9 @@ class RequestForTutor(models.Model):
 
 
 class RequestSMS(models.Model):
-    request = models.ForeignKey(RequestForTutor)
+    requests = models.ManyToManyField(RequestForTutor)
     tutor = models.ForeignKey(TutorProxy)
     delivery_status = models.CharField(max_length=16, default='unknown')
     response_text = models.CharField(max_length=32, null=True, blank=True)
     response_timestamp = models.DateTimeField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
-
-    @property
-    def code(self):
-        return request.code

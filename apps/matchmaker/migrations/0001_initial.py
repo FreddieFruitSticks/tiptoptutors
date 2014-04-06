@@ -12,25 +12,16 @@ class Migration(SchemaMigration):
         db.create_table(u'matchmaker_requestfortutor', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('pupil', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['pupil.Pupil'])),
+            ('subject', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['option.AvailableTutorSubject'])),
             ('status', self.gf('django.db.models.fields.CharField')(default='active', max_length=8)),
             ('code', self.gf('django.db.models.fields.CharField')(unique=True, max_length=12)),
             ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
         ))
         db.send_create_signal(u'matchmaker', ['RequestForTutor'])
 
-        # Adding M2M table for field subjects on 'RequestForTutor'
-        m2m_table_name = db.shorten_name(u'matchmaker_requestfortutor_subjects')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('requestfortutor', models.ForeignKey(orm[u'matchmaker.requestfortutor'], null=False)),
-            ('availabletutorsubject', models.ForeignKey(orm[u'option.availabletutorsubject'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['requestfortutor_id', 'availabletutorsubject_id'])
-
         # Adding model 'RequestSMS'
         db.create_table(u'matchmaker_requestsms', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('request', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['matchmaker.RequestForTutor'])),
             ('tutor', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tutor.Tutor'])),
             ('delivery_status', self.gf('django.db.models.fields.CharField')(default='unknown', max_length=16)),
             ('response_text', self.gf('django.db.models.fields.CharField')(max_length=32, null=True, blank=True)),
@@ -39,16 +30,25 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'matchmaker', ['RequestSMS'])
 
+        # Adding M2M table for field requests on 'RequestSMS'
+        m2m_table_name = db.shorten_name(u'matchmaker_requestsms_requests')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('requestsms', models.ForeignKey(orm[u'matchmaker.requestsms'], null=False)),
+            ('requestfortutor', models.ForeignKey(orm[u'matchmaker.requestfortutor'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['requestsms_id', 'requestfortutor_id'])
+
 
     def backwards(self, orm):
         # Deleting model 'RequestForTutor'
         db.delete_table(u'matchmaker_requestfortutor')
 
-        # Removing M2M table for field subjects on 'RequestForTutor'
-        db.delete_table(db.shorten_name(u'matchmaker_requestfortutor_subjects'))
-
         # Deleting model 'RequestSMS'
         db.delete_table(u'matchmaker_requestsms')
+
+        # Removing M2M table for field requests on 'RequestSMS'
+        db.delete_table(db.shorten_name(u'matchmaker_requestsms_requests'))
 
 
     models = {
@@ -59,14 +59,14 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'pupil': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['pupil.Pupil']"}),
             'status': ('django.db.models.fields.CharField', [], {'default': "'active'", 'max_length': '8'}),
-            'subjects': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['option.AvailableTutorSubject']", 'symmetrical': 'False'})
+            'subject': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['option.AvailableTutorSubject']"})
         },
         u'matchmaker.requestsms': {
             'Meta': {'object_name': 'RequestSMS'},
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'delivery_status': ('django.db.models.fields.CharField', [], {'default': "'unknown'", 'max_length': '16'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'request': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['matchmaker.RequestForTutor']"}),
+            'requests': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['matchmaker.RequestForTutor']", 'symmetrical': 'False'}),
             'response_text': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'}),
             'response_timestamp': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'tutor': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tutor.Tutor']"})
@@ -104,11 +104,11 @@ class Migration(SchemaMigration):
         },
         u'pupil.pupiltutormatch': {
             'Meta': {'object_name': 'PupilTutorMatch'},
-            'end_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
+            'end_date': ('django.db.models.fields.DateField', [], {'db_index': 'True', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'pupil': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['pupil.Pupil']"}),
-            'start_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
-            'subject': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['option.AvailableTutorSubject']", 'symmetrical': 'False'}),
+            'start_date': ('django.db.models.fields.DateField', [], {'db_index': 'True', 'null': 'True', 'blank': 'True'}),
+            'subject': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['option.AvailableTutorSubject']"}),
             'tutor': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tutor.Tutor']"})
         },
         u'tutor.tutor': {
