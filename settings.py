@@ -185,6 +185,17 @@ BROKER_URL = "django://"
 CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
 
 # ==============================================================================
+# SMS configuration
+# ==============================================================================
+
+CLICKATELL = {
+    'username': 'tiptoptutors',
+    'password': '3aHaLfh09Ac3gcPbeTsT',
+    'endpoint_url': 'http://api.clickatell.com/http',
+    'api_id': '3474124'
+}
+
+# ==============================================================================
 # Template directories
 # ==============================================================================
 
