@@ -161,6 +161,7 @@ PROJECT_APPS = (
     'quote',
     'pupil',
     'tutor',
+    'sms',
     'option',
     'matchmaker',
 )

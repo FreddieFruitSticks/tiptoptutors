@@ -21,12 +21,10 @@ class Migration(SchemaMigration):
 
         # Adding model 'RequestSMS'
         db.create_table(u'matchmaker_requestsms', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            (u'sms_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['sms.SMS'], unique=True, primary_key=True)),
             ('tutor', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tutor.Tutor'])),
-            ('delivery_status', self.gf('django.db.models.fields.CharField')(default='unknown', max_length=16)),
             ('response_text', self.gf('django.db.models.fields.CharField')(max_length=32, null=True, blank=True)),
             ('response_timestamp', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
         ))
         db.send_create_signal(u'matchmaker', ['RequestSMS'])
 
@@ -62,13 +60,11 @@ class Migration(SchemaMigration):
             'subject': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['option.AvailableTutorSubject']"})
         },
         u'matchmaker.requestsms': {
-            'Meta': {'object_name': 'RequestSMS'},
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'delivery_status': ('django.db.models.fields.CharField', [], {'default': "'unknown'", 'max_length': '16'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'Meta': {'object_name': 'RequestSMS', '_ormbases': [u'sms.SMS']},
             'requests': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['matchmaker.RequestForTutor']", 'symmetrical': 'False'}),
             'response_text': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'}),
             'response_timestamp': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            u'sms_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['sms.SMS']", 'unique': 'True', 'primary_key': 'True'}),
             'tutor': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tutor.Tutor']"})
         },
         u'option.availabletutorsubject': {
@@ -110,6 +106,13 @@ class Migration(SchemaMigration):
             'start_date': ('django.db.models.fields.DateField', [], {'db_index': 'True', 'null': 'True', 'blank': 'True'}),
             'subject': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['option.AvailableTutorSubject']"}),
             'tutor': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tutor.Tutor']"})
+        },
+        u'sms.sms': {
+            'Meta': {'object_name': 'SMS'},
+            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'delivery_status': ('django.db.models.fields.CharField', [], {'default': "'unknown'", 'max_length': '16'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'mobile_number': ('django.db.models.fields.CharField', [], {'max_length': '12'})
         },
         u'tutor.tutor': {
             'Meta': {'object_name': 'Tutor'},

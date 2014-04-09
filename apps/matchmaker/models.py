@@ -6,6 +6,7 @@ from django.db.models import Count, F, Q
 
 from option.models import AvailableTutorSubject
 from pupil.models import Pupil, PupilTutorMatch
+from sms.models import SMS
 from tutor.models import Tutor
 
 
@@ -143,10 +144,8 @@ class RequestForTutor(models.Model):
         super(RequestForTutor, self).save(*args, **kwargs)
 
 
-class RequestSMS(models.Model):
+class RequestSMS(SMS):
     requests = models.ManyToManyField(RequestForTutor)
     tutor = models.ForeignKey(TutorProxy)
-    delivery_status = models.CharField(max_length=16, default='unknown')
     response_text = models.CharField(max_length=32, null=True, blank=True)
     response_timestamp = models.DateTimeField(null=True, blank=True)
-    created = models.DateTimeField(auto_now_add=True)
