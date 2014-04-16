@@ -161,17 +161,39 @@ PROJECT_APPS = (
     'quote',
     'pupil',
     'tutor',
+    'sms',
     'option',
+    'matchmaker',
 )
 
 THIRD_PARTY_APPS = (
     'south',
-    'debug_toolbar'
+    'debug_toolbar',
+    'djcelery',
+    'kombu.transport.django'
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
+
+# ==============================================================================
+# Celery configuration
+# ==============================================================================
+
+BROKER_URL = "django://"
+CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+
+# ==============================================================================
+# SMS configuration
+# ==============================================================================
+
+CLICKATELL = {
+    'username': 'tiptoptutors',
+    'password': '3aHaLfh09Ac3gcPbeTsT',
+    'endpoint_url': 'http://api.clickatell.com/http',
+    'api_id': '3474124'
+}
 
 # ==============================================================================
 # Template directories

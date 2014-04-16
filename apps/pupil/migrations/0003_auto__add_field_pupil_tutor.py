@@ -8,11 +8,40 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        db.rename_table('student_student', 'pupil_pupil')
-        db.send_create_signal(u'pupil', ['Pupil'])
+        # Deleting field 'Pupil.subject'
+        db.delete_column(u'pupil_pupil', 'subject')
+
+        # Adding field 'Pupil.tutor'
+        db.add_column(u'pupil_pupil', 'tutor',
+                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tutor.Tutor'], null=True, blank=True),
+                      keep_default=False)
+
+        # Adding M2M table for field subject on 'Pupil'
+        m2m_table_name = db.shorten_name(u'pupil_pupil_subject')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('pupil', models.ForeignKey(orm[u'pupil.pupil'], null=False)),
+            ('availabletutorsubject', models.ForeignKey(orm[u'option.availabletutorsubject'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['pupil_id', 'availabletutorsubject_id'])
+
 
     def backwards(self, orm):
-        db.rename_table('pupil_pupil', 'student_student')
+
+        # User chose to not deal with backwards NULL issues for 'Pupil.subject'
+        raise RuntimeError("Cannot reverse this migration. 'Pupil.subject' and its values cannot be restored.")
+        
+        # The following code is provided here to aid in writing a correct migration        # Adding field 'Pupil.subject'
+        db.add_column(u'pupil_pupil', 'subject',
+                      self.gf('django.db.models.fields.CharField')(max_length=50),
+                      keep_default=False)
+
+        # Deleting field 'Pupil.tutor'
+        db.delete_column(u'pupil_pupil', 'tutor_id')
+
+        # Removing M2M table for field subject on 'Pupil'
+        db.delete_table(db.shorten_name(u'pupil_pupil_subject'))
+
 
     models = {
         u'option.availabletutorsubject': {
@@ -41,9 +70,10 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             'requirement': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'street': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'subject': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'subject': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['option.AvailableTutorSubject']", 'symmetrical': 'False'}),
             'suburb': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'surname': ('django.db.models.fields.CharField', [], {'max_length': '20'})
+            'surname': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'tutor': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tutor.Tutor']", 'null': 'True', 'blank': 'True'})
         },
         u'tutor.tutor': {
             'Meta': {'object_name': 'Tutor'},
