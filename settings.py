@@ -191,7 +191,7 @@ CLICKATELL = {
     'username': 'tiptoptutors',
     'password': '3aHaLfh09Ac3gcPbeTsT',
     'endpoint_url': 'http://api.clickatell.com/http',
-    'api_id': '3474124'
+    'api_id': '3478778'
 }
 
 # ==============================================================================

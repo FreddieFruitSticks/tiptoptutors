@@ -5,6 +5,8 @@ from django.conf import settings
 
 import requests
 
+from sms.models import SMS
+
 
 class SMSApi(object):
     '''
@@ -88,4 +90,27 @@ class Clickatell(SMSApi):
         }
         body = self._request('sendmsg', params)
         matches = Clickatell.SEND_REGEX.findall(body)
+        if len(numbers) == 1:
+            return [(g[0], numbers[0]) for g in matches]
         return [(g[0], g[2]) for g in matches]
+
+
+def send_smses(api_name, numbers, message):
+    '''
+    Sends SMSes using the specified API (only Clickatell at the moment).
+    Saves and returns [(SMS object), ...] for each SMS sent.
+    '''
+    # create API object
+    api_class = {
+        'Clickatell': Clickatell
+    }[api_name]
+    api_kwargs = {
+        'Clickatell': settings.CLICKATELL
+    }[api_name]
+    api_obj = api_class(**api_kwargs)
+
+    # sends SMSes and creates SMS objects
+    results = api_obj.send(numbers, message)
+    sms_objects = [SMS.objects.create(message_id=mid, mobile_number=msisdn)
+                   for mid, msisdn in results]
+    return sms_objects

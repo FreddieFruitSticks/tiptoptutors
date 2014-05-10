@@ -3,6 +3,7 @@ from django.conf.urls import patterns, url
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 from django import forms
+from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext, Template, Context, TemplateSyntaxError
 from django.template.loader import find_template_loader
@@ -105,6 +106,7 @@ class SMSTutorsForm(forms.Form):
             self.render_sms_text()
         except TemplateSyntaxError as e:
             raise forms.ValidationError("%s" % e)
+        return self.data['sms_text']
 
     def clean(self):
         c_data = super(SMSTutorsForm, self).clean()
@@ -136,7 +138,6 @@ class SMSTutorsForm(forms.Form):
         # match subjects to tutors
         tutor_pks = []
         request_pks = []
-        level_of_study = self.cleaned_data['pupil'].level_of_study
         for tutor in self.cleaned_data['matching_tutors']:
             tutor_pks.append(tutor.pk)
             request_pks.append([subject_requests[s.pk].pk for s in 
@@ -159,6 +160,7 @@ class PupilMatchingAdmin(admin.ModelAdmin):
             form = SMSTutorsForm(request.POST, pupil=pupil)
             if form.is_valid():
                 form.save(request)
+                return HttpResponseRedirect(reverse('admin:matchmaker_pupilproxy_changelist'))
         else:
             form = SMSTutorsForm(pupil=pupil)
         return render_to_response('admin/matchmaker/select-tutors.html',

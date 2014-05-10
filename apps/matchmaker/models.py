@@ -145,6 +145,11 @@ class RequestForTutor(models.Model):
 
 
 class RequestSMS(SMS):
+
+    class Meta:
+        verbose_name = 'Request SMS'
+        verbose_name_plural = "Request SMSes"
+
     requests = models.ManyToManyField(RequestForTutor)
     tutor = models.ForeignKey(TutorProxy)
     response_text = models.CharField(max_length=32, null=True, blank=True)
