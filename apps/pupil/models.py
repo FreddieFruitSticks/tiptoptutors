@@ -46,7 +46,9 @@ class Pupil(models.Model):
     suburb          = models.CharField(max_length=20)
     city            = models.ForeignKey(City)
     # available_times = models.TextField(blank=True, null=True)
-    requirement     = models.TextField(verbose_name="personal requirements", blank=True, null=True)
+    # requirement     = models.TextField(verbose_name="personal requirements", blank=True, null=True)
+    time_and_day    = models.TextField(verbose_name="times and days", blank=True, null=True)
+
 
     created_at = models.DateTimeField(auto_now=True)
 
