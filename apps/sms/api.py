@@ -1,7 +1,10 @@
+import base64
+import json
 import re
 import time
+from datetime import datetime, timedelta
 
-from django.conf import settings
+from django.conf import settings, ImproperlyConfigured
 
 import requests
 
@@ -17,10 +20,24 @@ class SMSApi(object):
         self.endpoint_url = endpoint_url
 
     def send(self, numbers, message):
+        '''
+        Returns [(apimsgid, address), ...] for each number provided.
+        '''
         raise NotImplementedError
 
     def get_responses(self):
         raise NotImplementedError
+
+    def process_status_report(self, request):
+        '''
+        Extracts and returns (message_id, address, status)
+        from request.
+        '''
+        raise NotImplementedError
+
+
+class InvalidAPIError(ValueError):
+    pass
 
 
 class ClickatellException(Exception):
@@ -33,6 +50,15 @@ class Clickatell(SMSApi):
     ERROR_REGEX = re.compile(r'ERR:\s*(?P<err_no>\d+),\s*(?P<err_description>.*)')
     SESSION_REGEX = re.compile(r'OK:\s*(?P<session_id>.*)')
     SEND_REGEX = re.compile(r'ID:\s*(?P<apimsgid>\w+)(\s*To:\s*(?P<address>[0-9+]+))?[\s\n\r]*')
+    STATUSES = {
+        '003': 'Delivered to gateway',
+        '004': 'Received by recipient',
+        '005': 'Error with message',
+        '007': 'Error delivering message',
+        '009': 'Routing error',
+        '010': 'Message expired',
+        '012': 'Out of credit',
+    }
 
     def __init__(self, endpoint_url, api_id, username, password):
         self.endpoint_url = endpoint_url
@@ -86,7 +112,8 @@ class Clickatell(SMSApi):
         addresses = ','.join(numbers)
         params = {
             'to': addresses,
-            'text': message
+            'text': message,
+            'callback': '7',  # return intermediate, final and error statuses,
         }
         body = self._request('sendmsg', params)
         matches = Clickatell.SEND_REGEX.findall(body)
@@ -94,23 +121,74 @@ class Clickatell(SMSApi):
             return [(g[0], numbers[0]) for g in matches]
         return [(g[0], g[2]) for g in matches]
 
+    def process_status_report(self, request):
+        '''
+        Extracts and returns (message_id, address, status)
+        from request.
+        '''
+        # We set up Clickatell to use HTTP POSTs
+        if request.method != "POST":
+            raise ClickatellException("Invalid request type")
+        try:
+            fields = json.loads(request.POST['data'])['callback']
+            message_id = fields['apiMsgId']
+            address = fields['to']
+            status_code = fields['status']
+            return message_id, address, Clickatell.STATUSES[status_code]
+        except (ValueError, KeyError) as e:
+            raise ClickatellException(str(e))
+
 
 def send_smses(api_name, numbers, message):
     '''
     Sends SMSes using the specified API (only Clickatell at the moment).
     Saves and returns [(SMS object), ...] for each SMS sent.
     '''
-    # create API object
-    api_class = {
-        'Clickatell': Clickatell
-    }[api_name]
-    api_kwargs = {
-        'Clickatell': settings.CLICKATELL
-    }[api_name]
-    api_obj = api_class(**api_kwargs)
-
+    api_obj = _get_api_obj(api_name)
     # sends SMSes and creates SMS objects
     results = api_obj.send(numbers, message)
     sms_objects = [SMS.objects.create(message_id=mid, mobile_number=msisdn)
                    for mid, msisdn in results]
     return sms_objects
+
+
+def process_status_report(api_name, request):
+    '''
+    Processes an SMS delivery status report, updating the relevant
+    SMS's delivery status.
+    '''
+    api_obj = _get_api_obj(api_name)
+    message_id, mobile_number, status = api_obj.process_status_report(request)
+    cutoff = datetime.utcnow() - timedelta(hours=48)
+    matched_smses = SMS.objects.filter(message_id=message_id,
+                                       mobile_number=mobile_number,
+                                       created__gte=cutoff)
+    if len(matched_smses) == 0 or len(matched_smses) > 1:
+        # don't update - either there is no matching sms or
+        # the message_id and MSISDN don't refer to a unique
+        # sms in the last 48 hours (highly unlikely but we are
+        # not being restrictive in db model)
+        return False
+    matched_smses.update(delivery_status=status)
+    return True
+
+
+def _get_api_obj(api_name):
+    '''
+    Instantiate and return an SMS API object. The API's settings
+    dict is passed as keyword arguments to __init__.
+    '''
+    try:
+        api_class = {
+            'Clickatell': Clickatell
+        }[api_name]
+        api_kwargs = {
+            'Clickatell': settings.CLICKATELL
+        }[api_name]
+        return api_class(**api_kwargs)
+    except KeyError:
+        raise InvalidAPIError(api_name)
+    except AttributeError:
+        raise ImproperlyConfigured("Settings for %s are missing" % api_name)
+    except TypeError:
+        raise ImproperlyConfigured("Invalid settings for %s" % api_name)
