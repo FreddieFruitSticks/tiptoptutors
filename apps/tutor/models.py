@@ -14,7 +14,7 @@ class Tutor(models.Model):
     surname     = models.CharField(max_length=20, verbose_name="surname *")
     email       = models.EmailField(max_length=25, verbose_name="email *")
     mobile      = models.CharField(max_length=10, verbose_name="mobile *")
-    # id_passport = models.CharField(max_length=20, verbose_name="id/passport number")
+    id_passport = models.CharField(max_length=20, verbose_name="id/passport number")
     subject     = models.ManyToManyField(AvailableTutorSubject, verbose_name="subject *")
     transport   = models.BooleanField(verbose_name="own transport?", default=False)
     id_doc      = models.FileField(verbose_name="id *", upload_to="media/cv")

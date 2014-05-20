@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'', include('contact.urls')),
     url(r'', include('pupil.urls')),
     url(r'', include('tutor.urls')),
+    url(r'', include('quote.urls')),
 )
 
 if settings.DEBUG:
