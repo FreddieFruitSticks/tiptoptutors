@@ -54,33 +54,34 @@ DATABASES = {
 # mail settings
 # ==============================================================================
 
-MAIL_WRITE_TO_HDD = False
-
-FROM_EMAIL = "support@tiptoptutors.co.za"
-
 ADMINS = (
+
     ('tiptoptutors', 'admin@tiptoptutors.co.za'),
     ('darren', 'darren@symfony.co.za'),
+    ('freddie', 'info@tiptoptutors.co.za'),
     ('riz', 'rizziepit@gmail.com')
 )
-
 MANAGERS = ADMINS
 
-WEBCONTACT_RECIPIENTS = (
-    'admin@tiptoptutors.co.za',
-)
-
-SERVER_EMAIL = 'support@tiptoptutors.co.za'
-
-EMAIL_TEST_MODE = True
-EMAIL_HOST = 'localhost'
-EMAIL_HOST_PASSWORD = ''
-EMAIL_HOST_USER = ''
-EMAIL_PORT = 25
-EMAIL_USE_TLS = False
-EMAIL_SYSTEM_SENDER = "%s <support@%s>" % (PROJECT_NAME, PROJECT_DOMAIN)
-
+# web contact form
+'''
 TEST_EMAIL_DIR = os.path.join(os.path.dirname(__file__), 'tmp', 'test_emails')
+WEBCONTACT_RECIPIENTS = (
+    'info@tiptoptutors.co.za',
+)
+EMAIL_TEST_MAIL = True
+EMAIL_SYSTEM_SENDER = "%s <no-reply@%s>" % (PROJECT_NAME, PROJECT_DOMAIN)
+MAIL_WRITE_TO_HDD = False
+'''
+
+# Django email settings
+DEFAULT_FROM_EMAIL = "no-reply@tiptoptutors.co.za"
+SERVER_EMAIL = 'server@tiptoptutors.co.za'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_PASSWORD = 'j7lsaXZ7EfB5biy7YNxD'
+EMAIL_HOST_USER = 'no-reply@tiptoptutors.co.za'
 
 # ==============================================================================
 # project settings
