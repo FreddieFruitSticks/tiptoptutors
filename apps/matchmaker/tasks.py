@@ -21,7 +21,7 @@ def send_tutor_request_smses(tutor_pks, request_pks, sms_template_source):
         }))
         tutor = TutorProxy.objects.get(pk=tutor_pk)
         msisdn = convert_to_international_format(tutor.mobile, '27')
-        sms_object, = send_smses('Clickatell', [msisdn], message)
+        sms_object, = send_smses('Clickatell', [msisdn], message, True)
         # recreate the SMS object so that it is of type RequestSMS
         sms_object = RequestSMS(id=sms_object.id,
                                 mobile_number=sms_object.mobile_number,

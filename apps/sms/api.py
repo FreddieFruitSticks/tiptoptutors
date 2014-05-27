@@ -1,14 +1,18 @@
-import base64
 import json
 import re
 import time
 from datetime import datetime, timedelta
 
 from django.conf import settings, ImproperlyConfigured
+from django.dispatch import Signal
 
+import pytz
 import requests
 
 from sms.models import SMS
+
+
+sms_reply_received = Signal(providing_args=['instance', 'text', 'timestamp'])
 
 
 class SMSApi(object):
@@ -25,7 +29,11 @@ class SMSApi(object):
         '''
         raise NotImplementedError
 
-    def get_responses(self):
+    def process_reply(self, request):
+        '''
+        Extracts and returns (message_id, address, text, datetime)
+        from request.
+        '''
         raise NotImplementedError
 
     def process_status_report(self, request):
@@ -60,12 +68,21 @@ class Clickatell(SMSApi):
         '012': 'Out of credit',
     }
 
-    def __init__(self, endpoint_url, api_id, username, password):
+    def __init__(self, endpoint_url, api_id, username, password, sender_id=None):
         self.endpoint_url = endpoint_url
         self.api_id = api_id
         self.username = username
         self.password = password
+        self.sender_id = sender_id
         self.session_id = None
+
+    def __eq__(self, other):
+        # for testing
+        return self.api_id == other.api_id
+
+    def __ne__(self, other):
+        # for testing
+        return self.api_id != other.api_id
 
     def _request(self, rel_path, params):
         if self.session_id is None or (self.last_session_activity - time.time()
@@ -102,7 +119,7 @@ class Clickatell(SMSApi):
 
         return Clickatell.SESSION_REGEX.match(resp.text).group('session_id')
 
-    def send(self, numbers, message):
+    def send(self, numbers, message, enable_reply=False):
         '''
         Returns [(apimsgid, address), ...] for each number provided.
         Raises ClickatellException if a request fails.
@@ -115,6 +132,12 @@ class Clickatell(SMSApi):
             'text': message,
             'callback': '7',  # return intermediate, final and error statuses,
         }
+        if enable_reply:
+            # make Clickatell route via a registered short code
+            params['mo'] = '1'
+            if self.sender_id is not None:
+                # specify the particular short code (in case there is more than one)
+                params['from'] = self.sender_id
         body = self._request('sendmsg', params)
         matches = Clickatell.SEND_REGEX.findall(body)
         if len(numbers) == 1:
@@ -138,15 +161,38 @@ class Clickatell(SMSApi):
         except (ValueError, KeyError) as e:
             raise ClickatellException(str(e))
 
+    def process_reply(self, request):
+        '''
+        Extracts and returns (message_id, address, text, datetime)
+        from request.
+        '''
+        if request.method != "POST":
+            raise ClickatellException("Invalid request type")
+        try:
+            fields = json.loads(request.POST['data'])['callback']
+            assert fields['api_id'] == self.api_id
+            message_id = fields['moMsgId']
+            address = fields['from']
+            charset = fields['charset']
+            text = fields['text'].decode(charset)
+            timestamp = datetime.strptime(fields['timestamp'], '%Y-%m-%d%H:%M:%S')
+            # Clickatell documentation mentions using GMT +2
+            timestamp = pytz.timezone("Africa/Johannesburg").localize(timestamp)
+            return message_id, address, text, timestamp
+        except (ValueError, KeyError) as e:
+            raise ClickatellException(str(e))
+        except AssertionError:
+            raise ClickatellException("Reply message does not match API ID") 
 
-def send_smses(api_name, numbers, message):
+
+def send_smses(api_name, numbers, message, enable_reply=False):
     '''
     Sends SMSes using the specified API (only Clickatell at the moment).
     Saves and returns [(SMS object), ...] for each SMS sent.
     '''
     api_obj = _get_api_obj(api_name)
     # sends SMSes and creates SMS objects
-    results = api_obj.send(numbers, message)
+    results = api_obj.send(numbers, message, enable_reply)
     sms_objects = [SMS.objects.create(message_id=mid, mobile_number=msisdn)
                    for mid, msisdn in results]
     return sms_objects
@@ -170,6 +216,22 @@ def process_status_report(api_name, request):
         # not being restrictive in db model)
         return False
     matched_smses.update(delivery_status=status)
+    return True
+
+
+def process_reply(api_name, request):
+    api_obj = _get_api_obj(api_name)
+    message_id, mobile_number, text, timestamp = api_obj.process_reply(request)
+    matched_smses = SMS.objects.filter(message_id=message_id,
+                                       mobile_number=mobile_number) \
+                               .order_by('-created')
+    if len(matched_smses) == 0:
+        return False
+    # assume the reply is for the latest matching sms
+    sms_reply_received.send(sender=api_obj,
+                            instance=matched_smses[0],
+                            text=text,
+                            timestamp=timestamp)
     return True
 
 

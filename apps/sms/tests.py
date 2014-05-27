@@ -4,8 +4,10 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import RequestFactory
 
-from sms.api import Clickatell, _get_api_obj
+from sms.api import Clickatell, _get_api_obj, sms_reply_received
 from sms.models import SMS
+
+from mock import create_autospec
 
 
 class ClickatellTestCase(TestCase):
@@ -58,8 +60,52 @@ class ClickatellTestCase(TestCase):
         self.assertEqual(result[1], payload['callback']['to'])
         self.assertEqual(result[2], Clickatell.STATUSES[payload['callback']['status']])
 
+    def test_process_reply(self):
+        factory = RequestFactory()
+        payload = {'callback': {
+            'moMsgId': 'b2aee337abd962489b123fda9c3480fa',
+            'timestamp': '2008-08-0609:43:50',
+            'to': '279995631564',
+            'from': '27833001171',
+            'text': 'Hereisthe messagetext',
+            'api_id': '3478778',
+            'charset': 'ISO-8859-1',
+            'udh': '',
+        }}
+        request = factory.post('/reply-callback/',
+                               {'data': json.dumps(payload)})
+        api_obj = _get_api_obj('Clickatell')
+        result = api_obj.process_reply(request)
+        self.assertEqual(len(result), 4)
+        self.assertEqual(result[0], payload['callback']['moMsgId'])
+        self.assertEqual(result[1], payload['callback']['from'])
+        self.assertEqual(result[2], payload['callback']['text']\
+                                    .decode(payload['callback']['charset']))
+        from datetime import datetime
+        import pytz
+        timestamp = datetime(year=2008, month=8, day=6,
+                             hour=7, minute=43, second=50,
+                             tzinfo=pytz.utc)
+        self.assertEqual(result[3], timestamp)
+
+
+def signal_handler(sender, **kwargs):
+    pass
+reply_handler = create_autospec(signal_handler)
+
 
 class ApiTestCase(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        sms_reply_received.connect(reply_handler, weak=False)
+
+    @classmethod
+    def tearDownClass(cls):
+        sms_reply_received.disconnect(reply_handler)
+
+    def tearDown(self):
+        reply_handler.reset_mock()
 
     def test_process_status_report(self):
         payload = {'callback': {
@@ -85,3 +131,37 @@ class ApiTestCase(TestCase):
         self.assertEqual(invalid_r.status_code, 200)
         self.assertEqual(SMS.objects.get(pk=sms_pk).delivery_status,
                          Clickatell.STATUSES[payload['callback']['status']])
+
+    def test_process_reply(self):
+        payload = {'callback': {
+            'moMsgId': 'b2aee337abd962489b123fda9c3480fa',
+            'timestamp': '2008-08-0609:43:50',
+            'to': '279995631564',
+            'from': '27833001171',
+            'text': 'Hereisthe messagetext',
+            'api_id': '3478778',
+            'charset': 'ISO-8859-1',
+            'udh': '',
+        }}
+        sms = SMS.objects.create(
+            message_id=payload['callback']['moMsgId'],
+            mobile_number=payload['callback']['from'],
+        )
+        data = {'data': json.dumps(payload)}
+        valid_r = self.client.post(reverse('sms-reply-callback'), data)
+        get_r = self.client.get(reverse('sms-reply-callback'), data)
+        invalid_r = self.client.post(reverse('sms-reply-callback'), {'data': '{]'})
+        self.assertEqual(valid_r.status_code, 200)
+        self.assertEqual(get_r.status_code, 405)
+        # this test passes because Django forces DEBUG = False in tests
+        self.assertEqual(invalid_r.status_code, 200)
+        from datetime import datetime
+        import pytz
+        timestamp = datetime(year=2008, month=8, day=6,
+                             hour=7, minute=43, second=50,
+                             tzinfo=pytz.utc)
+        reply_handler.assert_called_with(signal=sms_reply_received,
+                                         sender=_get_api_obj('Clickatell'),
+                                         instance=sms,
+                                         text=payload['callback']['text'],
+                                         timestamp=timestamp)
