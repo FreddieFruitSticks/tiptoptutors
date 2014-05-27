@@ -5,6 +5,7 @@ from django.test import TestCase
 from django.test.client import RequestFactory
 
 from sms.api import Clickatell, _get_api_obj
+from sms.models import SMS
 
 
 class ClickatellTestCase(TestCase):
@@ -70,6 +71,10 @@ class ApiTestCase(TestCase):
             'charge': 0.300000,
             'status': '004'
         }}
+        sms_pk = SMS.objects.create(
+            message_id=payload['callback']['apiMsgId'],
+            mobile_number=payload['callback']['to'],
+        ).pk
         data = {'data': json.dumps(payload)}
         valid_r = self.client.post(reverse('sms-status-callback'), data)
         get_r = self.client.get(reverse('sms-status-callback'), data)
@@ -78,3 +83,5 @@ class ApiTestCase(TestCase):
         self.assertEqual(get_r.status_code, 405)
         # this test passes because Django forces DEBUG = False in tests
         self.assertEqual(invalid_r.status_code, 200)
+        self.assertEqual(SMS.objects.get(pk=sms_pk).delivery_status,
+                         Clickatell.STATUSES[payload['callback']['status']])
