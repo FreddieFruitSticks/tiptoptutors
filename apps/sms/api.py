@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 
 from django.conf import settings, ImproperlyConfigured
 from django.dispatch import Signal
+from django.utils import timezone
 
 import pytz
 import requests
@@ -205,7 +206,7 @@ def process_status_report(api_name, request):
     '''
     api_obj = _get_api_obj(api_name)
     message_id, mobile_number, status = api_obj.process_status_report(request)
-    cutoff = datetime.utcnow() - timedelta(hours=48)
+    cutoff = timezone.now() - timedelta(hours=48)
     matched_smses = SMS.objects.filter(message_id=message_id,
                                        mobile_number=mobile_number,
                                        created__gte=cutoff)

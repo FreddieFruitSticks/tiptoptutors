@@ -1,6 +1,5 @@
-from datetime import datetime
-
 from django.db import models
+from django.utils import timezone
 
 from option.models import City, LevelOfStudy, AvailableTutorSubject
 from tutor.models import Tutor
@@ -20,16 +19,16 @@ class PupilTutorMatch(models.Model):
 
     @property
     def is_active(self):
-        date_now = datetime.utcnow().date()
+        date_now = timezone.now().date()
         return (self.start_date <= date_now) and \
                (not self.end_date or date_now <= self.end_date)
 
     def end_now(self):
-        self.end_date = datetime.utcnow().date()
+        self.end_date = timezone.now().date()
         self.save()
 
     def start_now(self):
-        self.start_date = datetime.utcnow().date()
+        self.start_date = timezone.now().date()
         self.save()
 
 

@@ -1,12 +1,14 @@
-from datetime import datetime
 import random
 
 from django.db import models
 from django.db.models import Count, F, Q
+from django.dispatch import receiver
+from django.utils import timezone
 
 from option.models import AvailableTutorSubject
 from pupil.models import Pupil, PupilTutorMatch
 from sms.models import SMS
+from sms.api import sms_reply_received
 from tutor.models import Tutor
 
 
@@ -36,13 +38,13 @@ WHERE_PUPILS_WITHOUT_UNMATCHED_SUBJECTS = (
 class PupilQuerySet(models.query.QuerySet):
 
     def some_unmatched(self):
-        date_now = datetime.utcnow().date()
+        date_now = timezone.now().date()
         return self.extra(tables=['option_availabletutorsubject'],
                           where=[WHERE_PUPILS_WITH_UNMATCHED_SUBJECTS],
                           params=[date_now, date_now]).distinct()
 
     def all_matched(self):
-        date_now = datetime.utcnow().date()
+        date_now = timezone.now().date()
         return self.extra(where=[WHERE_PUPILS_WITHOUT_UNMATCHED_SUBJECTS],
                           params=[date_now, date_now])
 
@@ -82,7 +84,7 @@ class PupilProxy(Pupil):
 
     @property
     def unmatched_subjects(self):
-        date_now = datetime.utcnow().date()
+        date_now = timezone.now().date()
         # get subjects actively being tutored
         matched_subject_ids = list(PupilTutorMatch.objects.filter(
             Q(end_date__isnull=True)|Q(end_date__gte=date_now),
@@ -154,3 +156,14 @@ class RequestSMS(SMS):
     tutor = models.ForeignKey(TutorProxy)
     response_text = models.CharField(max_length=32, null=True, blank=True)
     response_timestamp = models.DateTimeField(null=True, blank=True)
+
+
+@receiver(sms_reply_received)
+def save_requestsms_response(sender, **kwargs):
+    try:
+        sms_obj = RequestSMS.objects.get(pk=kwargs['instance'].pk)
+        sms_obj.response_text = kwargs['text']
+        sms_obj.response_timestamp = kwargs['timestamp']
+        sms_obj.save()
+    except RequestSMS.DoesNotExist:
+        pass
