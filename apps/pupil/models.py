@@ -44,6 +44,7 @@ class Pupil(models.Model):
     street          = models.CharField(max_length=20)
     suburb          = models.CharField(max_length=20)
     city            = models.ForeignKey(City)
+    # TODO - sort out commented out fields
     # available_times = models.TextField(blank=True, null=True)
     requirement     = models.TextField(verbose_name="personal requirements", blank=True, null=True)
     # time_and_day    = models.TextField(verbose_name="times and days", blank=True, null=True)
