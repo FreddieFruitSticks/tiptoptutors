@@ -15,6 +15,9 @@ class LevelOfStudy(models.Model):
 class AvailableTutorSubject(models.Model):
     name               = models.CharField(max_length=255, blank=False, null=False)
 
+    class Meta:
+        ordering = ('name', )
+
     def __unicode__(self):
         return self.name
 

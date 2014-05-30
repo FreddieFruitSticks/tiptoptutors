@@ -1,0 +1,102 @@
+[
+	{
+	    "pk": 1, 
+	    "model": "option.levelofstudy", 
+	    "fields": {
+	        "name": "Grade 10"
+	    }
+	},
+	{
+	    "pk": 2, 
+	    "model": "option.levelofstudy", 
+	    "fields": {
+	        "name": "Grade 11"
+	    }
+	},
+	{
+	    "pk": 3, 
+	    "model": "option.levelofstudy", 
+	    "fields": {
+	        "name": "Grade 12"
+	    }
+	},
+	{
+	    "pk": 1, 
+	    "model": "option.city", 
+	    "fields": {
+	        "name": "Cape Town"
+	    }
+	},
+	{
+	    "pk": 1, 
+	    "model": "pupil.pupil", 
+	    "fields": {
+	        "city": 1, 
+	        "contact_number": "+27733416692", 
+	        "surname": "Versfeld", 
+	        "name": "Rizmari", 
+	        "created_at": "2014-03-23T23:09:04Z", 
+	        "requirement": "", 
+	        "suburb": "Hout Bay", 
+	        "street": "Glomas Mnr Valley Rd", 
+	        "level_of_study": 3,
+	        "email": "rizziepit@gmail.com", 
+	        "subject": [
+	            3, 
+	            4, 
+	            1, 
+	            2
+	        ]
+	    }
+	},
+	{
+	    "pk": 1, 
+	    "model": "tutor.tutor", 
+	    "fields": {
+	        "comment": "", 
+	        "status": "Accepted", 
+	        "surname": "Versfeld", 
+	        "name": "Rizmari", 
+	        "mobile": "0733416692", 
+	        "created_at": "2014-03-23T18:12:18Z", 
+	        "id_passport": "", 
+	        "cv": "", 
+	        "academic": "", 
+	        "id_doc": "media/cv/face.jpg", 
+	        "email": "rizziepit@gmail.com", 
+	        "transport": true, 
+	        "subject": [
+	            4,
+	            2
+	        ]
+	    }
+	},
+	{
+	    "pk": 1, 
+	    "model": "option.availabletutorsubject", 
+	    "fields": {
+	        "name": "Mathematics"
+	    }
+	},
+	{
+	    "pk": 2, 
+	    "model": "option.availabletutorsubject", 
+	    "fields": {
+	        "name": "Physics"
+	    }
+	},
+	{
+	    "pk": 3, 
+	    "model": "option.availabletutorsubject", 
+	    "fields": {
+	        "name": "Chemistry"
+	    }
+	},
+	{
+	    "pk": 4, 
+	    "model": "option.availabletutorsubject", 
+	    "fields": {
+	        "name": "English"
+	    }
+	}
+]

@@ -1,0 +1,3 @@
+{{ level }} pupil needs tutor for:
+{% for obj in objects %}{{ obj.subject }} {{ obj.code }}
+{% endfor %}Reply with code(s) of subject(s) you want to tutor, e.g. "code1 code2".

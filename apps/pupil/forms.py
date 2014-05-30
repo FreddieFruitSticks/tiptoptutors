@@ -6,3 +6,4 @@ class PupilForm(forms.ModelForm):
 
     class Meta:
         model = Pupil
+        exclude = ('tutor',)

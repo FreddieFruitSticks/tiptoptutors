@@ -1,0 +1,67 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static %}
+{% load url from future %}
+{% load admin_urls %}
+
+
+{% block extrahead %}{{ block.super }}
+{% url 'admin:jsi18n' as jsi18nurl %}
+<script type="text/javascript" src="{{ jsi18nurl|default:"../../../jsi18n/" }}"></script>
+{{ media }}
+{% endblock %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />{% endblock %}
+
+{% block bodyclass %}select-tutors change-form{% endblock %}
+
+{% if not is_popup %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label='matchmaker' %}">Matchmaker</a>
+&rsaquo; <a href="{% url 'admin:matchmaker_pupilproxy_changelist' %}">Pupils</a>
+</div>
+{% endblock %}
+{% endif %}
+
+{% block content %}
+<div id="content-main">
+<form enctype="multipart/form-data" action="{{ form_url }}" method="post" id="nexus_form">
+{% csrf_token %}
+<div>
+{% if is_popup %}<input type="hidden" name="_popup" value="1" />{% endif %}
+{% if form.errors %}
+    <p class="errornote">
+    {% blocktrans count counter=form.errors|length %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}
+    </p>
+    {{ form.non_field_errors }}
+{% endif %}
+<div class="pupil-info">
+    <p class="name">{{ form.pupil_obj.name }}</p>
+    <p class="level-of-study">{{ form.pupil_obj.level_of_study }}</p>
+    <ul class="subjects">
+        {% for subject in form.pupil_obj.unmatched_subjects %}
+            <li>{{ subject.name }}</li>
+        {% endfor %}
+    </ul>
+    <p class="requirements">Special requirements: {{ form.pupil_obj.requirement|default:"N/A" }}</p>
+</div>
+<fieldset class="module aligned">
+{% for field in form.hidden_fields %}{{ field }}{% endfor %}
+{% for field in form.visible_fields %}
+<div class="form-row">
+	<div>
+    {{ field.errors }}
+    {{ field.label_tag }}{{ field }}
+    {% if field.help_text %}
+        <p class="help">{{ field.help_text|safe }}</p>
+    {% endif %}
+	</div>
+</div>
+{% endfor %}
+</fieldset>
+</div>
+<div class="submit-row"><input type="submit" value="{% trans 'Request tutors' %}" class="default" name="_save"/></div>
+</form>
+</div>
+{% endblock %}

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
@@ -12,5 +13,11 @@ urlpatterns = patterns('',
     url(r'', include('contact.urls')),
     url(r'', include('pupil.urls')),
     url(r'', include('tutor.urls')),
+    url(r'^sms/', include('sms.urls')),
 )
 
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += patterns('',
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    )
