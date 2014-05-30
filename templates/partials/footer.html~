@@ -20,10 +20,10 @@
             <ul class="small-block-grid-3">
                 <li>
                     <ul class="side-nav">
-                        <li><a href="/subjects#highSchoolMathematics">Mathematics</a></li>
-                        <li><a href="/subjects#highSchoolAccounting">Accounting</a></li>
-                        <li><a href="/subjects#highSchoolSciences">Sciences</a></li>
-                        <li><a href="/subjects#highSchoolEconomics">Economics</a></li>
+                        <li><a href="#">Mathematics</a></li>
+                        <li><a href="#">Accounting</a></li>
+                        <li><a href="#">Sciences</a></li>
+                        <li><a href="#">Economics</a></li>
                     </ul>
                 </li>
                 <!--<li>-->
@@ -52,17 +52,17 @@
                 <li>
                     <ul class="side-nav">
                         <li><a href="/subjects#universityMathematics">Mathematics</a></li>
-                        <li><a href="/subjects#universityPhysics">Physics</a></li>
-                        <li><a href="/subjects#universityChemistry">Chemistry</a></li>
-                        <li><a href="/subjects#universityStatistics">Statistics</a></li>
-                        <li><a href="/subjects#universityComputerScience">CompSci</a></li>
+                        <li><a href="#">Physics</a></li>
+                        <li><a href="#">Chemistry</a></li>
+                        <li><a href="#">Statistics</a></li>
+                        <li><a href="#">CompSci</a></li>
                     </ul>
                 </li>
                <li>
                     <ul class="side-nav">
-                        <li><a href="/subjects#universityAppliedMathematics">Applied Maths</a></li>
-                        <li><a href="/subjects#universityAccounting">Accounting</a></li>
-                        <li><a href="/subjects#universityEconomics">Economics</a></li>
+                        <li><a href="#">Applied Maths</a></li>
+                        <li><a href="#">Accounting</a></li>
+                        <li><a href="#">Economics</a></li>
                     </ul>
                 </li>
             </ul>
