@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'', include('pupil.urls')),
     url(r'', include('tutor.urls')),
     url(r'^sms/', include('sms.urls')),
+    url(r'', include('quote.urls')),
 )
 
 if settings.DEBUG:

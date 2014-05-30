@@ -10,6 +10,7 @@ class Tutor(models.Model):
     #admin tools
     comment     = models.TextField(null=True, blank=True)
     #front end display
+    # TODO - make next 6 fields required (show * in form)
     name        = models.CharField(max_length=20, verbose_name="name")
     surname     = models.CharField(max_length=20, verbose_name="surname")
     email       = models.EmailField(max_length=25, verbose_name="email")

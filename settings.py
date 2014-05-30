@@ -55,8 +55,10 @@ DATABASES = {
 # ==============================================================================
 
 ADMINS = (
+
+    ('tiptoptutors', 'admin@tiptoptutors.co.za'),
+    ('darren', 'darren@symfony.co.za'),
     ('freddie', 'info@tiptoptutors.co.za'),
-    ('darren', 'darren@symphony.co.za'),
     ('riz', 'rizziepit@gmail.com')
 )
 MANAGERS = ADMINS
@@ -151,6 +153,7 @@ DJANGO_CONTRIB_APPS = (
     'django.contrib.admindocs',
     'django.contrib.humanize',
     'django.contrib.webdesign',
+
 )
 
 PROJECT_APPS = (
@@ -170,6 +173,7 @@ THIRD_PARTY_APPS = (
     'debug_toolbar',
     'djcelery',
     'kombu.transport.django'
+
 )
 
 INSTALLED_APPS = DJANGO_CONTRIB_APPS + PROJECT_APPS + THIRD_PARTY_APPS

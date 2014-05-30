@@ -1,37 +1,39 @@
-{% extends "tutor/base.html" %}
+{% extends "quote/base.html" %}
 {% block content %}
-
     <!--BODY/MAIN-->
-    <section id="tutor">
-
+    <section id="contact">
         <div class="row">
             <div class="large-16 columns container">
                 <div class="row">
                     <!-- Contact Details -->
                     <div class="large-12 columns">
 
+                        <h3>Get an Instant Quote</h3>
 
-                        <h3>Become A Tutor</h3>
+                        <p>No spam, no fuss, just a quote.
+                        </p>
 
-                        <p>Apply now to become a Tip Top Tutor and select from a variety of mathematical-based subjects, offered at both school as well as University level.</p>
 
                         <section class="section">
-                            <h5 class="title">Your details</h5>
-
+                            <h5 class="title">Your Details</h5>
                             <div class="content" data-slug="panel1">
-                                <form method="post" action="{% url "tutor" %}">{% csrf_token %}
+                                <form method="post" action="{% url "quote" %}">{% csrf_token %}
                                     {% include "common/form.html" %}
                                 </form>
+
                             </div>
                         </section>
+
                     </div>
                     <!-- End Contact Details -->
+
+                    <!-- Sidebar -->
+
+                    <!-- End Sidebar -->
                 </div>
 
                 <!-- End Main Content and Sidebar -->
             </div>
         </div>
     </section>
-
-
 {% endblock %}

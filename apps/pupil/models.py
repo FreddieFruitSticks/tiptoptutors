@@ -17,6 +17,9 @@ class PupilTutorMatch(models.Model):
     start_date = models.DateField(null=True, blank=True, db_index=True)
     end_date = models.DateField(null=True, blank=True, db_index=True)
 
+    price = models.CharField(max_length=20,null=True, blank=True )
+    lesson = models.CharField(max_length=20, verbose_name="number of lessons", null=True, blank=True)
+
     @property
     def is_active(self):
         date_now = timezone.now().date()
@@ -54,3 +57,25 @@ class Pupil(models.Model):
 
     def __unicode__(self):
         return '%s %s' % (self.name, self.surname)
+
+# class Pupil(models.Model):
+#     tutor           = models.ManyToManyField(Tutor, null=True, blank=True,
+#                                              through=PupilTutorMatch)
+#     name            = models.CharField(max_length=20)
+#     surname         = models.CharField(max_length=20)
+#     email           = models.EmailField()
+#     contact_number  = models.CharField(max_length=15)
+#     subject         = models.ManyToManyField(AvailableTutorSubject)
+#     level_of_study  = models.ForeignKey(LevelOfStudy)
+#     street          = models.CharField(max_length=20)
+#     suburb          = models.CharField(max_length=20)
+#     city            = models.ForeignKey(City)
+#     # available_times = models.TextField(blank=True, null=True)
+#     # requirement     = models.TextField(verbose_name="personal requirements", blank=True, null=True)
+#     time_and_day    = models.TextField(verbose_name="times and days", blank=True, null=True)
+#
+#
+#     created_at = models.DateTimeField(auto_now=True)
+#
+#     def __unicode__(self):
+#         return '%s %s' % (self.name, self.surname)

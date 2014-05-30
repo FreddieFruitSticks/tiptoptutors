@@ -1,5 +1,6 @@
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView
+from contact.views import ContactView
 from pupil.forms import PupilForm
 from django.http import HttpResponseRedirect
 from pupil.models import Pupil
