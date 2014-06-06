@@ -192,7 +192,7 @@ class Clickatell(SMSApi):
         except (ValueError, KeyError) as e:
             raise ClickatellException(str(e))
         except AssertionError:
-            raise ClickatellException("Reply message does not match API ID") 
+            raise ClickatellException("Reply message does not match API ID")
 
 
 class BulkSMSException(SMSApiException):
@@ -201,15 +201,39 @@ class BulkSMSException(SMSApiException):
 
 class BulkSMS(SMSApi):
 
-    # 23|invalid credentials (username was: john)|
     MESSAGE_ID_PREFIX = 'BULK'
     ERROR_REGEX = re.compile(r'(?P<status_code>\d+)\|(?P<status_description>[^|]*)\|[\s\n]*$')
     SEND_REGEX = re.compile(r'(?P<status_code>0|1)\|(?P<status_description>[^|]*)\|(?P<batch_id>\d+)[\s\n]*$')
+    STATUSES = {
+        "11": "Delivered to mobile",
+        "22": "Internal fatal error",
+        "23": "Authentication failure",
+        "24": "Data validation failed",
+        "25": "You do not have sufficient credits",
+        "26": "Upstream credits not available",
+        "27": "You have exceeded your daily quota",
+        "28": "Upstream quota exceeded",
+        "29": "Message sending cancelled",
+        "31": "Unroutable",
+        "32": "Blocked (probably because of a recipient's complaint against you)",
+        "33": "Failed: censored",
+        "50": "Delivery failed - generic failure",
+        "51": "Delivery to phone failed",
+        "52": "Delivery to network failed",
+        "53": "Message expired",
+        "54": "Failed on remote network",
+        "55": "Failed: remotely blocked (variety of reasons)",
+        "56": "Failed: remotely censored (typically due to content of message)",
+        "57": "Failed due to fault on handset (e.g. SIM full)",
+        "64": "Queued for retry after temporary failure delivering, due to fault on handset (transient)",
+        "70": "Unknown upstream status",
+    }
 
-    def __init__(self, endpoint_url, username, password):
+    def __init__(self, endpoint_url, username, password, push_password):
         self.endpoint_url = endpoint_url
         self.username = username
         self.password = password
+        self.push_password = push_password
 
     def _request(self, rel_path, params):
         params = params.copy()
@@ -259,6 +283,10 @@ class BulkSMS(SMSApi):
         # BulkSMS only does GET requests
         if request.method != "GET":
             raise BulkSMSException("Invalid request type")
+        if request.GET.get('pass', None) != self.push_password:
+            raise BulkSMSException("Not authorized")
+        # datetime format: 'yy-MM-dd HH:mm:ss'
+        raise NotImplementedError
 
     def process_status_report(self, request):
         '''
@@ -267,6 +295,15 @@ class BulkSMS(SMSApi):
         '''
         if request.method != "GET":
             raise BulkSMSException("Invalid request type")
+        if request.GET.get('pass', None) != self.push_password:
+            raise BulkSMSException("Not authorized")
+        try:
+            message_id = request.GET['batch_id']
+            address = request.GET['msisdn']
+            status_code = request.GET['status']
+            return BulkSMS.get_message_id(message_id), address, BulkSMS.STATUSES[status_code]
+        except (ValueError, KeyError) as e:
+            raise BulkSMSException(str(e))
 
 
 def send_smses(api_name, numbers, message, enable_reply=False):

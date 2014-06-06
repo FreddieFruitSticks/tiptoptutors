@@ -1,5 +1,7 @@
 import json
+from urllib import urlencode
 
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import RequestFactory
@@ -108,6 +110,69 @@ class BulkSMSTestCase(TestCase):
             self.assertEqual(match.group('batch_id'), '1234')
             self.assertFalse(BulkSMS.ERROR_REGEX.match(resp_text))
 
+    def test_process_status_report(self):
+        factory = RequestFactory()
+        payload = {
+            'batch_id': '12345',
+            'completed_time': '14-05-25 12:05:11',
+            'msisdn': '279995631564',
+            'status': '11',
+            'unique_id': '1',
+            'pass': settings.BULKSMS['push_password']
+        }
+        request = factory.get('/status-callback/?%s' % urlencode(payload))
+        api_obj = _get_api_obj('BulkSMS')
+        result = api_obj.process_status_report(request)
+        self.assertEqual(len(result), 3)
+        self.assertEqual(result[0], BulkSMS.get_message_id(payload['batch_id']))
+        self.assertEqual(result[1], payload['msisdn'])
+        self.assertEqual(result[2], BulkSMS.STATUSES[payload['status']])
+
+    '''def test_process_reply(self):
+        factory = RequestFactory()
+        payload = {
+            'batch_id': '12345',
+            'completed_time': '14-05-25 12:05:11',
+            'msisdn': '279995631564',
+            'status': '11',
+            'unique_id': '1',
+            'pass': settings.BULKSMS['push_password']
+        }
+        request = factory.get('/reply-callback/?%s' % urlencode(payload))
+        api_obj = _get_api_obj('BulkSMS')
+        result = api_obj.process_status_report(request)
+        self.assertEqual(len(result), 4)
+        self.assertEqual(result[0], BulkSMS.get_message_id(payload['batch_id']))
+        self.assertEqual(result[1], payload['msisdn'])
+        self.assertEqual(result[2], BulkSMS.STATUSES[payload['text']])'''
+    '''def test_process_reply(self):
+        factory = RequestFactory()
+        payload = {'callback': {
+            'moMsgId': 'b2aee337abd962489b123fda9c3480fa',
+            'timestamp': '2008-08-0609:43:50',
+            'to': '279995631564',
+            'from': '27833001171',
+            'text': 'Hereisthe messagetext',
+            'api_id': '3478778',
+            'charset': 'ISO-8859-1',
+            'udh': '',
+        }}
+        request = factory.post('/reply-callback/',
+                               {'data': json.dumps(payload)})
+        api_obj = _get_api_obj('Clickatell')
+        result = api_obj.process_reply(request)
+        self.assertEqual(len(result), 4)
+        self.assertEqual(result[0], Clickatell.get_message_id(payload['callback']['moMsgId']))
+        self.assertEqual(result[1], payload['callback']['from'])
+        self.assertEqual(result[2], payload['callback']['text']\
+                                    .decode(payload['callback']['charset']))
+        from datetime import datetime
+        import pytz
+        timestamp = datetime(year=2008, month=8, day=6,
+                             hour=7, minute=43, second=50,
+                             tzinfo=pytz.utc)
+        self.assertEqual(result[3], timestamp)'''
+
 
 def signal_handler(sender, **kwargs):
     pass
@@ -143,14 +208,15 @@ class ApiTestCase(TestCase):
         ).pk
         data = {'data': json.dumps(payload)}
         valid_r = self.client.post(reverse('sms-status-callback'), data)
-        get_r = self.client.get(reverse('sms-status-callback'), data)
-        invalid_r = self.client.post(reverse('sms-status-callback'), {'data': '{]'})
         self.assertEqual(valid_r.status_code, 200)
-        self.assertEqual(get_r.status_code, 405)
-        # this test passes because Django forces DEBUG = False in tests
-        self.assertEqual(invalid_r.status_code, 200)
         self.assertEqual(SMS.objects.get(pk=sms_pk).delivery_status,
                          Clickatell.STATUSES[payload['callback']['status']])
+        # check that invalid requests return appropriate response code
+        get_r = self.client.get(reverse('sms-status-callback'), data)
+        invalid_r = self.client.post(reverse('sms-status-callback'), {'data': '{]'})
+        self.assertEqual(get_r.status_code, 200)
+        # this test passes because Django forces DEBUG = False in tests
+        self.assertEqual(invalid_r.status_code, 200)
 
     def test_process_reply_clickatell(self):
         payload = {'callback': {
@@ -169,12 +235,7 @@ class ApiTestCase(TestCase):
         )
         data = {'data': json.dumps(payload)}
         valid_r = self.client.post(reverse('sms-reply-callback'), data)
-        get_r = self.client.get(reverse('sms-reply-callback'), data)
-        invalid_r = self.client.post(reverse('sms-reply-callback'), {'data': '{]'})
         self.assertEqual(valid_r.status_code, 200)
-        self.assertEqual(get_r.status_code, 405)
-        # this test passes because Django forces DEBUG = False in tests
-        self.assertEqual(invalid_r.status_code, 200)
         from datetime import datetime
         import pytz
         timestamp = datetime(year=2008, month=8, day=6,
@@ -185,3 +246,9 @@ class ApiTestCase(TestCase):
                                          instance=sms,
                                          text=payload['callback']['text'],
                                          timestamp=timestamp)
+        # check that invalid requests return appropriate response code
+        get_r = self.client.get(reverse('sms-reply-callback'), data)
+        invalid_r = self.client.post(reverse('sms-reply-callback'), {'data': '{]'})
+        self.assertEqual(get_r.status_code, 200)
+        # this test passes because Django forces DEBUG = False in tests
+        self.assertEqual(invalid_r.status_code, 200)

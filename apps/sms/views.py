@@ -21,6 +21,14 @@ class StatusCallbackView(View):
                 return HttpResponseBadRequest(str(e))
         return HttpResponse()
 
+    def get(self, request, *args, **kwargs):
+        try:
+            process_status_report('BulkSMS', request)
+        except SMSApiException as e:
+            if settings.DEBUG:
+                return HttpResponseBadRequest(str(e))
+        return HttpResponse('OK')
+
 
 class ReplyCallbackView(View):
     http_method_names = ["post", "get"]
@@ -32,3 +40,11 @@ class ReplyCallbackView(View):
             if settings.DEBUG:
                 return HttpResponseBadRequest(str(e))
         return HttpResponse()
+
+    def get(self, request, *args, **kwargs):
+        try:
+            process_reply('BulkSMS', request)
+        except SMSApiException as e:
+            if settings.DEBUG:
+                return HttpResponseBadRequest(str(e))
+        return HttpResponse('OK')

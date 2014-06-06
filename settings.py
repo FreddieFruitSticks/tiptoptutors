@@ -203,6 +203,7 @@ BULKSMS = {
     'username': 'tiptoptutors',
     'password': 'MPKoBAbFhncL6QXWrANh',
     'endpoint_url': 'http://bulksms.2way.co.za:5567/eapi',
+    'push_password': '4v15tv087nfl34ucn'
 }
 # ==============================================================================
 # Template directories
