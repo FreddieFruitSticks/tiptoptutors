@@ -127,7 +127,7 @@ class ApiTestCase(TestCase):
     def tearDown(self):
         reply_handler.reset_mock()
 
-    def test_process_status_report(self):
+    def test_process_status_report_clickatell(self):
         payload = {'callback': {
             'apiMsgId': '996411ad91fa211e7d17bc873aa4a41d',
             'cliMsgId': '',
@@ -138,7 +138,7 @@ class ApiTestCase(TestCase):
             'status': '004'
         }}
         sms_pk = SMS.objects.create(
-            message_id=payload['callback']['apiMsgId'],
+            message_id=Clickatell.get_message_id(payload['callback']['apiMsgId']),
             mobile_number=payload['callback']['to'],
         ).pk
         data = {'data': json.dumps(payload)}
@@ -152,7 +152,7 @@ class ApiTestCase(TestCase):
         self.assertEqual(SMS.objects.get(pk=sms_pk).delivery_status,
                          Clickatell.STATUSES[payload['callback']['status']])
 
-    def test_process_reply(self):
+    def test_process_reply_clickatell(self):
         payload = {'callback': {
             'moMsgId': 'b2aee337abd962489b123fda9c3480fa',
             'timestamp': '2008-08-0609:43:50',
@@ -164,7 +164,7 @@ class ApiTestCase(TestCase):
             'udh': '',
         }}
         sms = SMS.objects.create(
-            message_id=payload['callback']['moMsgId'],
+            message_id=Clickatell.get_message_id(payload['callback']['moMsgId']),
             mobile_number=payload['callback']['from'],
         )
         data = {'data': json.dumps(payload)}

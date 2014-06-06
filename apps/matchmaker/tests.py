@@ -89,14 +89,14 @@ class MatchmakerTestCase(TestCase):
         # Check that no unmatched subjects remain
         self.assertEqual(self.pupil.unmatched_subjects.count(), 0)
 
-    def test_request_reply(self):
+    def test_request_reply_clickatell(self):
         subject = self.pupil.unmatched_subjects[0]
         rft = RequestForTutor.objects.create(pupil=self.pupil,
                                              subject=subject)
         mobile_international = convert_to_international_format(self.tutor.mobile)
         sms = RequestSMS.objects.create(tutor=self.tutor,
                                         mobile_number=mobile_international,
-                                        message_id='123456')
+                                        message_id='CLICK-123456')
         sms.requests.add(rft)
         payload = {'callback': {
             'moMsgId': '123456',

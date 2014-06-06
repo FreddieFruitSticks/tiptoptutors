@@ -53,7 +53,11 @@ class InvalidAPIError(ValueError):
     pass
 
 
-class ClickatellException(Exception):
+class SMSApiException(Exception):
+    pass
+
+
+class ClickatellException(SMSApiException):
     pass
 
 
@@ -191,7 +195,7 @@ class Clickatell(SMSApi):
             raise ClickatellException("Reply message does not match API ID") 
 
 
-class BulkSMSException(Exception):
+class BulkSMSException(SMSApiException):
     pass
 
 
@@ -252,14 +256,17 @@ class BulkSMS(SMSApi):
         Extracts and returns (message_id, address, text, datetime)
         from request.
         '''
-        raise NotImplementedError
+        # BulkSMS only does GET requests
+        if request.method != "GET":
+            raise BulkSMSException("Invalid request type")
 
     def process_status_report(self, request):
         '''
         Extracts and returns (message_id, address, status)
         from request.
         '''
-        raise NotImplementedError
+        if request.method != "GET":
+            raise BulkSMSException("Invalid request type")
 
 
 def send_smses(api_name, numbers, message, enable_reply=False):
