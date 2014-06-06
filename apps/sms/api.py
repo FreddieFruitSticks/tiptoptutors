@@ -24,6 +24,10 @@ class SMSApi(object):
     def __init__(self, endpoint_url):
         self.endpoint_url = endpoint_url
 
+    @classmethod
+    def get_message_id(cls, batch_code):
+        return '%s-%s' % (cls.MESSAGE_ID_PREFIX, batch_code)
+
     def send(self, numbers, message):
         '''
         Returns [(apimsgid, address), ...] for each number provided.
@@ -55,6 +59,7 @@ class ClickatellException(Exception):
 
 class Clickatell(SMSApi):
 
+    MESSAGE_ID_PREFIX = 'CLICK'
     SESSION_TIMEOUT = 10 * 60  # Clickatell docs say 15 minutes
     ERROR_REGEX = re.compile(r'ERR:\s*(?P<err_no>\d+),\s*(?P<err_description>.*)')
     SESSION_REGEX = re.compile(r'OK:\s*(?P<session_id>.*)')
@@ -142,8 +147,8 @@ class Clickatell(SMSApi):
         body = self._request('sendmsg', params)
         matches = Clickatell.SEND_REGEX.findall(body)
         if len(numbers) == 1:
-            return [(g[0], numbers[0]) for g in matches]
-        return [(g[0], g[2]) for g in matches]
+            return [(Clickatell.get_message_id(g[0]), numbers[0]) for g in matches]
+        return [(Clickatell.get_message_id(g[0]), g[2]) for g in matches]
 
     def process_status_report(self, request):
         '''
@@ -158,7 +163,7 @@ class Clickatell(SMSApi):
             message_id = fields['apiMsgId']
             address = fields['to']
             status_code = fields['status']
-            return message_id, address, Clickatell.STATUSES[status_code]
+            return Clickatell.get_message_id(message_id), address, Clickatell.STATUSES[status_code]
         except (ValueError, KeyError) as e:
             raise ClickatellException(str(e))
 
@@ -179,11 +184,82 @@ class Clickatell(SMSApi):
             timestamp = datetime.strptime(fields['timestamp'], '%Y-%m-%d%H:%M:%S')
             # Clickatell documentation mentions using GMT +2
             timestamp = pytz.timezone("Africa/Johannesburg").localize(timestamp)
-            return message_id, address, text, timestamp
+            return Clickatell.get_message_id(message_id), address, text, timestamp
         except (ValueError, KeyError) as e:
             raise ClickatellException(str(e))
         except AssertionError:
             raise ClickatellException("Reply message does not match API ID") 
+
+
+class BulkSMSException(Exception):
+    pass
+
+
+class BulkSMS(SMSApi):
+
+    # 23|invalid credentials (username was: john)|
+    MESSAGE_ID_PREFIX = 'BULK'
+    ERROR_REGEX = re.compile(r'(?P<status_code>\d+)\|(?P<status_description>[^|]*)\|[\s\n]*$')
+    SEND_REGEX = re.compile(r'(?P<status_code>0|1)\|(?P<status_description>[^|]*)\|(?P<batch_id>\d+)[\s\n]*$')
+
+    def __init__(self, endpoint_url, username, password):
+        self.endpoint_url = endpoint_url
+        self.username = username
+        self.password = password
+
+    def _request(self, rel_path, params):
+        params = params.copy()
+        params.update({
+            'username': self.username,
+            'password': self.password,
+        })
+        resp = requests.post('%s/%s' % (self.endpoint_url, rel_path),
+                             params=params)
+
+        self._check_error_and_raise(resp)
+
+        return resp.text
+
+    def _check_error_and_raise(self, response):
+        if response.status_code != 200:
+            raise BulkSMSException("HTTP %s: %s" % (response.status_code,
+                                                    response.text))
+        match = BulkSMS.ERROR_REGEX.match(response.text)
+        if match:
+            raise BulkSMSException("Error %s: %s" % (match.group('status_code'),
+                                                     match.group('status_description')))
+
+    def send(self, numbers, message, enable_reply=False):
+        '''
+        Returns [(apimsgid, address), ...] for each number provided.
+        '''
+        params = {
+            'msisdn': ','.join(numbers),
+            'message': message,
+            'want_report': '1',
+        }
+        if enable_reply:
+            # enable getting replies - in South Africa this has
+            # no effect since it is always enabled
+            params['repliable'] = '1'
+        body = self._request('submission/send_sms/2/2.0', params)
+        match = BulkSMS.SEND_REGEX.match(body)
+        message_id = match.group('batch_id')
+        return [(BulkSMS.get_message_id(message_id), n) for n in numbers]
+
+    def process_reply(self, request):
+        '''
+        Extracts and returns (message_id, address, text, datetime)
+        from request.
+        '''
+        raise NotImplementedError
+
+    def process_status_report(self, request):
+        '''
+        Extracts and returns (message_id, address, status)
+        from request.
+        '''
+        raise NotImplementedError
 
 
 def send_smses(api_name, numbers, message, enable_reply=False):
@@ -243,10 +319,12 @@ def _get_api_obj(api_name):
     '''
     try:
         api_class = {
-            'Clickatell': Clickatell
+            'Clickatell': Clickatell,
+            'BulkSMS': BulkSMS,
         }[api_name]
         api_kwargs = {
-            'Clickatell': settings.CLICKATELL
+            'Clickatell': getattr(settings, 'CLICKATELL', {}),
+            'BulkSMS': getattr(settings, 'BULKSMS', {})
         }[api_name]
         return api_class(**api_kwargs)
     except KeyError:

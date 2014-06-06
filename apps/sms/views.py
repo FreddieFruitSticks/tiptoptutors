@@ -12,7 +12,7 @@ class StatusCallbackView(View):
         # return 400 with error message in response if DEBUG = True
         # otherwise always return 200 response
         try:
-            process_status_report('Clickatell', request)
+            process_status_report('BulkSMS', request)
         except ClickatellException as e:
             if settings.DEBUG:
                 return HttpResponseBadRequest(str(e))
@@ -24,7 +24,7 @@ class ReplyCallbackView(View):
 
     def post(self, request, *args, **kwargs):
         try:
-            process_reply('Clickatell', request)
+            process_reply('BulkSMS', request)
         except ClickatellException as e:
             if settings.DEBUG:
                 return HttpResponseBadRequest(str(e))

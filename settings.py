@@ -199,6 +199,11 @@ CLICKATELL = {
     'sender_id': '36000',  # a short code that has been approved and configured for the api_id
 }
 
+BULKSMS = {
+    'username': 'tiptoptutors',
+    'password': 'MPKoBAbFhncL6QXWrANh',
+    'endpoint_url': 'http://bulksms.2way.co.za:5567/eapi',
+}
 # ==============================================================================
 # Template directories
 # ==============================================================================

@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import RequestFactory
 
-from sms.api import Clickatell, _get_api_obj, sms_reply_received
+from sms.api import Clickatell, BulkSMS, _get_api_obj, sms_reply_received
 from sms.models import SMS
 
 from mock import create_autospec
@@ -56,7 +56,7 @@ class ClickatellTestCase(TestCase):
         api_obj = _get_api_obj('Clickatell')
         result = api_obj.process_status_report(request)
         self.assertEqual(len(result), 3)
-        self.assertEqual(result[0], payload['callback']['apiMsgId'])
+        self.assertEqual(result[0], Clickatell.get_message_id(payload['callback']['apiMsgId']))
         self.assertEqual(result[1], payload['callback']['to'])
         self.assertEqual(result[2], Clickatell.STATUSES[payload['callback']['status']])
 
@@ -77,7 +77,7 @@ class ClickatellTestCase(TestCase):
         api_obj = _get_api_obj('Clickatell')
         result = api_obj.process_reply(request)
         self.assertEqual(len(result), 4)
-        self.assertEqual(result[0], payload['callback']['moMsgId'])
+        self.assertEqual(result[0], Clickatell.get_message_id(payload['callback']['moMsgId']))
         self.assertEqual(result[1], payload['callback']['from'])
         self.assertEqual(result[2], payload['callback']['text']\
                                     .decode(payload['callback']['charset']))
@@ -87,6 +87,26 @@ class ClickatellTestCase(TestCase):
                              hour=7, minute=43, second=50,
                              tzinfo=pytz.utc)
         self.assertEqual(result[3], timestamp)
+
+
+class BulkSMSTestCase(TestCase):
+
+    def test_err_response(self):
+        resp_text = '23|invalid credentials (username was: john)|'
+        match = BulkSMS.ERROR_REGEX.match(resp_text)
+        self.assertTrue(match)
+        self.assertEqual(match.group('status_code'), '23')
+        self.assertEqual(match.group('status_description'),
+                         'invalid credentials (username was: john)')
+
+    def test_send_response(self):
+        for resp_text in ('0|success|1234', '0|success|1234\n', '0|success|1234 '):
+            match = BulkSMS.SEND_REGEX.match(resp_text)
+            self.assertTrue(match)
+            self.assertEqual(match.group('status_code'), '0')
+            self.assertEqual(match.group('status_description'), 'success')
+            self.assertEqual(match.group('batch_id'), '1234')
+            self.assertFalse(BulkSMS.ERROR_REGEX.match(resp_text))
 
 
 def signal_handler(sender, **kwargs):
