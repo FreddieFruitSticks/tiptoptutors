@@ -143,9 +143,9 @@ class SMSTutorsForm(forms.Form):
             request_pks.append([subject_requests[s.pk].pk for s in 
                                 tutor.subject.filter(pk__in=subjects)
                                 if s.pk in subject_requests])
-        # send smses via celery
-        send_tutor_request_smses.delay(tutor_pks, request_pks,
-                                       self.cleaned_data['sms_text'])
+        # send smses (TODO: use celery)
+        send_tutor_request_smses(tutor_pks, request_pks,
+                                 self.cleaned_data['sms_text'])
 
 
 class PupilMatchingAdmin(admin.ModelAdmin):
