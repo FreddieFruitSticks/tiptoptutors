@@ -88,11 +88,11 @@ class Clickatell(SMSApi):
 
     def __eq__(self, other):
         # for testing
-        return self.api_id == other.api_id
+        return type(other) is Clickatell and self.api_id == other.api_id
 
     def __ne__(self, other):
         # for testing
-        return self.api_id != other.api_id
+        return type(other) is Clickatell and self.api_id != other.api_id
 
     def _request(self, rel_path, params):
         if self.session_id is None or (self.last_session_activity - time.time()
@@ -235,6 +235,14 @@ class BulkSMS(SMSApi):
         self.password = password
         self.push_password = push_password
 
+    def __eq__(self, other):
+        # for testing
+        return type(other) is BulkSMS and self.username == other.username
+
+    def __ne__(self, other):
+        # for testing
+        return type(other) is BulkSMS and self.username != other.username
+
     def _request(self, rel_path, params):
         params = params.copy()
         params.update({
@@ -285,8 +293,30 @@ class BulkSMS(SMSApi):
             raise BulkSMSException("Invalid request type")
         if request.GET.get('pass', None) != self.push_password:
             raise BulkSMSException("Not authorized")
-        # datetime format: 'yy-MM-dd HH:mm:ss'
-        raise NotImplementedError
+        try:
+            seq_num = request.GET.get('concat_seq_num', '1')
+            assert not seq_num or seq_num == '1'
+            message_id = request.GET['referring_batch_id']
+            address = request.GET['sender']
+            format = request.GET['dca']
+            text = request.GET['message']
+            if format == '7bit':
+                pass  # no need to decode
+            elif format == '8bit':
+                text = text.decode('hex').decode('utf-8')
+            elif format == '16bit':
+                text = text.decode('hex').decode('utf-16')
+            else:
+                raise ValueError("Unrecognized message format '%s'" % format)
+            # NB: set up BulkSMS profile to use UTC
+            timestamp = datetime.strptime(request.GET['received_time'],
+                                          '%y-%m-%d %H:%M:%S') \
+                                .replace(tzinfo=pytz.utc)
+            return BulkSMS.get_message_id(message_id), address, text, timestamp
+        except (ValueError, KeyError) as e:
+            raise BulkSMSException(str(e))
+        except AssertionError:
+            raise BulkSMSException("Reply message is not first/only in sequence")
 
     def process_status_report(self, request):
         '''
