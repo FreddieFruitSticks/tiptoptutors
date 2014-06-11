@@ -308,10 +308,10 @@ class BulkSMS(SMSApi):
                 text = text.decode('hex').decode('utf-16')
             else:
                 raise ValueError("Unrecognized message format '%s'" % format)
-            # NB: set up BulkSMS profile to use UTC
             timestamp = datetime.strptime(request.GET['received_time'],
                                           '%y-%m-%d %H:%M:%S') \
-                                .replace(tzinfo=pytz.utc)
+            # NB: We set up BulkSMS profile to use Africa/Johannesburg
+            timestamp = pytz.timezone("Africa/Johannesburg").localize(timestamp)
             return BulkSMS.get_message_id(message_id), address, text, timestamp
         except (ValueError, KeyError) as e:
             raise BulkSMSException(str(e))

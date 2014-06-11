@@ -156,7 +156,7 @@ class BulkSMSTestCase(TestCase):
         self.assertEqual(result[1], payload['sender'])
         self.assertEqual(result[2], payload['message'])
         timestamp = datetime(year=2014, month=5, day=25,
-                             hour=12, minute=40, second=6,
+                             hour=10, minute=40, second=6,
                              tzinfo=pytz.utc)
         self.assertEqual(result[3], timestamp)
         # test for 8bit and 16bit (badly)
@@ -302,7 +302,7 @@ class ApiTestCase(TestCase):
                                              urlencode(payload)))
         self.assertEqual(valid_r.status_code, 200)
         timestamp = datetime(year=2014, month=5, day=25,
-                             hour=12, minute=40, second=6,
+                             hour=10, minute=40, second=6,
                              tzinfo=pytz.utc)
         reply_handler.assert_called_with(signal=sms_reply_received,
                                          sender=_get_api_obj('BulkSMS'),
