@@ -309,7 +309,7 @@ class BulkSMS(SMSApi):
             else:
                 raise ValueError("Unrecognized message format '%s'" % format)
             timestamp = datetime.strptime(request.GET['received_time'],
-                                          '%y-%m-%d %H:%M:%S') \
+                                          '%Y-%m-%d %H:%M:%S') \
             # NB: We set up BulkSMS profile to use Africa/Johannesburg
             timestamp = pytz.timezone("Africa/Johannesburg").localize(timestamp)
             return BulkSMS.get_message_id(message_id), address, text, timestamp
