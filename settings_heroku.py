@@ -22,3 +22,5 @@ STATICFILES_DIRS = (
 )
 
 INSTALLED_APPS += ('gunicorn', )
+
+CELERY_ALWAYS_EAGER = True
