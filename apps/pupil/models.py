@@ -57,3 +57,7 @@ class Pupil(models.Model):
 
     def __unicode__(self):
         return '%s %s' % (self.name, self.surname)
+
+    @property
+    def full_name(self):
+        return '%s %s' % (self.name, self.surname)

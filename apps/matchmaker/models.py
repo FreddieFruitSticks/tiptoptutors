@@ -1,4 +1,5 @@
 import random
+import re
 
 from django.db import models
 from django.db.models import Count, F, Q
@@ -156,6 +157,15 @@ class RequestSMS(SMS):
     tutor = models.ForeignKey(TutorProxy)
     response_text = models.CharField(max_length=32, null=True, blank=True)
     response_timestamp = models.DateTimeField(null=True, blank=True)
+
+    @property
+    def codes(self):
+        if not self.response_text:
+            return []
+        return [c[0].strip() for c in
+                re.findall(r'(\w{6,12}($|\s+))',
+                           self.response_text,
+                           re.DOTALL)]
 
 
 @receiver(sms_reply_received)
