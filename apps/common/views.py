@@ -14,3 +14,6 @@ class SubjectsView(TemplateView):
 
 class LibraryView(TemplateView):
     template_name = "common/library.html"
+
+class TermsAndConditionsView(TemplateView):
+    template_name = "common/termsandconditions.html"
