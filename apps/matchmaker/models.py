@@ -170,10 +170,26 @@ class RequestSMS(SMS):
 
 @receiver(sms_reply_received)
 def save_requestsms_response(sender, **kwargs):
-    try:
-        sms_obj = RequestSMS.objects.get(pk=kwargs['instance'].pk)
+    sms_objects = RequestSMS.objects.filter(
+        pk__in=[i.pk for i in kwargs['instance']]
+    )
+    if len(sms_objects) == 0:
+        pass
+    elif len(sms_objects) == 1:
+        sms_obj = sms_objects[0]
         sms_obj.response_text = kwargs['text']
         sms_obj.response_timestamp = kwargs['timestamp']
         sms_obj.save()
-    except RequestSMS.DoesNotExist:
-        pass
+    else:
+        # match by code in response
+        codes = [c[0].strip() for c in
+                 re.findall(r'(\w{6,12}($|\s+))',
+                           kwargs['text'],
+                           re.DOTALL)]
+
+        if sms_objects.filter(requests__code__in=codes).exists():
+            sms_objects = sms_objects.filter(requests__code__in=codes)
+        else:
+            sms_objects = sms_objects.filter(response_text__isnull=True)
+        sms_objects.update(response_text=kwargs['text'],
+                           response_timestamp=kwargs['timestamp'])

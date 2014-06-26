@@ -373,14 +373,18 @@ def process_status_report(api_name, request):
 def process_reply(api_name, request):
     api_obj = _get_api_obj(api_name)
     message_id, mobile_number, text, timestamp = api_obj.process_reply(request)
-    matched_smses = SMS.objects.filter(message_id=message_id,
-                                       mobile_number=mobile_number) \
+    # NB: we ignore the message_id because it cannot reliably
+    # tell us which SMS is being responded to if multiple
+    # outgoing SMSes were sent in a short space of time
+    cutoff = timezone.now() - timedelta(hours=48)
+    matched_smses = SMS.objects.filter(mobile_number=mobile_number,
+                                       created__gte=cutoff) \
                                .order_by('-created')
     if len(matched_smses) == 0:
         return False
     # assume the reply is for the latest matching sms
     sms_reply_received.send(sender=api_obj,
-                            instance=matched_smses[0],
+                            instance=list(matched_smses),
                             text=text,
                             timestamp=timestamp)
     return True

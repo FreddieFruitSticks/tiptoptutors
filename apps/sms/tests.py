@@ -242,7 +242,7 @@ class ApiTestCase(TestCase):
                              tzinfo=pytz.utc)
         reply_handler.assert_called_with(signal=sms_reply_received,
                                          sender=_get_api_obj('Clickatell'),
-                                         instance=sms,
+                                         instance=[sms],
                                          text=payload['callback']['text'],
                                          timestamp=timestamp)
         # check that invalid requests return appropriate response code
@@ -306,7 +306,7 @@ class ApiTestCase(TestCase):
                              tzinfo=pytz.utc)
         reply_handler.assert_called_with(signal=sms_reply_received,
                                          sender=_get_api_obj('BulkSMS'),
-                                         instance=sms,
+                                         instance=[sms],
                                          text=payload['message'],
                                          timestamp=timestamp)
         # check that invalid requests return appropriate response code
