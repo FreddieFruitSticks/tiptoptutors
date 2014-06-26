@@ -114,7 +114,7 @@ class BulkSMSTestCase(TestCase):
         factory = RequestFactory()
         payload = {
             'batch_id': '12345',
-            'completed_time': '14-05-25 12:05:11',
+            'completed_time': '2014-05-25 12:05:11',
             'msisdn': '27833001171',
             'status': '11',
             'unique_id': '1',
@@ -145,7 +145,7 @@ class BulkSMSTestCase(TestCase):
             'concat_reference': '',
             'concat_num_segments': '',
             'concat_seq_num': '',
-            'received_time': '14-05-25 12:40:06',
+            'received_time': '2014-05-25 12:40:06',
             'pass': settings.BULKSMS['push_password']
         }
         request = factory.get('/reply-callback/?%s' % urlencode(payload))
@@ -255,7 +255,7 @@ class ApiTestCase(TestCase):
     def test_process_status_report_bulksms(self):
         payload = {
             'batch_id': '12345',
-            'completed_time': '14-05-25 12:05:11',
+            'completed_time': '2014-05-25 12:05:11',
             'msisdn': '27833001171',
             'status': '11',
             'unique_id': '1',
@@ -291,7 +291,7 @@ class ApiTestCase(TestCase):
             'concat_reference': '',
             'concat_num_segments': '',
             'concat_seq_num': '',
-            'received_time': '14-05-25 12:40:06',
+            'received_time': '2014-05-25 12:40:06',
             'pass': settings.BULKSMS['push_password']
         }
         sms = SMS.objects.create(
