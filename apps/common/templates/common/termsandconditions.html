@@ -1,70 +1,127 @@
-{% extends "common/base.html" %}
+{% extends "contact/base.html" %}
 {% block content %}
-
-    <section id="base">
-
+<!--BODY/MAIN-->
+<section id="subjects">
     <div class="row">
         <div class="large-16 columns container">
             <div class="row">
-                <div class="large-16 columns">
-                    <h3>Where we<span> came from</span><br/>
-                    <small>Our story in a nutshell.</small>
-                    </h3>
-                    <br/>
-                </div>
-            </div>
+                <!-- Contact Details -->
+                <div class="large-12 columns">
 
-            <div class="row">
-                <div class="medium-5 columns">
-
-                    <img src="/static/img/blog/thumb-2.png">
-                </div>
-                <div class="medium-11 columns">
-
-                    <p>Hi, my name is Freddie and I founded <strong>Tip Top Tutors</strong> while doing my Master’s degree in Mathematical Statistics at the University of Cape Town. I found that there is an increasing need for tutoring in mathematical-based subjects. We are specialised in these subjects and, as such, our tutors know exactly how to guide you, and how to help you achieve your goals.</p><p>We believe that a tutoring agency should be more than just a ‘middle-man’. That is why at <strong>Tip Top Tutors</strong> we guarantee results and therefore I, personally, hand-pick only the very best and brightest tutors. Each tutor has a complete background check before they are allowed to tutor, and each pupil tutored by <strong>Tip Top Tutors</strong> is closely monitored to ensure that their needs are met.</p>
-                </div>
-            </div>
-            <hr/>
-
-            <div class="row">
-                <div class="large-16 columns">
-                    <div class="large-8 columns">
-                        <h3>Why we <span>guarantee results</span><br/>
-                            <small>Our policy on quality education.</small>
-                        </h3>
-                        <br/>
-
-                        <p>If you purchase a product from a store, every now and then you will get a 'bad apple'. The
-                            only thing to do is return this product. Unfortunately, we cannot have the private lessons
-                            that were tutored returned (since you cannot return the tutor’s time like you can a tangible
-                            product), but we can offer to tutor the pupil for free to ensure their marks do actually
-                            improve. That is why we are prepared to offer the pupil an extra 3 months of tutoring
-                            absolutely free if his/her marks do not increase when using our tutors. This is our quality
-                            assurance guarantee.
-                        </p>
-
-
-            <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-2">
-                <li class="selector">
-                    <a href="{% url "pupil" %}" class="button radius expand">
-                        <span class="textBlock">Get A<br /> Tutor!</span>
-                    </a>
-                </li>
-            </ul>
-
+                    <div class="row">
+                        <div class="large-16 columns">
+                            <h3>Terms and <span>conditions</span><br/>
+                            </h3>
+                            <br/>
+                        </div>
                     </div>
-                    <div class="large-8 columns">
-                        <h3>Why our tutors <span>work best</span><br/>
-                            <small>Screened, qualified and specialised.</small>
-                        </h3>
-                        <br/>
-                       <p>Private tuition is a method of education that has, in our experience, proven to improve grades better than any other method of extra-curricular activity. It gives pupils the opportunity to discuss their particular difficulties, allows the tutor to teach in the exact way that allows each different pupil to learn best, and the pupil is compelled to engage with the tutor without any distractions.</p>
-                       <p>Our systems of tuition are all geared towards mathematical-based subjects and our tutors are all mathematically-inclined, and numerically-talented, individuals. We monitor each pupil on a weekly basis and encourage tutors to take a mentor-like approach when tutoring the pupil. This way our pupils want to learn, which is a stack-load better than forced learning (trust us!).</p>
-                    </div>
+
+                    <h5 id="agreement">Agreement</h5>
+                    <hr/>
+                    <p>Your use of this website, its services and programmes will be governed by these terms and conditions. These terms and conditions constitute an agreement between yourself and Tip Top Tutors.</p>
+                    <p>Tip Top Tutors may amend these terms and conditions from time to time. By accessing the website you are bound to the terms and conditions published on the website at the time of any visit to and/or usage of the site.</p>
+                    <p>A certificate signed by the administrator responsible for maintaining the website will be prima facie proof of the date of publication and content of the current version and all previous versions of the terms and conditions.</p>
+                    <h5 id="correctness-of-information">Correctness of supplied information</h5>
+                    <hr/>
+                    <p>Because we deal with each other in a non-face-to-face environment, you hereby permit Tip Top Tutors and its online partners to rely on the fact that:
+                    <ul>
+                        <li>all your given details are true and correct,</li>
+                        <li>you are legally capable of concluding any transaction on this site,</li>
+                        <li>you have read, understood and accepted these terms and conditions.</li>
+                    </ul></p>
+                    <p>Tip Top Tutors must be entitled to rely on instructions that appear to originate from you even if they come from someone else impersonating you and unless you notify us of any irregularities, to act on any instruction purporting to originate from you.</p>
+                    <h5 id="nature-of-information">Nature of information on the site</h5>
+                    <hr/>
+                    <p>All material on the website merely constitutes an invitation to do business unless otherwise expressly stated and is not an offer to enter into any transaction.</p>
+                    <h5 id="termination-of-usage">Terminating registration or use of the website or services</h5>
+                    <hr/>
+                    <p>Tip Top Tutors may also in its sole discretion and at any time discontinue providing the site or the programmes and other services or any part thereof, with or without notice.</p>
+                    <h5 id="linked-third-party">Linked third-party website and third-party content</h5>
+                    <hr/>
+                    <p>Tip Top Tutors, its contractors, agents, owners and employees are not responsible for the contract or privacy policies of any websites to which it may link.</p>
+<p>Tip Top Tutors shall not be liable in any manner whatsoever for any loss or damage that you may suffer as a result of the use of any linked access from this website.</p>
+                    <h5 id="disclosure">Disclosure</h5>
+                    <hr/>
+                    <p>Access to the services, content, software and content downloads available from the Tip Top Tutors website is classified as “electronic transactions” in terms of the Electronic Communications & Transactions Act 25 of 2002 (“ECT Act”) and therefore users have the rights detailed in Chapter 7 of the ECT Act and Tip Top Tutorshas the duty to disclose the following information:
+                    <ul>
+                        <li>The full name and legal status of the website owner: Tip Top Tutors Pty (Ltd), (Reg: 2007/250990/23)</li>
+                        <li>Main business: Selling, conducting and managing private tutoring services, for the purposes of improving academic results and general academic competence of tutees;</li>
+                        <li>The website address of the Tip Top Tutors website is www.tiptoptutors.co.za;</li>
+                        <li>The official email address of the Tip Top Tutors website is info (at) tiptoptutors.co.za;</li>
+                        <li>Membership of self-regulatory or accreditation bodies: ;</li>
+                        <li>Codes of conduct to which the Tip Top Tutors website subscribes: Code of Conduct and Code of IT Ethics;</li>
+                        <li>Governing terms: ;</li>
+                        <li>Copies of the manual published in terms of section 51 of the Promotion of Access to Information Act 2 of 2000: Download</li>
+                        <li>Management: Directors: ;</li>
+                        <li>The costs associated with the access and use of the Tip Top Tutors website are as follows: Free</li>
+                        <li>Alternative dispute resolution: Subject to urgent and/or interim relief, all disputes regarding:
+                            <ul>
+                        <li>access to the Tip Top Tutors website;
+                        <li>the inability to access the Tip Top Tutors website;
+                        <li>the services and content available from the Tip Top Tutors website; or
+                        <li>these terms and conditions;
+                        </ul>
+                        shall be referred to arbitration in terms of the expedited rules of the Arbitration Foundation of South Africa and such arbitration proceedings shall be conducted in Cape Town in English. The arbitration ruling shall be final and the unsuccessful party shall pay the costs of the successful party on a scale as between attorney and own client.</li>
+                        <li>Cooling off period: In terms of the operation of section 42(1)(d) of the ECT Act, the cooling off provisions of the ECT Act do not apply to this website; and</li>
+                        <li>Users may lodge complaints concerning the Tip Top Tutors website through the “Contact Us” service provided on this website. Users hereby assign the copyright in such complaints to Tip Top Tutors and understand that Tip Top Tutors may use, disclose and publish such complaints and is furthermore under no legal duty to answer, resolve or address such complaints.</li>
+                    </ul>
+                    </p>
+                    <h5 id="disclaimer">Disclaimer</h5>
+                    <hr/>
+                    <p>All the information appearing on these pages is provided without any representation or warranty whatsoever, whether expressed or implied and no liability pertaining thereto will attach to Tip Top Tutors.</p>
+                    <p>Tip Top Tutors accepts no liability whatsoever for any loss whether direct, indirect or consequential arising from information provided on these pages or any actions and/or transactions resulting therefrom.</p>
+                    <p>Tip Top Tutors does not warrant that the functions provided with this website will be uninterrupted or error free or that the website or the server that makes it available is free from viruses or other harmful components.</p>
+                    <p>The Tip Top Tutors website is supplied on an “as is” basis and has not been compiled to meet the user’s individual requirements. It is the responsibility of the user to satisfy himself or herself, prior to entering into this agreement with Tip Top Tutors that the content available from and though the Tip Top Tutors website meet the user’s individual requirements and is compatible with the user’s computer hardware and/or software.</p>
+                    <p>Information, ideas and opinions expressed on the Tip Top Tutors website should not be regarded as professional advice or the official opinion of Tip Top Tutors and users are encouraged to see professional advice before taking any course of action related to the information, ideas or opinions expressed on the Tip Top Tutors website.</p>
+                    <p>Tip Top Tutors does not make any warranties or representation that content and services available from the Tip Top Tutors website will in all cases be true, correct or free from any errors. Tip Top Tutors shall take all reasonable steps to ensure the quality and accuracy of content available from the Tip Top Tutors website and encourage users to report incorrect and untrue information subject to the right of Tip Top Tutors to rely on its free expression rights and determine, in its sole and absolute discretion, the contents of this website.</p>
+                    <h5 id="governing-law">Governing law</h5>
+                    <hr/>
+                    <p>The terms and conditions pertaining to any services appearing on these pages or sites shall be governed and interpreted in accordance with the laws of the Republic of South Africa and application for any of the services offered on these pages or sites will constitute your consent and submission to the jurisdiction of the South African courts regarding all proceedings, transactions, applications or the like instituted by either party against the other, arising from any of the terms and conditions pertaining to such services.</p>
+                    <h5 id="privacy-policy">Privacy policy</h5>
+                    <hr/>
+                    <p>Tip Top Tutors shall take all reasonable steps to protect the personal information of users and for the purpose of this clause “personal information” shall be defined as detailed in the Promotion of Access to Information Act 2 of 2000 (PAIA).</p>
+                    <p>Tip Top Tutors may electronically collect, store and use, amongst other, the following information of users:
+                    <ul>
+                    <li>name and surname;</li>
+                    <li>contact details; and</li>
+                    <li>email address.</li>
+                    </ul></p>
+                    <p>Tip Top Tutors collects, stores and uses the abovementioned information for the following purposes:
+                    <ul><li>communicate requested information to the user;</li>
+                    <li>registration and/or authentication of users; and</li>
+                    <li>to compile non-personal statistical information about browsing habits and access to the Tip Top Tutors website.</li></ul></p>
+                    <p>Information detailed above is collected either electronically by using cookies or is provided voluntarily by the user.</p>
+                    <p>Tip Top Tutors may collect, maintain, save, compile, share, disclose and sell any information collected from users, subject to the following provisions:
+                    <ul><li>Tip Top Tutors shall not disclose personal information from users unless the user consents thereto;</li>
+                    <li>Tip Top Tutors shall disclose information without the user’s consent only through due legal process; and</li>
+                    <li>Tip Top Tutors may compile, use and share any information that does not relate to any specific individual.</li></ul></p>
+                    <p>Tip Top Tutors owns and retains all rights to non-personal statistical information collected and compiled by Tip Top Tutors.</p>
+                    <p>When you complete a form on our website in order to query some aspect of our services, we gather this information to allow us to process your request and provide you with the information requested by you. Tip Top Tutors or our tutors and sub-contractors may contact you by post, email or telephone to ask you for your feedback and comments on our services. We may also wish to provide you with information about special features of our website or any other service or products, which we think, may be of interest to you. If you would rather not receive this information, please send an email message to info (at) tiptoptutors.co.za confirming your request.</p>
+                    <p>By submitting your information you consent to the use of that information as set out in this policy. If we change our privacy policy we will post the changes on this page, and may place notices on other pages of the website, so that you may be aware of the information we collect and how we use it at all times. Continued use of the service will signify that you agree to any such changes.</p>
+                    <h5 id="copyright">Copyright</h5>
+                    <hr/>
+                    <p>Tip Top Tutors retains all copyright in all material including logos and other graphics that form part of this website and in and to its programmes. Any use of materials on this website not expressly authorized is strictly prohibited and constitutes unlawful infringement of the intellectual property rights of Tip Top Tutors.</p>
+                    <p>Tip Top Tutors will not be held responsible for any mistakes, omissions, interruptions or delays with regard to the content or any damage resulting therefrom.</p>
+                    <h5 id="termination">Termination</h5>
+                    <hr/>
+                    <p>Tip Top Tutors may in its sole discretion terminate your access to this website, cancel your ticket order or exercise any other remedy available if it believes that your conduct is in breach with or inconsistent with these terms and conditions.</p>
+                    <h5 id="terms-of-guarantee">Terms of guarantee</h5>
+                    <hr/>
+                    <p>Tip Top Tutors does not guarantee the results of pupils who do not complete all work set out by the tutor. This includes work during the lessons and extra homework set out by the tutor. We expect to pupil to apply himself if we are to show any improvements. We help those who help themselves.</p>
+                    <p>Tip Top Tutors will not guarantee results of any client that does not have 15 lesson or more prior to examination. Each lesson must be no less than one week apart and no more than one week prior to the tutored subject's final examination.</p>
+                    <p>Results are taken to be the results of the 2nd or 4th term results, or a test result of Tip Top Tutors' choosing.</p>
+                    <p>If a client of Tip Top Tutors fulfils the requirements for free tutoring, the client will receive 2 months, at one lesson per week (8 lessons), for free, which must be completed in that year, or at the beginning of the following school year.</p>
+                    <p>The guarantee is only valid once per pupil. Tip Top Tutors does not guarantee free lessons.</p>
+                    <p>If the first set of results show an improvement from previous results, subsequent lessons are no longer guaranteed.</p>
+                    <p>The guarantee is only valid for high school subjects.</p>
+                    <p>Results are only guaranteed for pupils below 80%.</p>
                 </div>
             </div>
+
+            <!-- End Main Content and Sidebar -->
         </div>
     </div>
 
-    </section>
+</section>
+
 {% endblock %}

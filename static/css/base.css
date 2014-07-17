@@ -502,7 +502,7 @@ h3 {
 }
 
 /* line 26, ../../scss/base/_base.scss */
-p {
+p, ul, ul li {
   color: #555454;
   font-family: sans-serif;
   font-size: 14px;
