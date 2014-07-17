@@ -55,8 +55,6 @@ DATABASES = {
 # ==============================================================================
 
 ADMINS = (
-
-    ('tiptoptutors', 'admin@tiptoptutors.co.za'),
     ('darren', 'darren@symfony.co.za'),
     ('freddie', 'info@tiptoptutors.co.za'),
     ('riz', 'rizziepit@gmail.com')
@@ -77,10 +75,11 @@ MAIL_WRITE_TO_HDD = False
 # Django email settings
 DEFAULT_FROM_EMAIL = "no-reply@tiptoptutors.co.za"
 SERVER_EMAIL = 'server@tiptoptutors.co.za'
+# Note: Google has 99 emails per day limit
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_PASSWORD = 'j7lsaXZ7EfB5biy7YNxD'
+EMAIL_HOST_PASSWORD = '0f6GjAAponwMy4XqCeAh'
 EMAIL_HOST_USER = 'no-reply@tiptoptutors.co.za'
 
 # ==============================================================================
