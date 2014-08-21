@@ -26,7 +26,9 @@ class TutorAdmin(admin.ModelAdmin):
         }),
 
         ('Tutor details', {
-            'fields': ('name', 'surname', 'mobile', 'email', 'subject', 'transport', 'id_doc', 'cv', 'academic')
+            'fields': ('name', 'surname', 'mobile', 'email',
+                       'subject', 'transport', 'id_passport',
+                       'id_doc', 'cv', 'academic')
         }),
     )
 

@@ -19,6 +19,7 @@
                             </div>
                             <div class="large-10 columns left {{ field.id_for_label }}">
                                 {{ field }} {% if field.errors %}<small class="error">{{ field.errors }}</small>{% endif %}
+                                {% if field.help_text %}<small class="helptext">{{ field.help_text }}</small>{% endif %}
                             </div>
                         {% endif %}
                     </div>

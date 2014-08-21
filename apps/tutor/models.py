@@ -3,9 +3,14 @@ from option.models import AvailableTutorSubject
 
 class Tutor(models.Model):
     TUTOR_STATUS = (
-    ('Accepted', 'Accepted'),
-    ('Declined', 'Declined'),
-    ('Pending', 'Pending'),
+        ('Accepted', 'Accepted'),
+        ('Declined', 'Declined'),
+        ('Pending', 'Pending'),
+    )
+    GENDER_CHOICES = (
+        ('male', 'Male'),
+        ('female', 'Female'),
+        ('other', 'Other'),
     )
     #admin tools
     comment     = models.TextField(null=True, blank=True)
@@ -13,16 +18,27 @@ class Tutor(models.Model):
     # TODO - make next 6 fields required (show * in form)
     name        = models.CharField(max_length=20, verbose_name="name")
     surname     = models.CharField(max_length=20, verbose_name="surname")
-    email       = models.EmailField(max_length=25, verbose_name="email")
-    mobile      = models.CharField(max_length=10, verbose_name="mobile")
-    id_passport = models.CharField(max_length=20, verbose_name="id/passport number")
+    gender      = models.CharField(max_length=6, verbose_name="gender",
+                                   choices=GENDER_CHOICES)
+    email       = models.EmailField(verbose_name="email")
+    mobile      = models.CharField(max_length=10, verbose_name="mobile number")
     subject     = models.ManyToManyField(AvailableTutorSubject, verbose_name="subject")
-    transport   = models.BooleanField(verbose_name="own transport?", default=False)
-    id_doc      = models.FileField(verbose_name="id", upload_to="media/cv")
-    cv          = models.FileField(blank=True, null=True, upload_to="media/cv")
-    academic    = models.FileField(verbose_name="academic transcript ", blank=True, null=True, upload_to="media/academic/")
+    transport   = models.BooleanField(verbose_name="Transport",
+                                      default=False,
+                                      help_text="Do you have your own transport?")
+    id_passport = models.CharField(max_length=20, verbose_name="ID/passport number")
+    id_doc      = models.FileField(verbose_name="ID",
+                                   upload_to="media/cv",
+                                   help_text="Identification document with a photo is required.")
+    cv          = models.FileField(verbose_name="CV",
+                                   blank=True, null=True, upload_to="media/cv")
+    academic    = models.FileField(verbose_name="Academic transcript",
+                                   blank=True, null=True, upload_to="media/academic",
+                                   help_text="If you don't have a university-level "
+                                   "transcript for the subjects you want to tutor, "
+                                   "attach your matric results instead.")
     status = models.CharField(max_length=10, choices=TUTOR_STATUS, default='2')
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
 
     def __unicode__(self):
         return self.name
