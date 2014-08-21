@@ -14,9 +14,13 @@ from tutor.models import Tutor
 
 
 # numbers + lowercase + uppercase
-REQUEST_CODE_CHARSET = [chr(i) for i in range(ord('0'), ord('9') + 1)] + \
-                       [chr(i) for i in range(ord('a'), ord('z') + 1)] + \
-                       [chr(i) for i in range(ord('A'), ord('Z') + 1)]
+REQUEST_CODE_CHARSET = set([chr(i) for i in range(ord('0'), ord('9') + 1)] + \
+                           [chr(i) for i in range(ord('a'), ord('z') + 1)] + \
+                           [chr(i) for i in range(ord('A'), ord('Z') + 1)])
+# remove letters that are easily mistaken for one another
+REQUEST_CODE_CHARSET.remove('I')
+REQUEST_CODE_CHARSET.remove('l')
+REQUEST_CODE_CHARSET = list(REQUEST_CODE_CHARSET)
 
 # Change with care. These WHERE clauses should work on MySQL, SQLite and Postgres.
 WHERE_PUPILS_WITH_UNMATCHED_SUBJECTS = (
