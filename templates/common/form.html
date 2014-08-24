@@ -1,11 +1,12 @@
 {% load i18n %}
-    <form method="post" action="{% if form_action %}{{ form_action }}{% else %}.{% endif %}">{% csrf_token %}
+    <form method="post" action="{% if form_action %}{{ form_action }}{% else %}.{% endif %}"{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% csrf_token %}
         {% if include_hidden_user %}
         <input type="hidden" name="user_id" value="{{ user.id }}">
         {% endif %}
+        {% for field in form.hidden_fields %}{{ field }}{% endfor %}
         <div class="row collapse">
             <div class="small-12">
-                {% for field in form %}
+                {% for field in form.visible_fields %}
                     <div class="row {% if field.errors %}error{% endif %}">
                         {% if field.id_for_label == "id_tos" %}
                             <div class="large-10 columns left">

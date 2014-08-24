@@ -1,5 +1,6 @@
 from django import forms
 from django.db import models
+from common.models import Document
 from option.models import AvailableTutorSubject
 
 class Tutor(models.Model):

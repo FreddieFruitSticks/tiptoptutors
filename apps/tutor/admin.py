@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from models import Tutor
 
 
@@ -15,10 +16,12 @@ def related_information(obj):
 
 related_information.allow_tags = True
 
+
 class TutorAdmin(admin.ModelAdmin):
     search_fields = [ "name", 'surname', 'mobile', 'email', 'subject' ]
     list_display  =  ("name", 'surname', 'mobile', 'email', related_information)
     list_filter   = ('subject',)
+    raw_id_fields = ('id_doc', 'cv', 'academic')
 
     fieldsets = (
         ('Admin', {

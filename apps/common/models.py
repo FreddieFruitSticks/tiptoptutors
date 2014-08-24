@@ -1,3 +1,4 @@
+import os
 import mimetypes
 
 from django.db import models
@@ -16,7 +17,17 @@ class Document(models.Model):
     modified = models.DateTimeField(auto_now=True,
                                     editable=False)
 
-    def save(self, *args, **kwargs):
-        if self.name is not None:
-            self.mime_type = mimetypes.guess_type(self.name)[0]
-        super(Document, self).save(*args, **kwargs)
+    def set_file(self, file_obj):
+        self.name = os.path.basename(file_obj.name)
+        self.data = file_obj.read()
+        self.mime_type = mimetypes.guess_type(self.name)[0]
+
+    @classmethod
+    def create_from_file(cls, file_obj):
+        doc = cls()
+        doc.set_file(file_obj)
+        doc.save()
+        return doc
+
+    def __unicode__(self):
+        return self.name
