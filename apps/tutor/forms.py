@@ -1,8 +1,10 @@
-from django import forms
+from django.db import models
+
+from common.forms import RelatedDocumentsForm
 from tutor.models import Tutor
 
 
-class TutorForm(forms.ModelForm):
+class TutorForm(RelatedDocumentsForm):
 
     class Meta:
         model = Tutor

@@ -19,9 +19,8 @@
                             <h5 class="title">Your details</h5>
 
                             <div class="content" data-slug="panel1">
-                                <form method="post" action="{% url "tutor" %}">{% csrf_token %}
-                                    {% include "common/form.html" %}
-                                </form>
+                                {% url "tutor" as form_action %}
+                                {% include "common/form.html" %}
                             </div>
                         </section>
                     </div>

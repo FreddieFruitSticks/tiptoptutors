@@ -1,4 +1,6 @@
+from django import forms
 from django.db import models
+from common.models import Document
 from option.models import AvailableTutorSubject
 
 class Tutor(models.Model):
@@ -27,14 +29,20 @@ class Tutor(models.Model):
                                       default=False,
                                       help_text="Do you have your own transport?")
     id_passport = models.CharField(max_length=20, verbose_name="ID/passport number")
-    id_doc      = models.FileField(verbose_name="ID",
-                                   upload_to="media/cv",
-                                   help_text="Identification document with a photo is required.")
-    cv          = models.FileField(verbose_name="CV",
-                                   blank=True, null=True, upload_to="media/cv")
-    academic    = models.FileField(verbose_name="Academic transcript",
-                                   blank=True, null=True, upload_to="media/academic",
-                                   help_text="If you don't have a university-level "
+    id_doc      = models.ForeignKey('common.Document',
+                                    verbose_name="ID",
+                                    help_text="Identification document with a photo is required.",
+                                    related_name="id_tutors",
+                                    null=True)  # not blank=True on purpose
+    cv          = models.ForeignKey('common.Document',
+                                    verbose_name="CV",
+                                    blank=True, null=True,
+                                    related_name="cv_tutors")
+    academic    = models.ForeignKey('common.Document',
+                                    verbose_name="Academic transcript",
+                                    blank=True, null=True,
+                                    related_name="academic_tutors",
+                                    help_text="If you don't have a university-level "
                                    "transcript for the subjects you want to tutor, "
                                    "attach your matric results instead.")
     status = models.CharField(max_length=10, choices=TUTOR_STATUS, default='2')
