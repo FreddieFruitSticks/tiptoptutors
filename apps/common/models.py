@@ -1,6 +1,7 @@
 import os
 import mimetypes
 
+from django.core.urlresolvers import reverse
 from django.db import models
 
 
@@ -31,3 +32,6 @@ class Document(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('serve-document', kwargs={'doc_id': self.id})
