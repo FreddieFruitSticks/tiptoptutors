@@ -191,7 +191,7 @@ class PupilMatchingAdmin(admin.ModelAdmin):
 
 
 class RequestSMSAdmin(admin.ModelAdmin):
-    list_display = ['pupil', 'tutor', 'subjects', 'matched_subjects',
+    list_display = ['id', 'pupil', 'tutor', 'subjects', 'matched_subjects',
                     'response_text', 'response_timestamp']
 
     def pupil(self, obj):
@@ -205,6 +205,14 @@ class RequestSMSAdmin(admin.ModelAdmin):
         return ', '.join([str(m.subject) for m in matched])
 
 
+class RequestForTutorAdmin(admin.ModelAdmin):
+    list_display = ['id', 'pupil_full_name', 'subject', 'status', 'code', 'created']
+
+    def pupil_full_name(self, obj):
+        return obj.pupil.full_name
+    pupil_full_name.short_description = 'pupil'
+
+
 admin.site.register(models.PupilProxy, PupilMatchingAdmin)
-admin.site.register(models.RequestForTutor)
+admin.site.register(models.RequestForTutor, RequestForTutorAdmin)
 admin.site.register(models.RequestSMS, RequestSMSAdmin)
