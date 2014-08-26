@@ -195,7 +195,10 @@ class RequestSMSAdmin(admin.ModelAdmin):
                     'response_text', 'response_timestamp']
 
     def pupil(self, obj):
-        return obj.requests.all()[0].pupil.full_name
+        requests = obj.requests.all()
+        if requests:
+            return requests[0].pupil.full_name
+        return None
 
     def subjects(self, obj):
         return ', '.join([str(o.subject) for o in obj.requests.all()])
