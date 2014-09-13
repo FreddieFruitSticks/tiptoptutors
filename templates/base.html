@@ -3,7 +3,10 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Tip Top Tutors</title>
+    {% block meta %}
+       <title>Tip Top Tutors - Cape Town tutors, results guaranteed.</title>
+       <meta name="description" content="Get the right tutor to help you. Tip Top Tutors guarantees results or we tutor for free. School and university tutors in Cape Town.">
+    {% endblock %}
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css"/>
     <link rel="stylesheet" href="/static/css/foundation.css" type="text/css"/>
     <link rel="stylesheet" href="/static/css/base.css" type="text/css"/>
@@ -18,6 +21,7 @@
 {% endblock %}
 
 {% include "partials/footer.html" %}
+{% include "partials/ga.html" %}
 
 {% block js %}
     {% include "partials/js.html" %}
