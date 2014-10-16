@@ -2,7 +2,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
 from django.utils.encoding import smart_str
 from django.views.generic import TemplateView
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 
 from models import Document
 
@@ -26,9 +26,14 @@ class TermsAndConditionsView(TemplateView):
     template_name = "common/termsandconditions.html"
 
 
-@staff_member_required
 def serve_document(request, doc_id):
     doc = get_object_or_404(Document, id=doc_id)
+    # return 403 if the doc is not public and the user is not staff
+    if not doc.is_public and (not hasattr(request, 'user') or
+                              not request.user.is_authenticated() or
+                              not request.user.is_staff):
+        return HttpResponseForbidden()
+
     response = HttpResponse(doc.data, content_type=doc.mime_type)
     response['Content-Disposition'] = ('attachment; filename="%s"'
                                        % smart_str(doc.name))

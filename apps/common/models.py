@@ -17,6 +17,7 @@ class Document(models.Model):
                                    editable=False)
     modified = models.DateTimeField(auto_now=True,
                                     editable=False)
+    is_public = models.BooleanField(default=False)
 
     def set_file(self, file_obj):
         self.name = os.path.basename(file_obj.name)

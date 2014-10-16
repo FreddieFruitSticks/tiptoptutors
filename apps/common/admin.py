@@ -16,7 +16,8 @@ class DocumentForm(forms.ModelForm):
 
 
 class DocumentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'mime_type', 'created', 'modified', 'url']
+    list_display = ['name', 'mime_type', 'is_public', 'created', 'modified', 'url']
+    list_editable = ['is_public']
     form = DocumentForm
 
     def url(self, obj):
