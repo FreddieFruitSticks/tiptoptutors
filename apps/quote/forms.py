@@ -5,6 +5,8 @@ from django import forms
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+
+from common.models import Document
 from quote.models import Quote
 
 
@@ -23,8 +25,15 @@ class QuoteForm(forms.ModelForm):
             to=[self.instance.email],
         )
         email.attach_alternative(html_content, 'text/html')
-        doc_dir = os.path.join(os.path.dirname(__file__), 'data')
-        email.attach_file(os.path.join(doc_dir, 'High school rates.pdf'))
-        email.attach_file(os.path.join(doc_dir, 'University rates.pdf'))
+        self.attach_file_from_documents(email, 'High school rates.pdf')
+        self.attach_file_from_documents(email, 'University rates.pdf')
         email.send(fail_silently=not settings.DEBUG)
         return super(QuoteForm, self).save()
+
+    def attach_file_from_documents(self, email, name):
+        doc = Document.objects.filter(name__iexact=name) \
+                              .order_by('-modified')[:1][0]
+        path = '/tmp/%s' % name
+        with open(path, 'wb') as f:
+            f.write(doc.data)
+        email.attach_file(path)
