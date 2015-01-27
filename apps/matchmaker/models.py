@@ -159,7 +159,7 @@ class RequestSMS(SMS):
 
     requests = models.ManyToManyField(RequestForTutor)
     tutor = models.ForeignKey(TutorProxy)
-    response_text = models.CharField(max_length=32, null=True, blank=True)
+    response_text = models.CharField(max_length=256, null=True, blank=True)
     response_timestamp = models.DateTimeField(null=True, blank=True)
 
     @property
