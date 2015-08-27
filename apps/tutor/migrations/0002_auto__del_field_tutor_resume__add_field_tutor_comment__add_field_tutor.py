@@ -6,6 +6,9 @@ from django.db import models
 
 
 class Migration(SchemaMigration):
+    depends_on = (
+        ("option", "0002_auto__add_availabletutorsubject"),
+    )
 
     def forwards(self, orm):
         # Renaming field 'Tutor.resume'

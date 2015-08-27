@@ -41,12 +41,12 @@ DATE_FORMAT = "d/m/Y"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'tiptoptutors',
         'USER': 'tiptoptutors',
         'PASSWORD': 'tiptoptutors',
-        'HOST': '',
-        'PORT': '',   
+        'HOST': '127.0.0.1',
+        'PORT': '5432',   
     }
 }
 
