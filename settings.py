@@ -168,7 +168,6 @@ PROJECT_APPS = (
 )
 
 THIRD_PARTY_APPS = (
-    'south',
     'debug_toolbar',
     'djcelery',
     'kombu.transport.django'

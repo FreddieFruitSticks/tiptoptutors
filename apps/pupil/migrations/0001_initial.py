@@ -1,67 +1,57 @@
 # -*- coding: utf-8 -*-
-from south.utils import datetime_utils as datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    depends_on = (
-        ("option", "0001_initial"),
-    )
+    dependencies = [
+        ('option', '0001_initial'),
+        ('tutor', '0001_initial'),
+    ]
 
-    def forwards(self, orm):
-        # Adding model 'Student'
-        db.create_table(u'student_student', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=20)),
-            ('surname', self.gf('django.db.models.fields.CharField')(max_length=20)),
-            ('email', self.gf('django.db.models.fields.EmailField')(max_length=75)),
-            ('contact_number', self.gf('django.db.models.fields.CharField')(max_length=15)),
-            ('subject', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('level_of_study', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['option.LevelOfStudy'])),
-            ('street', self.gf('django.db.models.fields.CharField')(max_length=20)),
-            ('suburb', self.gf('django.db.models.fields.CharField')(max_length=20)),
-            ('city', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['option.City'])),
-            ('requirement', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-        ))
-        # don't send the signal since the app doesn't exist anymore
-        #db.send_create_signal(u'student', ['Student'])
-
-
-    def backwards(self, orm):
-        # Deleting model 'Student'
-        db.delete_table(u'student_student')
-
-
-    models = {
-        u'option.city': {
-            'Meta': {'object_name': 'City'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
-        },
-        u'option.levelofstudy': {
-            'Meta': {'object_name': 'LevelOfStudy'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
-        },
-        u'student.student': {
-            'Meta': {'object_name': 'Student'},
-            'city': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['option.City']"}),
-            'contact_number': ('django.db.models.fields.CharField', [], {'max_length': '15'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'level_of_study': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['option.LevelOfStudy']"}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'requirement': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'street': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'subject': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'suburb': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'surname': ('django.db.models.fields.CharField', [], {'max_length': '20'})
-        }
-    }
-
-    complete_apps = ['student']
+    operations = [
+        migrations.CreateModel(
+            name='Pupil',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=20)),
+                ('surname', models.CharField(max_length=20)),
+                ('email', models.EmailField(max_length=75)),
+                ('contact_number', models.CharField(max_length=15)),
+                ('street', models.CharField(max_length=20)),
+                ('suburb', models.CharField(max_length=20)),
+                ('requirement', models.TextField(null=True, verbose_name=b'personal requirements', blank=True)),
+                ('created_at', models.DateTimeField(auto_now=True)),
+                ('city', models.ForeignKey(to='option.City')),
+                ('level_of_study', models.ForeignKey(to='option.LevelOfStudy')),
+                ('subject', models.ManyToManyField(to='option.AvailableTutorSubject')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='PupilTutorMatch',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('start_date', models.DateField(db_index=True, null=True, blank=True)),
+                ('end_date', models.DateField(db_index=True, null=True, blank=True)),
+                ('price', models.CharField(max_length=20, null=True, blank=True)),
+                ('lesson', models.CharField(max_length=20, null=True, verbose_name=b'number of lessons', blank=True)),
+                ('pupil', models.ForeignKey(to='pupil.Pupil')),
+                ('subject', models.ForeignKey(to='option.AvailableTutorSubject')),
+                ('tutor', models.ForeignKey(to='tutor.Tutor')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.AddField(
+            model_name='pupil',
+            name='tutor',
+            field=models.ManyToManyField(to='tutor.Tutor', null=True, through='pupil.PupilTutorMatch', blank=True),
+            preserve_default=True,
+        ),
+    ]
