@@ -9,6 +9,7 @@ class DocumentForm(forms.ModelForm):
 
     class Meta:
         model = models.Document
+        fields = ['is_public']
 
     def save(self, commit=True):
         self.instance.set_file(self.cleaned_data['file'])

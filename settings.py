@@ -147,7 +147,6 @@ DJANGO_CONTRIB_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.comments',
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.humanize',
