@@ -5,8 +5,7 @@ from django.contrib.admin import SimpleListFilter
 from django import forms
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
-from django.template import RequestContext, Template, Context, TemplateSyntaxError
-from django.template.loader import find_template_loader
+from django.template import RequestContext, Template, Context, TemplateSyntaxError, Engine, TemplateDoesNotExist
 
 from pupil.admin import PupilTutorMatchAdmin
 from option.models import AvailableTutorSubject
@@ -39,9 +38,7 @@ def label_from_tutor_instance(pupil_subject_pks):
 
 
 class SMSTutorsForm(forms.Form):
-    _template_loader = find_template_loader(
-        'django.template.loaders.app_directories.Loader'
-    )
+    _template_engine = Engine.get_default()
     pupil = forms.ModelChoiceField(
         queryset=models.PupilProxy.objects.all(),
         widget=forms.HiddenInput,
@@ -56,6 +53,16 @@ class SMSTutorsForm(forms.Form):
         label='SMS text'
     )
 
+    @classmethod
+    def load_sms_template_source(cls):
+        for loader in cls._template_engine.template_loaders:
+            try:
+                return loader.load_template_source('matchmaker/sms_request_for_tutor.txt'
+                )[0]
+            except TemplateDoesNotExist:
+                pass
+        raise TemplateDoesNotExist('matchmaker/sms_request_for_tutor.txt')
+
     def __init__(self, *args, **kwargs):
         if 'pupil' not in kwargs:
             raise TypeError("argument 'pupil' is required")
@@ -63,9 +70,7 @@ class SMSTutorsForm(forms.Form):
         pupil = new_kwargs.pop('pupil')
         initial = {
             'pupil': pupil,
-            'sms_text': SMSTutorsForm._template_loader.load_template_source(
-                'matchmaker/sms_request_for_tutor.txt'
-            )[0]
+            'sms_text': self.load_sms_template_source()
         }
         initial.update(new_kwargs.pop('initial', {}))
         super(SMSTutorsForm, self).__init__(*args, initial=initial, **new_kwargs)

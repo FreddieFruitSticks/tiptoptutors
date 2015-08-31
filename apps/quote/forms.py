@@ -14,6 +14,7 @@ class QuoteForm(forms.ModelForm):
 
     class Meta:
         model = Quote
+        fields = ['name', 'email']
 
     def save(self):
         html_content = render_to_string('quote/quote-email.html')
