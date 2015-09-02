@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from django import forms
 
 from models import Document
@@ -7,24 +9,38 @@ class RelatedDocumentsForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(RelatedDocumentsForm, self).__init__(*args, **kwargs)
+        # NOTE: This adds a FileField for each model foreign key to Document.
+        # The FileField is called '%(fieldname)s_file' where `fieldname` is
+        # the name of the foreign key field.
+        # It also hides the corresponding Document ModelChoiceField.
+        # This means you can only create a new Document using this form,
+        # not select an existing Document.
         self.document_fields = []
+        ordered_fields = self.fields.items()
         for field in self.Meta.model._meta.fields:
+            # skip the field if it's not included in the form
+            if field.name not in self.fields:
+                continue
+            # skip the field if it's not a ForeignKey to Document
             if not field.get_internal_type() == "ForeignKey":
                 continue
-            if not field.rel.to is Document:
+            if field.rel.to is not Document:
                 continue
             name = field.name
             self.document_fields.append(name)
-            file_field = self.fields[name]
-            file_field.widget = forms.HiddenInput(attrs=file_field.widget.attrs)
-            index = self.fields.keyOrder.index(name)
-            self.fields.insert(index, '%s_file' % name, forms.FileField(
-                required=file_field.required,
-                label=file_field.label,
-                help_text=file_field.help_text,
+            choice_field = self.fields[name]
+            choice_field.widget = forms.HiddenInput(
+                attrs=choice_field.widget.attrs)
+            index = ordered_fields.index((name, choice_field))
+            ordered_fields.insert(index, ('%s_file' % name, forms.FileField(
+                required=choice_field.required,
+                label=choice_field.label,
+                help_text=choice_field.help_text,
                 widget=forms.FileInput
-            ))
-            file_field.required = False
+            )))
+            choice_field.required = False
+
+        self.fields = OrderedDict(ordered_fields)
 
     def save(self, commit=True):
         for field in self.document_fields:
