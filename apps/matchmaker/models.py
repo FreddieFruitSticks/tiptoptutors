@@ -42,6 +42,9 @@ WHERE_PUPILS_WITHOUT_UNMATCHED_SUBJECTS = (
 
 class PupilQuerySet(models.query.QuerySet):
 
+    class Meta:
+        app_label = 'matchmaker'
+
     def some_unmatched(self):
         date_now = timezone.now().date()
         return self.extra(tables=['option_availabletutorsubject'],
@@ -70,6 +73,7 @@ class PupilProxy(Pupil):
     objects = PupilManager()
 
     class Meta:
+        app_label = 'matchmaker'
         proxy = True
         verbose_name = 'pupil'
         verbose_name_plural = 'pupils'
@@ -101,6 +105,7 @@ class PupilProxy(Pupil):
 class TutorProxy(Tutor):
 
     class Meta:
+        app_label = 'matchmaker'
         proxy = True
         verbose_name = 'available tutor'
         verbose_name_plural = 'available tutors'
@@ -122,6 +127,10 @@ class RequestForTutor(models.Model):
     communication media might be used to reach out to tutors. Only
     generic functionality should go here.
     '''
+
+    class Meta:
+        app_label = 'matchmaker'
+        
     pupil = models.ForeignKey(PupilProxy)
     subject = models.ForeignKey(AvailableTutorSubject)
     # active: initial state, tutors can apply for this matchup
@@ -154,6 +163,7 @@ class RequestForTutor(models.Model):
 class RequestSMS(SMS):
 
     class Meta:
+        app_label = 'matchmaker'
         verbose_name = 'Request SMS'
         verbose_name_plural = "Request SMSes"
 

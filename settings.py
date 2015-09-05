@@ -155,14 +155,14 @@ DJANGO_CONTRIB_APPS = (
 )
 
 PROJECT_APPS = (
-    'blog',
-    'common',
-    'contact',
-    'quote',
-    'pupil',
     'tutor',
+    'pupil',
     'sms',
     'option',
+    'common',
+    'blog',
+    'contact',
+    'quote',
     'matchmaker',
 )
 
