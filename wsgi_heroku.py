@@ -15,7 +15,8 @@ import newrelic.agent
 os.environ.setdefault("NEW_RELIC_CONFIG_FILE", "newrelic.ini")
 newrelic.agent.initialize(os.environ["NEW_RELIC_CONFIG_FILE"])
 
-
 from django.core.wsgi import get_wsgi_application
-from dj_static import Cling
-application = Cling(get_wsgi_application())
+from whitenoise.django import DjangoWhiteNoise
+
+application = get_wsgi_application()
+application = DjangoWhiteNoise(application)
