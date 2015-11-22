@@ -26,17 +26,14 @@ REQUEST_CODE_CHARSET = list(REQUEST_CODE_CHARSET)
 WHERE_PUPILS_WITH_UNMATCHED_SUBJECTS = (
     "NOT EXISTS (SELECT * FROM pupil_pupiltutormatch "
     "WHERE pupil_pupiltutormatch.pupil_id = pupil_pupil.id AND "
-    "option_availabletutorsubject.id = pupil_pupiltutormatch.subject_id AND "
-    "pupil_pupiltutormatch.start_date <= %s AND (pupil_pupiltutormatch.end_date "
-    "IS NULL OR pupil_pupiltutormatch.end_date >= %s))"
+    "option_availabletutorsubject.id = pupil_pupiltutormatch.subject_id)"
 )
 WHERE_PUPILS_WITHOUT_UNMATCHED_SUBJECTS = (
     "NOT EXISTS (SELECT pupil_pupil_subject.availabletutorsubject_id FROM "
     "pupil_pupil_subject WHERE pupil_pupil_subject.pupil_id = pupil_pupil.id "
     "AND NOT EXISTS (SELECT * FROM pupil_pupiltutormatch WHERE "
     "pupil_pupiltutormatch.subject_id = pupil_pupil_subject.availabletutorsubject_id "
-    "AND pupil_pupiltutormatch.pupil_id = pupil_pupil.id AND pupil_pupiltutormatch.start_date "
-    "<= %s AND (pupil_pupiltutormatch.end_date IS NULL OR pupil_pupiltutormatch.end_date >= %s)))"
+    "AND pupil_pupiltutormatch.pupil_id = pupil_pupil.id))"
 )
 
 
@@ -56,6 +53,9 @@ class PupilQuerySet(models.query.QuerySet):
         return self.extra(where=[WHERE_PUPILS_WITHOUT_UNMATCHED_SUBJECTS],
                           params=[date_now, date_now])
 
+    def get_all(self):
+        return self.all()
+
 
 class PupilManager(models.Manager):
 
@@ -67,6 +67,9 @@ class PupilManager(models.Manager):
 
     def all_matched(self):
         return self.get_queryset().all_matched()
+
+    def get_all(self):
+        return self.get_queryset().all()
 
 
 class PupilProxy(Pupil):

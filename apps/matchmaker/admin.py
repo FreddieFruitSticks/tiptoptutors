@@ -24,7 +24,7 @@ class FilterByTutorStatus(SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value() == '1':
             return queryset.all_matched()
-        else:
+        elif self.value() == '0':
             return queryset.some_unmatched()
 
 
