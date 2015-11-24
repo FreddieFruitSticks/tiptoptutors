@@ -43,10 +43,9 @@ class PupilQuerySet(models.query.QuerySet):
         app_label = 'matchmaker'
 
     def some_unmatched(self):
-        date_now = timezone.now().date()
         return self.extra(tables=['option_availabletutorsubject'],
-                          where=[WHERE_PUPILS_WITH_UNMATCHED_SUBJECTS],
-                          params=[date_now, date_now]).distinct()
+                          where=[WHERE_PUPILS_WITH_UNMATCHED_SUBJECTS]).distinct()
+        # return self.filter(pupiltutormatch__id__isnull = False).filter(__isnull = False)
 
     def all_matched(self):
         date_now = timezone.now().date()
