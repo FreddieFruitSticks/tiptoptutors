@@ -22,25 +22,6 @@ REQUEST_CODE_CHARSET.remove('I')
 REQUEST_CODE_CHARSET.remove('l')
 REQUEST_CODE_CHARSET = list(REQUEST_CODE_CHARSET)
 
-# Change with care. These WHERE clauses should work on MySQL, SQLite and Postgres.
-WHERE_PUPILS_WITH_UNMATCHED_SUBJECTS = (
-    "NOT EXISTS (SELECT * FROM pupil_pupiltutormatch "
-    "WHERE pupil_pupiltutormatch.pupil_id = pupil_pupil.id AND "
-    "pupil_pupiltutormatch.subject_id = option_availabletutorsubject.id)"
-)
-
-# WHERE_PUPILS_WITH_UNMATCHED_SUBJECTS = (
-#     "NOT EXISTS (SELECT * FROM pupil_pupiltutormatch "
-#     "WHERE pupil_pupiltutormatch.pupil_id = pupil_pupil.id)"
-# )
-WHERE_PUPILS_WITHOUT_UNMATCHED_SUBJECTS = (
-    "NOT EXISTS (SELECT pupil_pupil_subject.availabletutorsubject_id FROM "
-    "pupil_pupil_subject WHERE pupil_pupil_subject.pupil_id = pupil_pupil.id "
-    "AND NOT EXISTS (SELECT * FROM pupil_pupiltutormatch WHERE "
-    "pupil_pupiltutormatch.subject_id = pupil_pupil_subject.availabletutorsubject_id "
-    "AND pupil_pupiltutormatch.pupil_id = pupil_pupil.id))"
-)
-
 
 class PupilQuerySet(models.query.QuerySet):
 
