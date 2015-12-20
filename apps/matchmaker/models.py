@@ -86,8 +86,9 @@ class PupilProxy(Pupil):
         ordering = ('-created_at', 'surname', 'name')
 
     def __unicode__(self):
-        return '%s: %s for %s (%s)' % (
+        return '%s: %s, %s for %s (%s)' % (
             self.created_at.strftime('%d-%m-%Y %H:%M'),
+            self.surname,
             self.name,
             ', '.join(s.name for s in self.unmatched_subjects),
             self.level_of_study
