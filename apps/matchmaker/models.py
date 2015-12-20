@@ -26,8 +26,13 @@ REQUEST_CODE_CHARSET = list(REQUEST_CODE_CHARSET)
 WHERE_PUPILS_WITH_UNMATCHED_SUBJECTS = (
     "NOT EXISTS (SELECT * FROM pupil_pupiltutormatch "
     "WHERE pupil_pupiltutormatch.pupil_id = pupil_pupil.id AND "
-    "option_availabletutorsubject.id = pupil_pupiltutormatch.subject_id)"
+    "pupil_pupiltutormatch.subject_id = option_availabletutorsubject.id)"
 )
+
+# WHERE_PUPILS_WITH_UNMATCHED_SUBJECTS = (
+#     "NOT EXISTS (SELECT * FROM pupil_pupiltutormatch "
+#     "WHERE pupil_pupiltutormatch.pupil_id = pupil_pupil.id)"
+# )
 WHERE_PUPILS_WITHOUT_UNMATCHED_SUBJECTS = (
     "NOT EXISTS (SELECT pupil_pupil_subject.availabletutorsubject_id FROM "
     "pupil_pupil_subject WHERE pupil_pupil_subject.pupil_id = pupil_pupil.id "
@@ -43,14 +48,13 @@ class PupilQuerySet(models.query.QuerySet):
         app_label = 'matchmaker'
 
     def some_unmatched(self):
-        return self.extra(tables=['option_availabletutorsubject'],
-                          where=[WHERE_PUPILS_WITH_UNMATCHED_SUBJECTS]).distinct()
-        # return self.filter(pupiltutormatch__id__isnull = False).filter(__isnull = False)
+        # return self.extra(tables=['option_availabletutorsubject'],
+        #                   where=[WHERE_PUPILS_WITH_UNMATCHED_SUBJECTS]).distinct()
+        query = PupilTutorMatch.objects.all()
+        return self.filter(pupiltutormatch__id__isnull = True)
 
     def all_matched(self):
-        date_now = timezone.now().date()
-        return self.extra(where=[WHERE_PUPILS_WITHOUT_UNMATCHED_SUBJECTS],
-                          params=[date_now, date_now])
+        return self.filter(pupiltutormatch__id__isnull = False)
 
     def get_all(self):
         return self.all()
@@ -88,6 +92,9 @@ class PupilProxy(Pupil):
             ', '.join(s.name for s in self.unmatched_subjects),
             self.level_of_study
         )
+
+    def get_number_of_tutors(self):
+        return self.objects.all().__sizeof__();
 
     @property
     def needs_tutor(self):
