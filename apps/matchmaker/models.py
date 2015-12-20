@@ -48,13 +48,10 @@ class PupilQuerySet(models.query.QuerySet):
         app_label = 'matchmaker'
 
     def some_unmatched(self):
-        # return self.extra(tables=['option_availabletutorsubject'],
-        #                   where=[WHERE_PUPILS_WITH_UNMATCHED_SUBJECTS]).distinct()
-        query = PupilTutorMatch.objects.all()
-        return self.filter(pupiltutormatch__id__isnull = True)
+        return self.filter(pupiltutormatch__id__isnull = True).distinct()
 
     def all_matched(self):
-        return self.filter(pupiltutormatch__id__isnull = False)
+        return self.filter(pupiltutormatch__id__isnull = False).distinct()
 
     def get_all(self):
         return self.all()
