@@ -224,3 +224,4 @@ class RequestForTutorAdmin(admin.ModelAdmin):
 admin.site.register(models.PupilProxy, PupilMatchingAdmin)
 admin.site.register(models.RequestForTutor, RequestForTutorAdmin)
 admin.site.register(models.RequestSMS, RequestSMSAdmin)
+admin.site.register(models.PupilSubjectMatch)

@@ -24,22 +24,20 @@ REQUEST_CODE_CHARSET = list(REQUEST_CODE_CHARSET)
 
 
 class PupilQuerySet(models.query.QuerySet):
-
     class Meta:
         app_label = 'matchmaker'
 
     def some_unmatched(self):
-        return self.filter(pupiltutormatch__id__isnull = True).distinct()
+        return self.filter(pupiltutormatch__id__isnull=True).distinct()
 
     def all_matched(self):
-        return self.filter(pupiltutormatch__id__isnull = False).distinct()
+        return self.filter(pupiltutormatch__id__isnull=False).distinct()
 
     def get_all(self):
         return self.all()
 
 
 class PupilManager(models.Manager):
-
     def get_queryset(self):
         return PupilQuerySet(self.model, using=self._db)
 
@@ -51,6 +49,20 @@ class PupilManager(models.Manager):
 
     def get_all(self):
         return self.get_queryset().all()
+
+
+class PupilSubjectMatch(models.Model):
+    class Meta:
+        app_label = 'matchmaker'
+        managed = False
+        db_table = 'pupil_pupil_subject'
+
+    id = models.IntegerField(primary_key=True)
+    pupil = models.ForeignKey(Pupil)
+    availabletutorsubject = models.ForeignKey(AvailableTutorSubject)
+
+    def __unicode__(self):
+        return '%s (%s)' % (self.pupil, self.availabletutorsubject)
 
 
 class PupilProxy(Pupil):
@@ -84,14 +96,13 @@ class PupilProxy(Pupil):
         date_now = timezone.now().date()
         # get subjects actively being tutored
         matched_subject_ids = list(PupilTutorMatch.objects.filter(
-            Q(end_date__isnull=True)|Q(end_date__gte=date_now),
+            Q(end_date__isnull=True) | Q(end_date__gte=date_now),
             pupil=self,
             start_date__lte=date_now).values_list('subject_id', flat=True))
         return self.subject.exclude(id__in=matched_subject_ids)
 
 
 class TutorProxy(Tutor):
-
     class Meta:
         app_label = 'matchmaker'
         proxy = True
@@ -118,7 +129,7 @@ class RequestForTutor(models.Model):
 
     class Meta:
         app_label = 'matchmaker'
-        
+
     pupil = models.ForeignKey(PupilProxy)
     subject = models.ForeignKey(AvailableTutorSubject)
     # active: initial state, tutors can apply for this matchup
@@ -149,7 +160,6 @@ class RequestForTutor(models.Model):
 
 
 class RequestSMS(SMS):
-
     class Meta:
         app_label = 'matchmaker'
         verbose_name = 'Request SMS'
@@ -186,8 +196,8 @@ def save_requestsms_response(sender, **kwargs):
         # match by code in response
         codes = [c[0].strip() for c in
                  re.findall(r'(\w{6,12}($|\s+))',
-                           kwargs['text'],
-                           re.DOTALL)]
+                            kwargs['text'],
+                            re.DOTALL)]
 
         if sms_objects.filter(requests__code__in=codes).exists():
             sms_objects = sms_objects.filter(requests__code__in=codes)
