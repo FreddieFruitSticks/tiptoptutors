@@ -13,3 +13,5 @@ class PupilAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Pupil, PupilAdmin)
+admin.site.register(PupilTutorMatch)
+

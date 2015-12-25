@@ -28,12 +28,28 @@ class FilterByTutorStatus(SimpleListFilter):
             return queryset.some_unmatched()
 
 
+class FilterByPaidStatus(SimpleListFilter):
+    title = 'Paid or not Paid'
+    parameter_name = 'has_paid'
+
+    def lookups(self, request, model_admin):
+        return (('0', 'Paid'),
+                ('1', 'Not Paid'))
+
+    def queryset(self, request, queryset):
+        if self.value() == '0':
+            return queryset.paid()
+        elif self.value() == '1':
+            return queryset.unpaid()
+
+
 def label_from_tutor_instance(pupil_subject_pks):
     def inner(obj):
         return '%s (%s)' % (
             obj.__unicode__(),
             ', '.join(s.name for s in obj.matching_subjects(pupil_subject_pks))
         )
+
     return inner
 
 
@@ -58,7 +74,7 @@ class SMSTutorsForm(forms.Form):
         for loader in cls._template_engine.template_loaders:
             try:
                 return loader.load_template_source('matchmaker/sms_request_for_tutor.txt'
-                )[0]
+                                                   )[0]
             except TemplateDoesNotExist:
                 pass
         raise TemplateDoesNotExist('matchmaker/sms_request_for_tutor.txt')
@@ -79,11 +95,11 @@ class SMSTutorsForm(forms.Form):
         # NB: only show unmatched subjects
         self.pupil_subject_pks = list(pupil.unmatched_subjects.values_list('pk', flat=True))
         self.fields['matching_tutors'].queryset = models.TutorProxy.objects \
-                .filter(subject__in=self.pupil_subject_pks) \
-                .filter(status__iexact='Accepted') \
-                .distinct()
+            .filter(subject__in=self.pupil_subject_pks) \
+            .filter(status__iexact='Accepted') \
+            .distinct()
         self.fields['matching_tutors'].label_from_instance = \
-                label_from_tutor_instance(self.pupil_subject_pks)
+            label_from_tutor_instance(self.pupil_subject_pks)
         try:
             rendered_sms = self.render_sms_text()
             self.fields['sms_text'].help_text = (
@@ -145,7 +161,7 @@ class SMSTutorsForm(forms.Form):
         request_pks = []
         for tutor in self.cleaned_data['matching_tutors']:
             tutor_pks.append(tutor.pk)
-            request_pks.append([subject_requests[s.pk].pk for s in 
+            request_pks.append([subject_requests[s.pk].pk for s in
                                 tutor.subject.filter(pk__in=subjects)
                                 if s.pk in subject_requests])
         # send smses (TODO: use celery)
@@ -155,7 +171,7 @@ class SMSTutorsForm(forms.Form):
 
 class PupilMatchingAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'needs_tutor', 'per_pupil_actions']
-    list_filter = [FilterByTutorStatus]
+    list_filter = [FilterByTutorStatus, FilterByPaidStatus]
     actions = None
     inlines = [PupilTutorMatchAdmin]
 
@@ -175,16 +191,17 @@ class PupilMatchingAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(PupilMatchingAdmin, self).get_urls()
         return patterns('',
-            url(
-                '^(?P<pk>\d+)/select-tutors/$',
-                self.admin_site.admin_view(self.select_tutors),
-                name='select-tutors'
-            ),
-        ) + urls
+                        url(
+                            '^(?P<pk>\d+)/select-tutors/$',
+                            self.admin_site.admin_view(self.select_tutors),
+                            name='select-tutors'
+                        ),
+                        ) + urls
 
     def per_pupil_actions(self, obj):
         return '<a href="%s">SMS tutors</a>' % \
-                reverse('admin:select-tutors', kwargs={'pk': obj.pk})
+               reverse('admin:select-tutors', kwargs={'pk': obj.pk})
+
     per_pupil_actions.allow_tags = True
     per_pupil_actions.short_description = 'Actions'
 
@@ -218,6 +235,7 @@ class RequestForTutorAdmin(admin.ModelAdmin):
 
     def pupil_full_name(self, obj):
         return obj.pupil.full_name
+
     pupil_full_name.short_description = 'pupil'
 
 

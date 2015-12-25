@@ -10,8 +10,8 @@ class PupilTutorMatch(models.Model):
     Stores information regarding a particular pupil-tutor matchup,
     including the start and end dates of the tutoring period.
     '''
-    pupil = models.ForeignKey('Pupil')
-    tutor = models.ForeignKey(Tutor)
+    pupil = models.ForeignKey('Pupil', null=True)
+    tutor = models.ForeignKey(Tutor, null=True)
     # a matchup must be create per subject
     subject = models.ForeignKey(AvailableTutorSubject)
     start_date = models.DateField(null=True, blank=True, db_index=True)
@@ -19,6 +19,7 @@ class PupilTutorMatch(models.Model):
 
     price = models.CharField(max_length=20, null=True, blank=True)
     lesson = models.CharField(max_length=20, verbose_name="number of lessons", null=True, blank=True)
+    lessons_bought = models.IntegerField(blank=True, null=True)
 
     @property
     def is_active(self):
@@ -33,6 +34,9 @@ class PupilTutorMatch(models.Model):
     def start_now(self):
         self.start_date = timezone.now().date()
         self.save()
+
+    def __unicode__(self):
+        return '%s - %s (%s)' % (self.pupil, self.tutor, self.subject)
 
 
 class Pupil(models.Model):

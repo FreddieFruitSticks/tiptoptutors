@@ -23,15 +23,41 @@ REQUEST_CODE_CHARSET.remove('l')
 REQUEST_CODE_CHARSET = list(REQUEST_CODE_CHARSET)
 
 
+def filter_multi_value_queryset_as_list(parentlist, childlist):
+    for pair in childlist:
+        if pair in parentlist:
+            parentlist.remove(pair)
+    return parentlist
+
+
+def get_pupil_ids(list_of_tuples):
+    pupil_ids = []
+    for entry in list_of_tuples:
+        pupil_ids.append(entry[0])
+    return pupil_ids
+
+
 class PupilQuerySet(models.query.QuerySet):
     class Meta:
         app_label = 'matchmaker'
 
     def some_unmatched(self):
-        return self.filter(pupiltutormatch__id__isnull=True).distinct()
+        list1 = list(PupilSubjectMatch.objects.values_list("pupil", "availabletutorsubject"))
+        list2 = PupilTutorMatch.objects.values_list("pupil", "subject")
+        pupil_ids = get_pupil_ids(filter_multi_value_queryset_as_list(list1, list2))
+        return self.filter(id__in=pupil_ids).distinct()
 
     def all_matched(self):
-        return self.filter(pupiltutormatch__id__isnull=False).distinct()
+        list1 = list(PupilSubjectMatch.objects.values_list("pupil", "availabletutorsubject"))
+        list2 = PupilTutorMatch.objects.values_list("pupil", "subject")
+        pupil_ids = get_pupil_ids(filter_multi_value_queryset_as_list(list1, list2))
+        return self.exclude(id__in=pupil_ids).distinct()
+
+    def unpaid(self):
+        return self.filter(id__in=PupilTutorMatch.objects.filter(lessons_bought=None).values('pupil'))
+
+    def paid(self):
+        return self.filter(id__in=PupilTutorMatch.objects.exclude(lessons_bought=None).values('pupil'))
 
     def get_all(self):
         return self.all()
@@ -46,6 +72,9 @@ class PupilManager(models.Manager):
 
     def all_matched(self):
         return self.get_queryset().all_matched()
+
+    def unpaid(self):
+        return self.get_queryset().unpaid()
 
     def get_all(self):
         return self.get_queryset().all()
