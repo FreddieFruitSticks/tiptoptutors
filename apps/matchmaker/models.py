@@ -13,6 +13,7 @@ from sms.api import sms_reply_received
 from tutor.models import Tutor
 
 
+
 # numbers + lowercase + uppercase
 REQUEST_CODE_CHARSET = set([chr(i) for i in range(ord('0'), ord('9') + 1)] + \
                            [chr(i) for i in range(ord('a'), ord('z') + 1)] + \
@@ -109,7 +110,7 @@ class PupilProxy(Pupil):
             self.created_at.strftime('%d-%m-%Y %H:%M'),
             self.surname,
             self.name,
-            ', '.join(s.name for s in self.unmatched_subjects),
+            ', '.join(s.name for s in self.subject.all()),
             self.level_of_study
         )
 
@@ -122,13 +123,9 @@ class PupilProxy(Pupil):
 
     @property
     def unmatched_subjects(self):
-        date_now = timezone.now().date()
         # get subjects actively being tutored
-        matched_subject_ids = list(PupilTutorMatch.objects.filter(
-            Q(end_date__isnull=True) | Q(end_date__gte=date_now),
-            pupil=self,
-            start_date__lte=date_now).values_list('subject_id', flat=True))
-        return self.subject.exclude(id__in=matched_subject_ids)
+        return self.subject.exclude(id__in=PupilTutorMatch.objects.filter(pupil=self).values_list('subject_id',
+                                                                                                  flat=True))
 
 
 class TutorProxy(Tutor):
