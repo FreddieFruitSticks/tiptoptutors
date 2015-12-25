@@ -2,6 +2,7 @@ import random
 import re
 
 from django.db import models
+from django.db.models import Q
 
 from django.dispatch import receiver
 
@@ -54,7 +55,8 @@ class PupilQuerySet(models.query.QuerySet):
         return self.exclude(id__in=pupil_ids).distinct()
 
     def unpaid(self):
-        return self.filter(id__in=PupilTutorMatch.objects.filter(lessons_bought=None).values('pupil'))
+        return self.filter(Q(id__in=PupilTutorMatch.objects.filter(lessons_bought=None).values('pupil')) |
+                           Q(pupiltutormatch__isnull=True)).distinct()
 
     def paid(self):
         return self.filter(id__in=PupilTutorMatch.objects.exclude(lessons_bought=None).values('pupil'))
