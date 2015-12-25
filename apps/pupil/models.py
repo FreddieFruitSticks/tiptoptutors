@@ -20,6 +20,7 @@ class PupilTutorMatch(models.Model):
     price = models.CharField(max_length=20, null=True, blank=True)
     lesson = models.CharField(max_length=20, verbose_name="number of lessons", null=True, blank=True)
     lessons_bought = models.IntegerField(blank=True, null=True)
+    last_updated = models.DateField(null=True, blank=True, db_index=True)
 
     @property
     def is_active(self):

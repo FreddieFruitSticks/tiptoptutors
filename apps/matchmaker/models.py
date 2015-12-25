@@ -2,9 +2,8 @@ import random
 import re
 
 from django.db import models
-from django.db.models import Count, F, Q
+
 from django.dispatch import receiver
-from django.utils import timezone
 
 from option.models import AvailableTutorSubject
 from pupil.models import Pupil, PupilTutorMatch
@@ -73,6 +72,9 @@ class PupilManager(models.Manager):
 
     def all_matched(self):
         return self.get_queryset().all_matched()
+
+    def paid(self):
+        return self.get_queryset().paid()
 
     def unpaid(self):
         return self.get_queryset().unpaid()

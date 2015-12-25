@@ -1,10 +1,30 @@
-from django import forms
 from django.db import models
-from common.models import Document
+
 from option.models import AvailableTutorSubject
 
 
+class TutorQuerySet(models.query.QuerySet):
+    def active_tutor(self):
+        return self.filter(pupiltutormatch__isnull=False).distinct()
+
+    def inactive_tutor(self):
+        return self.filter(pupiltutormatch__isnull=True).distinct()
+
+
+class TutorManager(models.Manager):
+    def get_queryset(self):
+        return TutorQuerySet(self.model, using=self._db)
+
+    def active_tutor(self):
+        return self.get_queryset().active_tutor()
+
+    def inactive_tutor(self):
+        return self.get_queryset().inactive_tutor()
+
+
 class Tutor(models.Model):
+    objects = TutorManager()
+
     TUTOR_STATUS = (
         ('Accepted', 'Accepted'),
         ('Declined', 'Declined'),
