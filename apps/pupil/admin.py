@@ -7,11 +7,10 @@ class PupilTutorMatchAdmin(admin.StackedInline):
 
 
 class PupilAdmin(admin.ModelAdmin):
-    search_fields = [ "name", 'surname', 'email',  ]
-    list_display =  ("name", 'surname', 'email', 'contact_number','created_at')
+    search_fields = ["name", 'surname', 'email', ]
+    list_display = ("name", 'surname', 'email', 'contact_number', 'created_at')
     inlines = [PupilTutorMatchAdmin]
 
 
 admin.site.register(Pupil, PupilAdmin)
 admin.site.register(PupilTutorMatch)
-

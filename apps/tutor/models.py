@@ -66,7 +66,7 @@ class Tutor(models.Model):
                                  help_text="If you don't have a university-level "
                                            "transcript for the subjects you want to tutor, "
                                            "attach your matric results instead.")
-    status = models.CharField(max_length=10, choices=TUTOR_STATUS, default='2')
+    status = models.CharField(max_length=10, choices=TUTOR_STATUS, default='Pending')
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
 
     def __unicode__(self):

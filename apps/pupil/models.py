@@ -14,36 +14,34 @@ class PupilTutorMatch(models.Model):
     tutor = models.ForeignKey(Tutor, null=True)
     # a matchup must be create per subject
     subject = models.ForeignKey(AvailableTutorSubject)
-    start_date = models.DateField(null=True, blank=True, db_index=True)
-    end_date = models.DateField(null=True, blank=True, db_index=True)
 
     price = models.CharField(max_length=20, null=True, blank=True)
     lesson = models.CharField(max_length=20, verbose_name="number of lessons", null=True, blank=True)
-    lessons_bought = models.IntegerField(blank=True, null=True)
-    last_updated = models.DateField(null=True, blank=True, db_index=True)
+    lessons_bought = models.IntegerField(blank=True, null=True, default=0)
+    last_bought_updated = models.DateField(verbose_name="bought updated", null=True, blank=True, db_index=True)
+    lessons_taught = models.IntegerField(blank=True, null=True, default=0)
+    last_taught_updated = models.DateField(verbose_name="taught updated", null=True, blank=True, db_index=True)
+
+    lessons_remaining = models.IntegerField(verbose_name="lessons remaining", null=True, blank=True)
+    readonly_fields = (lessons_remaining,)
 
     @property
     def is_active(self):
-        date_now = timezone.now().date()
-        return (self.start_date <= date_now) and \
-               (not self.end_date or date_now <= self.end_date)
-
-    def end_now(self):
-        self.end_date = timezone.now().date()
-        self.save()
-
-    def start_now(self):
-        self.start_date = timezone.now().date()
-        self.save()
+        return (self.lessons_bought > 0) \
+               and (self.lessons_bought - self.lessons_taught > 0)
 
     def __unicode__(self):
         return '%s - %s (%s)' % (self.pupil, self.tutor, self.subject)
+
+    def save(self, **kwargs):
+        self.lessons_remaining = self.lessons_bought - self.lessons_taught
+        super(PupilTutorMatch, self).save()
 
 
 class Pupil(models.Model):
     tutor = models.ManyToManyField(Tutor, null=True, blank=True,
                                    through=PupilTutorMatch)
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20, verbose_name="Pupil name")
     surname = models.CharField(max_length=20)
     email = models.EmailField()
     contact_number = models.CharField(max_length=15)

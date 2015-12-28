@@ -43,6 +43,24 @@ class FilterByPaidStatus(SimpleListFilter):
             return queryset.unpaid()
 
 
+class FilterByActiveStatus(SimpleListFilter):
+    title = 'Lessons remaining (has paid)'
+    parameter_name = 'lessons_remaining'
+
+    def lookups(self, request, model_admin):
+        return (('0', 'Has lessons remaining'),
+                ('1', 'No lessons remaining'),
+                ('2', 'Two lessons remaining'))
+
+    def queryset(self, request, queryset):
+        if self.value() == '0':
+            return queryset.actively_tutored()
+        elif self.value() == '1':
+            return queryset.finished_lessons()
+        elif self.value() == '2':
+            return queryset.two_lessons_remaining()
+
+
 def label_from_tutor_instance(pupil_subject_pks):
     def inner(obj):
         return '%s (%s)' % (
@@ -171,7 +189,7 @@ class SMSTutorsForm(forms.Form):
 
 class PupilMatchingAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'needs_tutor', 'per_pupil_actions']
-    list_filter = [FilterByTutorStatus, FilterByPaidStatus]
+    list_filter = [FilterByTutorStatus, FilterByPaidStatus, FilterByActiveStatus]
     actions = None
     inlines = [PupilTutorMatchAdmin]
 

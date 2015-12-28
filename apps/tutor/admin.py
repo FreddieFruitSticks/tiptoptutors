@@ -23,7 +23,7 @@ class TutorAdmin(admin.ModelAdmin):
     search_fields = ["name", 'surname', 'mobile', 'email', 'subject']
     list_display = ("name", 'surname', 'mobile', 'email',
                     'related_information', 'documents')
-    list_filter = [FilterByTutorActive]
+    list_filter = [FilterByTutorActive, 'status']
     raw_id_fields = ('id_doc', 'cv', 'academic')
 
     fieldsets = (

@@ -54,12 +54,24 @@ class PupilQuerySet(models.query.QuerySet):
         pupil_ids = get_pupil_ids(filter_multi_value_queryset_as_list(list1, list2))
         return self.exclude(id__in=pupil_ids).distinct()
 
+    def actively_tutored(self):
+        return self.paid().filter(id__in=PupilTutorMatch.objects.exclude(lessons_remaining=0).values_list('pupil'))
+
+    def finished_lessons(self):
+        print PupilTutorMatch.objects.filter(lessons_remaining=0).values_list('pupil')
+        return self.filter(id__in=PupilTutorMatch.objects.filter(lessons_remaining=0).values_list('pupil'))
+
+    def two_lessons_remaining(self):
+        return self.paid().filter(
+            id__in=PupilTutorMatch.objects.filter(Q(lessons_remaining=2) | Q(lessons_remaining=1)).values_list('pupil'))
+
     def unpaid(self):
-        return self.filter(Q(id__in=PupilTutorMatch.objects.filter(lessons_bought=None).values('pupil')) |
-                           Q(pupiltutormatch__isnull=True)).distinct()
+        return self.filter(Q(id__in=PupilTutorMatch.objects.filter(Q(lessons_bought=None) | Q(lessons_bought=0))
+                             .values('pupil')) | Q(pupiltutormatch__isnull=True)).distinct()
 
     def paid(self):
-        return self.filter(id__in=PupilTutorMatch.objects.exclude(lessons_bought=None).values('pupil'))
+        return self.filter(id__in=PupilTutorMatch.objects.exclude(Q(lessons_bought=None) | Q(lessons_bought=0))
+                           .values('pupil'))
 
     def get_all(self):
         return self.all()
@@ -75,11 +87,22 @@ class PupilManager(models.Manager):
     def all_matched(self):
         return self.get_queryset().all_matched()
 
+    def actively_tutored(self):
+        return self.get_queryset().actively_tutored()
+
+    def finished_lessons(self):
+        return self.get_queryset().finished_lessons()
+
+    def two_lessons_remaining(self):
+        return self.get_queryset().two_lessons_remaining()
+
     def paid(self):
         return self.get_queryset().paid()
 
     def unpaid(self):
         return self.get_queryset().unpaid()
+
+
 
     def get_all(self):
         return self.get_queryset().all()
