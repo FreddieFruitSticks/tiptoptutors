@@ -1,12 +1,13 @@
 from collections import OrderedDict
 
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 from models import Document
 
 
 class RelatedDocumentsForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
         super(RelatedDocumentsForm, self).__init__(*args, **kwargs)
         # NOTE: This adds a FileField for each model foreign key to Document.
@@ -61,3 +62,18 @@ class RelatedDocumentsForm(forms.ModelForm):
                     document.set_file(f)
                     document.save()
         return super(RelatedDocumentsForm, self).save(commit)
+
+
+class TutorSignupForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "password1", "password2")
+
+    def save(self, commit=True):
+        user = super(TutorSignupForm, self).save(commit=False)
+        user.email = self.cleaned_data["email"]
+        if commit:
+            user.save()
+        return user

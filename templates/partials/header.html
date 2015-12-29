@@ -18,155 +18,155 @@
                     <li><a href="{% url "subjects" %}">subjects</a></li>
                     <!--<li><a href="#">blog</a></li>-->
                     <li><a href="{% url "contact" %}">contact us</a></li>
+                    <li><a href="{% url "login" %}" data-reveal-id="signIn">Tutor login</a></li>
                     <!--<<li><a href="#">Call: 072 947 9422</a></li>-->
                     <!--<li class="divider"></li>-->
                     <li class="has-form"></li>
                 </ul>
 
-                    <!-- Left Nav Section 
-                    <ul class="left">
-                      <li><a href="#">Call: 072 947 9422</a></li>
-                    </ul>
-                    -->
+                <!-- Left Nav Section
+                <ul class="left">
+                  <li><a href="#">Call: 072 947 9422</a></li>
+                </ul>
+                -->
             </section>
 
+            <!--Sign Up Window-->
+            <div id="signUp" class="reveal-modal small" data-reveal>
+                <h2>Sign Up<br/>
+                    <small>Sign up to create your Tip Top account</small>
+                </h2>
+                <div class="signup">
+                    <form>
+                        <div class="row">
+                            <div class="large-8 columns">
+                                <div class="row collapse">
+                                    <div class="small-3 columns">
+                                        <span class="prefix"><i class="icon-cool"></i></span>
+                                    </div>
+                                    <div class="small-13 columns">
+                                        <input type="text" placeholder="First Name" required/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="large-8 columns">
+                                <div class="row collapse">
+                                    <div class="small-3 columns">
+                                        <span class="prefix"><i class="icon-grin"></i></span>
+                                    </div>
+                                    <div class="small-13 columns">
+                                        <input type="text" placeholder="Last Name" required/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="large-8 columns">
+                                <div class="row collapse">
+                                    <div class="small-3 columns">
+                                        <span class="prefix"><i class="icon-location"></i></span>
+                                    </div>
+                                    <div class="small-13 columns">
+                                        <input type="text" placeholder="Location"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="large-8 columns">
+                                <div class="row collapse">
+                                    <div class="small-3 columns">
+                                        <span class="prefix"><i class="icon-mail"></i></span>
+                                    </div>
+                                    <div class="small-13 columns">
+                                        <input type="email" placeholder="Email" required/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="large-8 columns">
+                                <div class="row collapse">
+                                    <div class="small-3 columns">
+                                        <span class="prefix"><i class="icon-mobile"></i></span>
+                                    </div>
+                                    <div class="small-13 columns">
+                                        <input type="number" placeholder="Contact Number"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="large-8 columns">
+                                <div class="row collapse">
+                                    <div class="small-3 columns">
+                                        <span class="prefix"><i class="icon-lock"></i></span>
+                                    </div>
+                                    <div class="small-13 columns">
+                                        <input type="password" placeholder="Password" required/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="large-16 columns">
+                                <button class="button expand radius">submit</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="large-7 columns large-centered text-center">
+                                <a href="#" data-reveal-id="signIn">I already have an Account</a>
+                            </div>
+                        </div>
 
-<!--Sign Up Window-->
-<div id="signUp" class="reveal-modal small" data-reveal>
-    <h2>Sign Up<br/>
-        <small>Sign up to create you Tip Top account</small>
-    </h2>
-    <div class="signup">
-        <form>
-            <div class="row">
-                <div class="large-8 columns">
-                    <div class="row collapse">
-                        <div class="small-3 columns">
-                            <span class="prefix"><i class="icon-cool"></i></span>
-                        </div>
-                        <div class="small-13 columns">
-                            <input type="text" placeholder="First Name" required/>
-                        </div>
-                    </div>
+                    </form>
                 </div>
-                <div class="large-8 columns">
-                    <div class="row collapse">
-                        <div class="small-3 columns">
-                            <span class="prefix"><i class="icon-grin"></i></span>
-                        </div>
-                        <div class="small-13 columns">
-                            <input type="text" placeholder="Last Name" required/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-8 columns">
-                    <div class="row collapse">
-                        <div class="small-3 columns">
-                            <span class="prefix"><i class="icon-location"></i></span>
-                        </div>
-                        <div class="small-13 columns">
-                            <input type="text" placeholder="Location"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="large-8 columns">
-                    <div class="row collapse">
-                        <div class="small-3 columns">
-                            <span class="prefix"><i class="icon-mail"></i></span>
-                        </div>
-                        <div class="small-13 columns">
-                            <input type="email" placeholder="Email" required/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-8 columns">
-                    <div class="row collapse">
-                        <div class="small-3 columns">
-                            <span class="prefix"><i class="icon-mobile"></i></span>
-                        </div>
-                        <div class="small-13 columns">
-                            <input type="number" placeholder="Contact Number"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="large-8 columns">
-                    <div class="row collapse">
-                        <div class="small-3 columns">
-                            <span class="prefix"><i class="icon-lock"></i></span>
-                        </div>
-                        <div class="small-13 columns">
-                            <input type="password" placeholder="Password" required/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-16 columns">
-                    <button class="button expand radius">submit</button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-7 columns large-centered text-center">
-                    <a href="#" data-reveal-id="signIn">I already have an Account</a>
-                </div>
+
+                <a class="close-reveal-modal">&#215;</a>
             </div>
 
-        </form>
-    </div>
+            <!--Sign In / Login Window-->
 
-    <a class="close-reveal-modal">&#215;</a>
-</div>
-
-<!--Sign In / Login Window-->
-
-<div id="signIn" class="reveal-modal small" data-reveal>
-    <h2>Sign In<br/>
-        <small>Welcome Back! please login in here</small>
-    </h2>
-    <div class="signup">
-        <form>
-            <div class="row">
-                <div class="large-8 columns large-centered">
-                    <div class="row collapse">
-                        <div class="small-3 columns">
-                            <span class="prefix"><i class="icon-cool"></i></span>
+            <div id="signIn" class="reveal-modal small" data-reveal>
+                <h2>Sign In<br/>
+                    <small>Welcome Back! please login in here</small>
+                </h2>
+                <div class="signup">
+                    <form>
+                        <div class="row">
+                            <div class="large-8 columns large-centered">
+                                <div class="row collapse">
+                                    <div class="small-3 columns">
+                                        <span class="prefix"><i class="icon-cool"></i></span>
+                                    </div>
+                                    <div class="small-13 columns">
+                                        <input type="text" placeholder="First Name" required/>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="small-13 columns">
-                            <input type="text" placeholder="First Name" required/>
+                        <div class="row">
+                            <div class="large-8 columns large-centered">
+                                <div class="row collapse">
+                                    <div class="small-3 columns">
+                                        <span class="prefix"><i class="icon-lock"></i></span>
+                                    </div>
+                                    <div class="small-13 columns">
+                                        <input type="password" placeholder="Password" required/>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-8 columns large-centered">
-                    <div class="row collapse">
-                        <div class="small-3 columns">
-                            <span class="prefix"><i class="icon-lock"></i></span>
+                        <div class="row">
+                            <div class="large-8 columns large-centered">
+                                <button class="button expand radius">login</button>
+                            </div>
                         </div>
-                        <div class="small-13 columns">
-                            <input type="password" placeholder="Password" required/>
+                        <div class="row">
+                            <div class="large-7 columns large-centered text-center">
+                                <a href="#" data-reveal-id="signUp">Oops! I need to sign up.</a>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
+                <a class="close-reveal-modal">&#215;</a>
             </div>
-            <div class="row">
-                <div class="large-8 columns large-centered">
-                    <button class="button expand radius">login</button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-7 columns large-centered text-center">
-                    <a href="#" data-reveal-id="signUp">Oops! I need to sign up.</a>
-                </div>
-            </div>
-        </form>
-    </div>
-    <a class="close-reveal-modal">&#215;</a>
-</div>
 
         </nav>
     </div>

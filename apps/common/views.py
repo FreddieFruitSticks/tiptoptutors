@@ -1,8 +1,11 @@
 from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import get_object_or_404
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import get_object_or_404, render_to_response
+from django.template.context_processors import csrf
 from django.utils.encoding import smart_str
 from django.views.generic import TemplateView
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect
+from forms import TutorSignupForm
 
 from models import Document
 
@@ -10,17 +13,39 @@ from models import Document
 class HomeView(TemplateView):
     template_name = "common/index.html"
 
+
 class AboutView(TemplateView):
     template_name = "common/about.html"
+
 
 class HowThisWorksView(TemplateView):
     template_name = "common/how-this-works.html"
 
+
+class LoginView(TemplateView):
+    template_name = "common/login.html"
+
+
+def register_user(request):
+    if request.method == 'POST':
+        form = TutorSignupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('login.html')
+
+    args = {}
+    args.update(csrf(request))
+    args['form'] = TutorSignupForm
+    return render_to_response('common/login.html', args)
+
+
 class SubjectsView(TemplateView):
     template_name = "common/subjects.html"
 
+
 class LibraryView(TemplateView):
     template_name = "common/library.html"
+
 
 class TermsAndConditionsView(TemplateView):
     template_name = "common/termsandconditions.html"
@@ -30,8 +55,8 @@ def serve_document(request, doc_id):
     doc = get_object_or_404(Document, id=doc_id)
     # return 403 if the doc is not public and the user is not staff
     if not doc.is_public and (not hasattr(request, 'user') or
-                              not request.user.is_authenticated() or
-                              not request.user.is_staff):
+                                  not request.user.is_authenticated() or
+                                  not request.user.is_staff):
         return HttpResponseForbidden()
 
     response = HttpResponse(doc.data, content_type=doc.mime_type)

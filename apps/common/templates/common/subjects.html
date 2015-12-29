@@ -1,154 +1,233 @@
 {% extends "contact/base.html" %}
 
 {% block meta %}
-       <title>Subjects - Tip Top Tutors - Cape Town tutors, results guaranteed.</title>
-       <meta name="description" content="Tip Top Tutors teaches a wide range of mathematical-based subjects for both school and university. Our tutors are experienced and specialised in these.">
+    <title>Subjects - Tip Top Tutors - Cape Town tutors, results guaranteed.</title>
+    <meta name="description"
+          content="Tip Top Tutors teaches a wide range of mathematical-based subjects for both school and university. Our tutors are experienced and specialised in these.">
 {% endblock %}
 
 {% block content %}
-<!--BODY/MAIN-->
-<section id="subjects">
-    <div class="row">
-        <div class="large-16 columns container">
-            <div class="row">
-                <!-- Contact Details -->
-                <div class="large-12 columns">
+    <!--BODY/MAIN-->
+    <section id="subjects">
+        <div class="row">
+            <div class="large-16 columns container">
+                <div class="row">
+                    <!-- Contact Details -->
+                    <div class="large-12 columns">
 
-                    <div class="row">
-                        <div class="large-16 columns">
-                            <h3>High school <span>subjects</span><br/>
-                                <small>Our subjects that we teach.</small>
-                            </h3>
-                            <br/>
+                        <div class="row">
+                            <div class="large-16 columns">
+                                <h3>High school <span>subjects</span><br/>
+                                    <small>Our subjects that we teach.</small>
+                                </h3>
+                                <br/>
+                            </div>
+                        </div>
+
+                        <h5 id="highSchoolMathematics">Mathematics</h5>
+                        <hr/>
+                        <p>Some people believe mathematics is “just not their thing” - that they simply don’t have the
+                            brains for it. Well, we are here to tell you that high school maths is FAR more about hard
+                            work than any genetic influence. Sure we don’t have the same maths ability as Einstein or
+                            Newton, but we don’t have to. If you destroy the idea that you are “not a maths person” and
+                            put in enough effort, you can achieve your goal of an A. Our experience has shown this to be
+                            true time and time again. Our tutors understand this concept and tutor accordingly. All our
+                            tutors excelled at mathematics at school and are hand-picked to be the best. </p>
+
+                        <div class="row">
+                            <div class="large-5 columns" style="float: right;">
+                                <a href="{% url "pupil" %}" class="button radius expand">
+                                    <span class="textBlock">Get A Maths Tutor</span>
+                                </a>
+                            </div>
+                        </div>
+                        <h5 id="highSchoolScience">Science</h5>
+                        <hr/>
+                        <p>We believe science is one of the most important subjects to study at school. Science teaches
+                            pupils how to critically observe and model the world around them using mathematics. Like
+                            mathematics, doing science at school gives the pupil a better chance of being accepted for
+                            many university subjects and it sets the pupil up for promising future career options. All
+                            of our tutors have excelled in science at school and have experience in tutoring this
+                            subject.</p>
+
+                        <div class="row">
+                            <div class="large-5 columns" style="float: right;">
+                                <a href="{% url "pupil" %}" class="button radius expand">
+                                    <span class="textBlock">Get A Science Tutor</span>
+                                </a>
+                            </div>
+                        </div>
+                        <h5 id="highSchoolAccounting">Accounting</h5>
+                        <hr/>
+                        <p>Accounting is an important skill for any entrepreneur (it’s important to keep track of your
+                            company’s numbers). It requires a certain level of numeric skill and a familiarity with
+                            numbers that does not always come naturally. Many investment bankers, some of the highest
+                            paid people in the world, have a strong grounding in accounting that gives them a unique
+                            ability to analyse the statuses of big companies and subsequently make informed decisions.
+                            Chartered accountancy is another lucrative career option for accounting students. Our
+                            accounting tutors are more than capable of tutoring accounting at all levels and have
+                            excelled at it academically.</p>
+
+                        <div class="row">
+                            <div class="large-5 columns" style="float: right;">
+                                <a href="{% url "pupil" %}" class="button radius expand">
+                                    <span class="textBlock">Get An Acc Tutor</span>
+                                </a>
+                            </div>
+                        </div>
+                        <h5 id="highSchoolEconomics">Economics</h5>
+                        <hr/>
+                        <p>Economics provides the pupil with general principles and a fundamental knowledge that can be
+                            applied to business operations and strategies. The goal of studying economics is to apply
+                            these strategies in the business world. While economics is not very mathematical at school
+                            level, the mathematical workload at university level is somewhat increased. Top universities
+                            require levels of advanced mathematics (such as Topology which is only taught in 4th year
+                            mathematics) in order to enrol in their masters programmes. We have a team of bright
+                            economics tutors that are more than capable of tutoring economics up the grade 12.</p>
+
+                        <div class="row">
+                            <div class="large-5 columns" style="float: right;">
+                                <a href="{% url "pupil" %}" class="button radius expand">
+                                    <span class="textBlock">Get An Ecos Tutor</span></a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="large-16 columns">
+                                <h3>University <span>subjects</span><br/>
+                                    <small>Our subjects that we teach.</small>
+                                </h3>
+                                <br/>
+                            </div>
+                        </div>
+                        <h5 id="universityMathematics">Mathematics</h5>
+                        <hr/>
+                        <p>Mathematics is arguably the most important subject in academics. It is used in many fields
+                            including finance, quantitative analysis, radar engineering, control engineering, computer
+                            programming, data science and many other specialised jobs. It teaches students logical
+                            deduction and how to clearly convey their reasoning and calculations. It provides students
+                            with mathematical maturity that allows them to analyse today’s advanced world of technology.
+                            Our tutors have excelled in mathematics at university level and are prepared to tutor each
+                            specific course.</p>
+
+                        <div class="row">
+                            <div class="large-5 columns" style="float: right;">
+                                <a href="{% url "pupil" %}" class="button radius expand">
+                                    <span class="textBlock">Get A Maths Tutor</span></a>
+                            </div>
+                        </div>
+                        <h5 id="universityPhysics">Physics</h5>
+                        <hr/>
+                        <p>Physics is a very important subject in academia. It uses mathematics to describe how the
+                            universe around us behaves. One could say that mathematics is the language of physics, which
+                            teaches students how to create mathematical models of the natural world. A degree in physics
+                            opens up many career options for the learner because it shows competency and learning
+                            ability (not to mention the mathematical intelligence learned along the course of your
+                            degree). Our physics tutors have excelled in various courses of physics at university level.
+
+                        <div class="row">
+                            <div class="large-5 columns" style="float: right;">
+                                <a href="{% url "pupil" %}" class="button radius expand">
+                                    <span class="textBlock">Get A Physics Tutor</span></a>
+                            </div>
+                        </div>
+                        <h5 id="universityChemistry">Chemistry</h5>
+                        <hr/>
+                        <p>Chemistry is the discipline of studying and manipulating various organic and inorganic
+                            chemical compounds. The career options of a 4 year advanced degree (honours equivalent) and
+                            up include forensic science, chemical engineering, textile industry, oil industry (we know
+                            how much money is in that), medicine, plastics industry, organic chemistry and many more. A
+                            chemist has a solid basis in skills both mathematical and analytical, which makes employment
+                            opportunities endless. Our tutors have all excelled in this field at university level and
+                            they are assured to meet your needs.</p>
+
+                        <div class="row">
+                            <div class="large-5 columns" style="float: right;">
+                                <a href="{% url "pupil" %}" class="button radius expand">
+                                    <span class="textBlock">Get A Chem Tutor</span></a>
+                            </div>
+                        </div>
+                        <h5 id="universityStatistics">Statistics</h5>
+                        <hr/>
+                        <p>Statistics is the mathematics of probability theory and data analysis. This discipline is
+                            used to calculate a variety of potential outcomes of the future, as well as analyse and
+                            deconstruct all types of data sets. The career opportunities in statistics are endless as a
+                            degree in this field shows academic competency, mathematical intelligence and a strong
+                            ability to understand difficult concepts. Statistics is used in banking, search engines
+                            (such as Google and Yahoo), data analysis and many more. Our tutors have all excelled in an
+                            abundance of statistic courses and are well equipped to help your achieve your results.</p>
+
+                        <div class="row">
+                            <div class="large-5 columns" style="float: right;">
+                                <a href="{% url "pupil" %}" class="button radius expand">
+                                    <span class="textBlock">Get A Stats Tutor</span></a>
+                            </div>
+                        </div>
+                        <h5 id="universityComputerScience">Computer Science</h5>
+                        <hr/>
+                        <p>Computer science is a very important field in today’s computer age. It enables one to build
+                            websites (like this one!), create games and implement mathematical models. This discipline
+                            teaches you to understand the language of computers and apply computation to a variety of
+                            problems - a very useful and profitable discipline indeed. Our tutors are all master
+                            programmers in Java, Python, C++, Matlab/Octave and R. They have all excelled in their
+                            studies and are well equipped to help you achieve your goals.</p>
+
+                        <div class="row">
+                            <div class="large-5 columns" style="float: right;">
+                                <a href="{% url "pupil" %}" class="button radius expand">
+                                    <span class="textBlock">Get A CompSci Tutor</span></a>
+                            </div>
+                        </div>
+                        <h5 id="universityAppliedMathematics">Applied Mathematics</h5>
+                        <hr/>
+                        <p>Applied mathematics can be described as the middle-ground between mathematics and physics. In
+                            applied mathematics the learner focuses on applications of mathematical constructs rather
+                            than the proof of these constructs. However, knowledge of the first principles is paramount
+                            to grasping this field. Our tutors have excelled in applied mathematics at university level
+                            and are well equipped to help you achieve the grades you want.</p>
+
+                        <div class="row">
+                            <div class="large-5 columns" style="float: right;">
+                                <a href="{% url "pupil" %}" class="button radius expand">
+                                    <span class="textBlock">Get A Tutor now</span></a>
+                            </div>
+                        </div>
+                        <h5 id="universityAccounting">Accounting</h5>
+                        <hr/>
+                        <p>Accounting at university level is an extremely difficult subject to excel at due to the
+                            myriad of hand-ins and the actual complexity of various subjects (such as tax!). There is no
+                            doubt that a master accountant is a well-respected position and your marks are important in
+                            securing a solid career one day. Our tutors are just the right bunch of accountants for you!
+                            Their marks are solid and their tutoring ability is the best there is.</p>
+
+                        <div class="row">
+                            <div class="large-5 columns" style="float: right;">
+                                <a href="{% url "pupil" %}" class="button radius expand">
+                                    <span class="textBlock">Get An Acc Tutor</span></a>
+                            </div>
+                        </div>
+                        <h5 id="universityEconomics">Economics</h5>
+                        <hr/>
+                        <p>Economics is a broad term that encompasses micro- and macroeconomics, econometrics, risk and
+                            uncertainty, financial economics, game theory and many more. University-level economics has
+                            become a highly mathematical subject. One learns to understand mathematical models of the
+                            markets, the Black-Scholes being the most famous. Top universities require the student to
+                            have years of advanced mathematics to be able to enrol in their postgraduate economics
+                            programmes. Our tutors have all excelled at economics and have experience tutoring various
+                            economics courses. All our tutors are screened and verified to meet your needs.</p>
+
+                        <div class="row">
+                            <div class="large-5 columns" style="float: right;">
+                                <a href="{% url "pupil" %}" class="button radius expand">
+                                    <span class="textBlock">Get An Ecos Tutor</span></a>
+                            </div>
                         </div>
                     </div>
-
-                    <h5 id="highSchoolMathematics">Mathematics</h5>
-                    <hr/>
-                    <p>Some people believe mathematics is “just not their thing” - that they simply don’t have the brains for it. Well, we are here to tell you that high school maths is FAR more about hard work than any genetic influence. Sure we don’t have the same maths ability as Einstein or Newton, but we don’t have to. If you destroy the idea that you are “not a maths person” and put in enough effort, you can achieve your goal of an A. Our experience has shown this to be true time and time again. Our tutors understand this concept and tutor accordingly. All our tutors excelled at mathematics at school and are hand-picked to be the best. </p>
-                    <div class="row">
-                        <div  class="large-5 columns" style="float: right;">
-                            <a href="{% url "pupil" %}" class="button radius expand">
-                            <span class="textBlock">Get A Maths Tutor</span>
-                             </a>
-                         </div>
-                    </div>
-                    <h5 id="highSchoolScience">Science</h5>
-                    <hr/>
-                    <p>We believe science is one of the most important subjects to study at school. Science teaches pupils how to critically observe and model the world around them using mathematics. Like mathematics, doing science at school gives the pupil a better chance of being accepted for many university subjects and it sets the pupil up for promising future career options. All of our tutors have excelled in science at school and have experience in tutoring this subject.</p>
-                    <div class="row">
-                        <div  class="large-5 columns" style="float: right;">
-                            <a href="{% url "pupil" %}" class="button radius expand">
-                            <span class="textBlock">Get A Science Tutor</span>
-                             </a>
-                         </div>
-                    </div>
-                    <h5 id="highSchoolAccounting">Accounting</h5>
-                    <hr/>
-                    <p>Accounting is an important skill for any entrepreneur (it’s important to keep track of your company’s numbers). It requires a certain level of numeric skill and a familiarity with numbers that does not always come naturally. Many investment bankers, some of the highest paid people in the world, have a strong grounding in accounting that gives them a unique ability to analyse the statuses of big companies and subsequently make informed decisions. Chartered accountancy is another lucrative career option for accounting students. Our accounting tutors are more than capable of tutoring accounting at all levels and have excelled at it academically.</p>
-                    <div class="row">
-                        <div  class="large-5 columns" style="float: right;">
-                            <a href="{% url "pupil" %}" class="button radius expand">
-                            <span class="textBlock">Get An Acc Tutor</span>
-                             </a>
-                         </div>
-                    </div>
-                    <h5 id="highSchoolEconomics">Economics</h5>
-                    <hr/>
-                    <p>Economics provides the pupil with general principles and a fundamental knowledge that can be applied to business operations and strategies. The goal of studying economics is to apply these strategies in the business world. While economics is not very mathematical at school level, the mathematical workload at university level is somewhat increased. Top universities require levels of advanced mathematics (such as Topology which is only taught in 4th year mathematics) in order to enrol in their masters programmes. We have a team of bright economics tutors that are more than capable of tutoring economics up the grade 12.</p>
-                    <div class="row">
-                        <div  class="large-5 columns" style="float: right;">
-                            <a href="{% url "pupil" %}" class="button radius expand">
-                            <span class="textBlock">Get An Ecos Tutor</span></a>
-                         </div>
-                    </div>
-            <div class="row">
-                <div class="large-16 columns">
-                    <h3>University <span>subjects</span><br/>
-                    <small>Our subjects that we teach.</small>
-                    </h3>
-                    <br/>
                 </div>
-            </div>
-                    <h5 id="universityMathematics">Mathematics</h5>
-                    <hr/>
-                    <p>Mathematics is arguably the most important subject in academics. It is used in many fields including finance, quantitative analysis, radar engineering, control engineering, computer programming, data science and many other specialised jobs. It teaches students logical deduction and how to clearly convey their reasoning and calculations. It provides students with mathematical maturity that allows them to analyse today’s advanced world of technology. Our tutors have excelled in mathematics at university level and are prepared to tutor each specific course.</p>
-                    <div class="row">
-                        <div  class="large-5 columns" style="float: right;">
-                            <a href="{% url "pupil" %}" class="button radius expand">
-                            <span class="textBlock">Get A Maths Tutor</span></a>
-                         </div>
-                    </div>
-                    <h5 id="universityPhysics">Physics</h5>
-                    <hr/>
-                    <p>Physics is a very important subject in academia. It uses mathematics to describe how the universe around us behaves. One could say that mathematics is the language of physics, which teaches students how to create mathematical models of the natural world. A degree in physics opens up many career options for the learner because it shows competency and learning ability (not to mention the mathematical intelligence learned along the course of your degree). Our physics tutors have excelled in various courses of physics at university level.
-                    <div class="row">
-                        <div  class="large-5 columns" style="float: right;">
-                            <a href="{% url "pupil" %}" class="button radius expand">
-                            <span class="textBlock">Get A Physics Tutor</span></a>
-                         </div>
-                    </div>
-                    <h5 id="universityChemistry">Chemistry</h5>
-                    <hr/>
-                    <p>Chemistry is the discipline of studying and manipulating various organic and inorganic chemical compounds. The career options of a 4 year advanced degree (honours equivalent) and up include forensic science, chemical engineering, textile industry, oil industry (we know how much money is in that), medicine, plastics industry, organic chemistry and many more. A chemist has a solid basis in skills both mathematical and analytical, which makes employment opportunities endless. Our tutors have all excelled in this field at university level and they are assured to meet your needs.</p>
-                    <div class="row">
-                        <div  class="large-5 columns" style="float: right;">
-                            <a href="{% url "pupil" %}" class="button radius expand">
-                            <span class="textBlock">Get A Chem Tutor</span></a>
-                         </div>
-                    </div>
-                    <h5 id="universityStatistics">Statistics</h5>
-                    <hr/>
-                    <p>Statistics is the mathematics of probability theory and data analysis. This discipline is used to calculate a variety of potential outcomes of the future, as well as analyse and deconstruct all types of data sets. The career opportunities in statistics are endless as a degree in this field shows academic competency, mathematical intelligence and a strong ability to understand difficult concepts. Statistics is used in banking, search engines (such as Google and Yahoo), data analysis and many more. Our tutors have all excelled in an abundance of statistic courses and are well equipped to help your achieve your results.</p>
-                    <div class="row">
-                        <div  class="large-5 columns" style="float: right;">
-                            <a href="{% url "pupil" %}" class="button radius expand">
-                            <span class="textBlock">Get A Stats Tutor</span></a>
-                         </div>
-                    </div>
-                    <h5 id="universityComputerScience">Computer Science</h5>
-                    <hr/>
-                    <p>Computer science is a very important field in today’s computer age. It enables one to build websites (like this one!), create games and implement mathematical models. This discipline teaches you to understand the language of computers and apply computation to a variety of problems - a very useful and profitable discipline indeed. Our tutors are all master programmers in Java, Python, C++, Matlab/Octave and R. They have all excelled in their studies and are well equipped to help you achieve your goals.</p>
-                    <div class="row">
-                        <div  class="large-5 columns" style="float: right;">
-                            <a href="{% url "pupil" %}" class="button radius expand">
-                            <span class="textBlock">Get A CompSci Tutor</span></a>
-                         </div>
-                    </div>
-                    <h5 id="universityAppliedMathematics">Applied Mathematics</h5>
-                    <hr/>
-                    <p>Applied mathematics can be described as the middle-ground between mathematics and physics. In applied mathematics the learner focuses on applications of mathematical constructs rather than the proof of these constructs. However, knowledge of the first principles is paramount to grasping this field. Our tutors have excelled in applied mathematics at university level and are well equipped to help you achieve the grades you want.</p>
-                    <div class="row">
-                        <div  class="large-5 columns" style="float: right;">
-                            <a href="{% url "pupil" %}" class="button radius expand">
-                            <span class="textBlock">Get A Tutor now</span></a>
-                         </div>
-                    </div>
-                    <h5 id="universityAccounting">Accounting</h5>
-                    <hr/>
-                    <p>Accounting at university level is an extremely difficult subject to excel at due to the myriad of hand-ins and the actual complexity of various subjects (such as tax!). There is no doubt that a master accountant is a well-respected position and your marks are important in securing a solid career one day. Our tutors are just the right bunch of accountants for you! Their marks are solid and their tutoring ability is the best there is.</p>
-                    <div class="row">
-                        <div  class="large-5 columns" style="float: right;">
-                            <a href="{% url "pupil" %}" class="button radius expand">
-                            <span class="textBlock">Get An Acc Tutor</span></a>
-                         </div>
-                    </div>
-                    <h5 id="universityEconomics">Economics</h5>
-                    <hr/>
-                    <p>Economics is a broad term that encompasses micro- and macroeconomics, econometrics, risk and uncertainty, financial economics, game theory and many more. University-level economics has become a highly mathematical subject. One learns to understand mathematical models of the markets, the Black-Scholes being the most famous. Top universities require the student to have years of advanced mathematics to be able to enrol in their postgraduate economics programmes. Our tutors have all excelled at economics and have experience tutoring various economics courses. All our tutors are screened and verified to meet your needs.</p>
-                                    <div class="row">
-                        <div  class="large-5 columns" style="float: right;">
-                            <a href="{% url "pupil" %}" class="button radius expand">
-                            <span class="textBlock">Get An Ecos Tutor</span></a>
-                         </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- End Main Content and Sidebar -->
+                <!-- End Main Content and Sidebar -->
+            </div>
         </div>
-    </div>
 
-</section>
+    </section>
 
 {% endblock %}
