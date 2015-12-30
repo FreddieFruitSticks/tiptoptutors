@@ -9,6 +9,6 @@ urlpatterns = patterns('',
                        url(r'^past-papers/$', views.LibraryView.as_view(), name='past-papers'),
                        url(r'^terms-and-conditions/$', views.TermsAndConditionsView.as_view(),
                            name='terms-and-conditions'),
-                       url(r'^login/$', views.register_user, name='login'),
-                       url(r'^document/(?P<doc_id>\d+)/$', views.serve_document, name='serve-document')
+                       url(r'^document/(?P<doc_id>\d+)/$', views.serve_document, name='serve-document'),
+
                        )

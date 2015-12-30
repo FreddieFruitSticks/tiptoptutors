@@ -1,0 +1,26 @@
+<!--HEADER-->
+<section id="header">
+    <div class="fixed contain-to-grid">
+        <nav class="top-bar" data-topbar>
+            <ul class="title-area">
+                <li class="name">
+                    <a href="{% url "home" %}"><img src="/static/img/logo.png"></a>
+                </li>
+                <li class="toggle-topbar menu-icon">
+                    <a href="#"><span>Menu</span></a>
+                </li>
+            </ul>
+
+            <section class="top-bar-section">
+                <ul class="right">
+                    <li><a href="{% url "about" %}">Register Lesson</a></li>
+                    <li><a href="{% url "how-this-works" %}">FAQ</a></li>
+                    <li><a href="{% url "subjects" %}">Pupils/Credits</a></li>
+                    <li><a href="{% url "logout" %}" >Logout</a></li>
+                    <li class="has-form"></li>
+                </ul>
+            </section>
+
+        </nav>
+    </div>
+</section>

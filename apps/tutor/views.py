@@ -1,11 +1,11 @@
-#from django.core.urlresolvers import reverse
+# from django.core.urlresolvers import reverse
+from django.shortcuts import render_to_response
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView
 from tutor.forms import TutorForm
 
 
 class TutorView(CreateView):
-
     form_class = TutorForm
     template_name = "tutor/tutor.html"
 
@@ -16,3 +16,10 @@ class TutorView(CreateView):
 
 class TutorSuccessView(TemplateView):
     template_name = "tutor/tutor-success.html"
+
+
+def tutor_view_form(request):
+    form_class = TutorForm
+    template_name = "tutor/tutor.html"
+
+    return render_to_response(template_name, {'form': form_class})

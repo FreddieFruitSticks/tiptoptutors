@@ -1,12 +1,13 @@
-from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib import auth
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template.context_processors import csrf
 from django.utils.encoding import smart_str
+from django.views.decorators.http import require_http_methods
 from django.views.generic import TemplateView
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect
-from forms import TutorSignupForm
 
+from forms import TutorSignupForm
+from tutor.views import tutor_view_form
 from models import Document
 
 
@@ -20,23 +21,6 @@ class AboutView(TemplateView):
 
 class HowThisWorksView(TemplateView):
     template_name = "common/how-this-works.html"
-
-
-class LoginView(TemplateView):
-    template_name = "common/login.html"
-
-
-def register_user(request):
-    if request.method == 'POST':
-        form = TutorSignupForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('login.html')
-
-    args = {}
-    args.update(csrf(request))
-    args['form'] = TutorSignupForm
-    return render_to_response('common/login.html', args)
 
 
 class SubjectsView(TemplateView):
