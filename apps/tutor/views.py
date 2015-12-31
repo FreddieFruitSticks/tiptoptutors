@@ -18,7 +18,7 @@ class TutorSuccessView(TemplateView):
     template_name = "tutor/tutor-success.html"
 
 
-def tutor_view_form(request):
+def tutor_login_frontpage(request):
     form_class = TutorForm
     template_name = "tutor/tutor.html"
 

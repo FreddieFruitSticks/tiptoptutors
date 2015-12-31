@@ -1,13 +1,8 @@
-from django.contrib import auth
-from django.shortcuts import get_object_or_404, render_to_response
-from django.template.context_processors import csrf
+from django.shortcuts import get_object_or_404
 from django.utils.encoding import smart_str
-from django.views.decorators.http import require_http_methods
 from django.views.generic import TemplateView
-from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseForbidden
 
-from forms import TutorSignupForm
-from tutor.views import tutor_view_form
 from models import Document
 
 
