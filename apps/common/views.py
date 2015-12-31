@@ -1,9 +1,18 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render_to_response
+from django.template.context_processors import csrf
 from django.utils.encoding import smart_str
+from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
 from django.http import HttpResponse, HttpResponseForbidden
 
 from models import Document
+
+
+@never_cache
+def home_view(request):
+    args = {}
+    args.update(csrf(request))
+    return render_to_response('common/index.html', args)
 
 
 class HomeView(TemplateView):

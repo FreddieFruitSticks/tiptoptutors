@@ -1,102 +1,112 @@
 {% extends "common/base.html" %}
 
 {% block meta %}
-       <title>Tip Top Tutors - Cape Town tutors, results guaranteed.</title>
-       <meta name="description" content="We're a Cape Town tutoring agency that guarantees an improvement of results or we tutor for free. We tutor a variety mathematical based subjects for both school and university level.">
+    <title>Tip Top Tutors - Cape Town tutors, results guaranteed.</title>
+    <meta name="description"
+          content="We're a Cape Town tutoring agency that guarantees an improvement of results or we tutor for free. We tutor a variety mathematical based subjects for both school and university level.">
 {% endblock %}
 
-{%  block content %}
+{% block content %}
 
-<section id="imageBannerContainer">
-    <div class="row">
-        <div class="large-10 columns">
-            <div class="payoffLine">
-                <h1>Get the <span>RIGHT TUTOR</span> to help you<br/>
-                    <small>Results Guaranteed,</small>
-                </h1>
-                <h4>or we tutor for free.*</h4>
+    <section id="imageBannerContainer">
+        <div class="row">
+            <div class="large-10 columns">
+                <div class="payoffLine">
+                    <h1>Get the <span>RIGHT TUTOR</span> to help you<br/>
+                        <small>Results Guaranteed,</small>
+                    </h1>
+                    <h4>or we tutor for free.*</h4>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="small-10 columns ">
-            <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-2">
-                <li class="selector">
-                    <a href="{% url "pupil" %}" class="button radius expand">
-                        <span class="iconBlock"><img src="static/img/student-icon.png"></span>
-                        <span class="textBlock">Get A<br /> Tutor</span>
-                    </a>
-                </li>
-                <li class="selector">
-                    <a href="{% url "quote" %}" class="button radius expand secondary">
-                        <span class="iconBlock"><img src="static/img/tutor-icon.png"></span>
-                        <span class="textBlock">Get A<br /> Quote</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</section>
-
-<section id="main">
-    <div class="row">
-        <div class="selectors">
-            <div class="large-16 columns container">
-                <ul class="small-block-grid-1 medium-block-grid-3 large-block-grid-3">
-                    <li>
-                        <a href="#">
-                            <img src="/static/img/student-icon-blue.png">
-                            <h4>get a <span>Tutor</span></h4>
-                            <p class="text-center"> Qualified, flexible, authentic. </p>
+        <div class="row">
+            <div class="small-10 columns ">
+                <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-2">
+                    <li class="selector">
+                        <a href="{% url "pupil" %}" class="button radius expand">
+                            <span class="iconBlock"><img src="static/img/student-icon.png"></span>
+                            <span class="textBlock">Get A<br/> Tutor</span>
                         </a>
-                        <a href="{% url "pupil" %}" class="button expand">request a tutor</a>
                     </li>
-                    <li>
-                        <a href="#">
-                            <img src="/static/img/tutor-icon-blue.png">
-                            <h4>become a <span>Tutor</span></h4>
-                            <p class="text-center">Inspire, mentor, earn extra cash.</p>
+                    <li class="selector">
+                        <a href="{% url "quote" %}" class="button radius expand secondary">
+                            <span class="iconBlock"><img src="static/img/tutor-icon.png"></span>
+                            <span class="textBlock">Get A<br/> Quote</span>
                         </a>
-                        <a href="{% url "tutor" %}" class="button expand">Apply to be a tutor</a>
                     </li>
-                    <li>
-                        <a href="#">
-                            <img src="/static/img/papers-icon-blue.png">
-                            <h4>get past <span>papers</span></h4>
-                            <p class="text-center">Practice, pratice, pratice!</p>
-                        </a>
-                        <a href="{% url "past-papers" %}" class="button expand">CHECK OUR LIBRARY</a>
-                    </li>
-
                 </ul>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="row">
-        <div class="large-16 columns container">
-            <div class="row">
-                <div class="small-4 columns">
-                    <a class="th [radius]" href="#"> <img src="/static/img/blog/thumb.png"> </a>
-                </div>
-                <div class="small-12 columns">
-                    <h5>Where we came from </h5>
-                    <p><strong>Tip Top Tutors</strong> was founded due to an ever-increasing need for tuition in mathematical-based subjects. We are specialised in these subjects and as such our tutors know exactly how to increase the pupil's marks.</p>
-                    <a href="{% url "about" %}" class="button radius">Read more</a>
-                </div>
-            </div>
-            <hr/>
-            <div class="row">
-                <div class="small-12 small-centered columns">
-                    <h5 class="text-center" style="font-style: italic;">"I am now confident I am receiving quality Education. One less thing to worry about when I start my day."</h5>
+    <section id="main">
+        <div class="row">
+            <div class="selectors">
+                <div class="large-16 columns container">
+                    <ul class="small-block-grid-1 medium-block-grid-3 large-block-grid-3">
+                        <li>
+                            <a href="#">
+                                <img src="/static/img/student-icon-blue.png">
+                                <h4>get a <span>Tutor</span></h4>
+
+                                <p class="text-center"> Qualified, flexible, authentic. </p>
+                            </a>
+                            <a href="{% url "pupil" %}" class="button expand">request a tutor</a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="/static/img/tutor-icon-blue.png">
+                                <h4>become a <span>Tutor</span></h4>
+
+                                <p class="text-center">Inspire, mentor, earn extra cash.</p>
+                            </a>
+                            <a href="{% url "tutor" %}" data-reveal-id="signUp" class="button expand">Apply to be a
+                                tutor</a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="/static/img/papers-icon-blue.png">
+                                <h4>get past <span>papers</span></h4>
+
+                                <p class="text-center">Practice, pratice, pratice!</p>
+                            </a>
+                            <a href="{% url "past-papers" %}" class="button expand">CHECK OUR LIBRARY</a>
+                        </li>
+
+                    </ul>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="large-10 columns " style="font-size: 11px;">
-            * All liability is taken on by <strong>Tip Top Tutors</strong>. All tutors are paid in full for all lessons.
+
+        <div class="row">
+            <div class="large-16 columns container">
+                <div class="row">
+                    <div class="small-4 columns">
+                        <a class="th [radius]" href="#"> <img src="/static/img/blog/thumb.png"> </a>
+                    </div>
+                    <div class="small-12 columns">
+                        <h5>Where we came from </h5>
+
+                        <p><strong>Tip Top Tutors</strong> was founded from a need for tuition in
+                            mathematical-based subjects. We are specialised in these subjects and as such our tutors
+                            know exactly how to help you help yourself.</p>
+                        <a href="{% url "about" %}" class="button radius">Read more</a>
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="small-12 small-centered columns">
+                        <h5 class="text-center" style="font-style: italic;">"I am now confident I am receiving quality
+                            Education. One less thing to worry about when I start my day."</h5>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</section>
+        <div class="row">
+            <div class="large-10 columns " style="font-size: 11px;">
+                * All liability is taken on by <strong>Tip Top Tutors</strong>. All tutors are paid in full for all
+                lessons.
+            </div>
+        </div>
+    </section>
 {% endblock %}

@@ -13,11 +13,9 @@ def register_user(request):
     form = TutorSignupForm(request.POST)
     if form.is_valid():
         form.save()
-        args = {}
-        args.update(csrf(request))
         return tutor_login_frontpage(request)
     else:
-        invalid_login(request)
+        return invalid_registration(request)
 
 
 def auth_view(request):
@@ -26,10 +24,9 @@ def auth_view(request):
     user = auth.authenticate(username=username, password=password)
     if user is not None:
         auth.login(request, user)
-        # return HttpResponseRedirect('/loggedin/')
         return tutor_pupil_summary(request)
     else:
-        return render_to_response('invalid-login.html')
+        return invalid_login(request)
 
 
 @login_required(login_url="/")
@@ -43,27 +40,43 @@ def logout(request):
 
 
 def invalid_login(request):
-    return render_to_response('invalid-login.html')
+    args = {}
+    args.update(csrf(request))
+    return render_to_response('invalid-login.html', args)
+
+
+def invalid_registration(request):
+    args = {}
+    args.update(csrf(request))
+    return render_to_response('form-something-wrong.html', args)
 
 
 @login_required(login_url="/")
 def tutor_pupil_summary(request):
-    return HttpResponseRedirect('/loggedin/')
+    args = {}
+    args.update(csrf(request))
+    return HttpResponseRedirect('/loggedin/', args)
 
 
 @login_required(login_url="/")
 def tutor_faq(request):
-    return render_to_response('faq.html')
+    args = {}
+    args.update(csrf(request))
+    return render_to_response('faq.html', args)
 
 
 @login_required(login_url="/")
 def register_lesson(request):
-    return render_to_response('regiter-lesson.html')
+    args = {}
+    args.update(csrf(request))
+    return render_to_response('regiter-lesson.html', args)
 
 
 @login_required(login_url="/")
 def pupil_credits(request):
-    return render_to_response('pupils-credits.html')
+    args = {}
+    args.update(csrf(request))
+    return render_to_response('pupils-credits.html', args)
 
 
 @login_required(login_url="/")

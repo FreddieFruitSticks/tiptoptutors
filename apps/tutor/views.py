@@ -1,5 +1,6 @@
 # from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
+from django.template.context_processors import csrf
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView
 from tutor.forms import TutorForm
@@ -21,5 +22,7 @@ class TutorSuccessView(TemplateView):
 def tutor_login_frontpage(request):
     form_class = TutorForm
     template_name = "tutor/tutor.html"
-
-    return render_to_response(template_name, {'form': form_class})
+    args = {}
+    args.update(csrf(request))
+    args['form'] = form_class
+    return render_to_response(template_name, args)
