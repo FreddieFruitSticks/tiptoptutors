@@ -102,7 +102,7 @@ MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 MEDIA_URL = '/media/'
 STATIC_ROOT = '/static/'
 STATIC_URL = '/static/'
-STATICFILES_DIRS = ( PROJECT_DIR + '/static/', )
+STATICFILES_DIRS = (PROJECT_DIR + '/static/',)
 
 ADMIN_TOOLS_MEDIA_URL = ''
 ADMIN_MEDIA_PREFIX = '/static/admin/'
@@ -238,7 +238,7 @@ LOGGING = {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': True,
-            }
+        }
     },
     'filters': {
         'require_debug_false': {
@@ -252,7 +252,7 @@ LOGGING = {
             'class': 'django.utils.log.AdminEmailHandler'
         }
     },
-    }
+}
 
 # ==============================================================================
 #  overrides settings
@@ -260,6 +260,7 @@ LOGGING = {
 
 try:
     from settings_local import *
+
     print "import settings local"
 except ImportError:
     pass

@@ -1,3 +1,4 @@
+from django.contrib import auth
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template.context_processors import csrf
 from django.utils.encoding import smart_str

@@ -64,7 +64,7 @@ class RelatedDocumentsForm(forms.ModelForm):
         return super(RelatedDocumentsForm, self).save(commit)
 
 
-class TutorSignupForm(UserCreationForm):
+class UserTutorSignupForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
     class Meta:
@@ -72,7 +72,7 @@ class TutorSignupForm(UserCreationForm):
         fields = ("username", "email", "password1", "password2")
 
     def save(self, commit=True):
-        user = super(TutorSignupForm, self).save(commit=False)
+        user = super(UserTutorSignupForm, self).save(commit=False)
         user.email = self.cleaned_data["email"]
         if commit:
             user.save()

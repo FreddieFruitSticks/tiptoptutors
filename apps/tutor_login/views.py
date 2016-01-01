@@ -1,18 +1,24 @@
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.context_processors import csrf
 from django.views.decorators.http import require_http_methods
-from common.forms import TutorSignupForm
+from common.forms import UserTutorSignupForm
 from tutor.views import tutor_login_frontpage
 
 
 @require_http_methods("POST")
 def register_user(request):
-    form = TutorSignupForm(request.POST)
+    form = UserTutorSignupForm(request.POST)
     if form.is_valid():
         form.save()
+        user1 = User.objects.get(username=request.POST.get('username', ''))
+        user = auth.authenticate(username=user1.username, password=user1.password)
+        print 'in register user: '+user1.username
+        if user is not None:
+            auth.login(request, user)
         return tutor_login_frontpage(request)
     else:
         return invalid_registration(request)
@@ -53,9 +59,7 @@ def invalid_registration(request):
 
 @login_required(login_url="/")
 def tutor_pupil_summary(request):
-    args = {}
-    args.update(csrf(request))
-    return HttpResponseRedirect('/loggedin/', args)
+    return HttpResponseRedirect('/loggedin/')
 
 
 @login_required(login_url="/")

@@ -3,11 +3,11 @@ from django.shortcuts import render_to_response
 from django.template.context_processors import csrf
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView
-from tutor.forms import TutorForm
+from tutor.forms import TutorDetailsForm
 
 
 class TutorView(CreateView):
-    form_class = TutorForm
+    form_class = TutorDetailsForm
     template_name = "tutor/tutor.html"
 
     def get_success_url(self):
@@ -20,7 +20,7 @@ class TutorSuccessView(TemplateView):
 
 
 def tutor_login_frontpage(request):
-    form_class = TutorForm
+    form_class = TutorDetailsForm(request=request)
     template_name = "tutor/tutor.html"
     args = {}
     args.update(csrf(request))

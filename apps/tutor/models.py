@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 from option.models import AvailableTutorSubject
@@ -37,6 +38,7 @@ class Tutor(models.Model):
     )
     # admin tools
     comment = models.TextField(null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, default=None)
     # front end display
     # TODO - make next 6 fields required (show * in form)
     name = models.CharField(max_length=20, verbose_name="name")
