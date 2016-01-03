@@ -1,12 +1,11 @@
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.context_processors import csrf
 from django.views.decorators.http import require_http_methods
+
 from common.forms import UserTutorSignupForm
-from tutor.views import tutor_login_frontpage
 
 
 @require_http_methods("POST")
@@ -14,12 +13,11 @@ def register_user(request):
     form = UserTutorSignupForm(request.POST)
     if form.is_valid():
         form.save()
-        user1 = User.objects.get(username=request.POST.get('username', ''))
-        user = auth.authenticate(username=user1.username, password=user1.password)
-        print 'in register user: '+user1.username
+        user = auth.authenticate(username=request.POST.get('username', ''), password=request.POST.get('password1', ''))
         if user is not None:
             auth.login(request, user)
-        return tutor_login_frontpage(request)
+            return HttpResponseRedirect('/tutor/')
+        return HttpResponseRedirect('/tutor-invalid/')
     else:
         return invalid_registration(request)
 
