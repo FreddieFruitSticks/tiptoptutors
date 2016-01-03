@@ -7,6 +7,7 @@ urlpatterns = patterns('',
                        url(r'^loggedin/$', views.loggedin, name='loggedin'),
                        url(r'^logout/$', views.logout, name='logout'),
                        url(r'^pupilsummary/', views.tutor_pupil_summary, name="tutorsummary"),
+                       url(r'^tutor-invalid-pass/$', views.invalid_pass, name='invalidpass'),
                        url(r'^invalidlogin/', views.invalid_login, name="invalidlogin"),
 
                        url(r'^tutorfaq/', views.tutor_faq, name="tutorfaq"),

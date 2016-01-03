@@ -6,6 +6,9 @@ from django.template.context_processors import csrf
 from django.views.decorators.http import require_http_methods
 
 from common.forms import UserTutorSignupForm
+from tutor.models import Tutor
+from pupil.models import Pupil
+from matchmaker.models import PupilTutorMatch
 
 
 @require_http_methods("POST")
@@ -14,10 +17,13 @@ def register_user(request):
     if form.is_valid():
         form.save()
         user = auth.authenticate(username=request.POST.get('username', ''), password=request.POST.get('password1', ''))
+
         if user is not None:
             auth.login(request, user)
             return HttpResponseRedirect('/tutor/')
         return HttpResponseRedirect('/tutor-invalid/')
+    elif not request.POST.get('password1', '') == request.POST.get('password2', ''):
+        return HttpResponseRedirect('/tutor-invalid-pass/')
     else:
         return invalid_registration(request)
 
@@ -55,6 +61,12 @@ def invalid_registration(request):
     return render_to_response('form-something-wrong.html', args)
 
 
+def invalid_pass(request):
+    args = {}
+    args.update(csrf(request))
+    return render_to_response('invalid-tutor-pass.html', args)
+
+
 @login_required(login_url="/")
 def tutor_pupil_summary(request):
     return HttpResponseRedirect('/loggedin/')
@@ -78,6 +90,10 @@ def register_lesson(request):
 def pupil_credits(request):
     args = {}
     args.update(csrf(request))
+
+    pupils = PupilTutorMatch.objects.filter(tutor_id=Tutor.objects.filter(user_id=request.user.id))
+
+    args['pupils'] = pupils
     return render_to_response('pupils-credits.html', args)
 
 
