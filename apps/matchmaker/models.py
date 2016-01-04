@@ -102,8 +102,6 @@ class PupilManager(models.Manager):
     def unpaid(self):
         return self.get_queryset().unpaid()
 
-
-
     def get_all(self):
         return self.get_queryset().all()
 

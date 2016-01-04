@@ -165,6 +165,7 @@ PROJECT_APPS = (
     'quote',
     'matchmaker',
     'tutor_login',
+    'payments',
 )
 
 THIRD_PARTY_APPS = (
