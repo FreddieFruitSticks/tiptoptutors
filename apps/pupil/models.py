@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils import timezone
 
 from option.models import City, LevelOfStudy, AvailableTutorSubject
 from tutor.models import Tutor

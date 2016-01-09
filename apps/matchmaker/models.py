@@ -58,7 +58,6 @@ class PupilQuerySet(models.query.QuerySet):
         return self.paid().filter(id__in=PupilTutorMatch.objects.exclude(lessons_remaining=0).values_list('pupil'))
 
     def finished_lessons(self):
-        print PupilTutorMatch.objects.filter(lessons_remaining=0).values_list('pupil')
         return self.filter(id__in=PupilTutorMatch.objects.filter(lessons_remaining=0).values_list('pupil'))
 
     def two_lessons_remaining(self):

@@ -34,7 +34,9 @@ def auth_view(request):
     user = auth.authenticate(username=username, password=password)
     if user is not None:
         auth.login(request, user)
-        return tutor_pupil_summary(request)
+        if Tutor.objects.filter(user=user.id).count() > 0:
+            return tutor_pupil_summary(request)
+        return HttpResponseRedirect('/tutor/')
     else:
         return invalid_login(request)
 
