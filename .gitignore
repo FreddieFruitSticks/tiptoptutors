@@ -19,3 +19,4 @@ src/*.egg-info
 settings_local.py
 media/*
 *~
+*.dump

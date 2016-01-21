@@ -17,6 +17,7 @@ urlpatterns = patterns('',
                        url(r'^sms/', include('sms.urls')),
                        url(r'', include('quote.urls')),
                        url(r'', include('tutor_login.urls')),
+                       url(r'', include('payments.urls')),
                        )
 
 if settings.DEBUG:

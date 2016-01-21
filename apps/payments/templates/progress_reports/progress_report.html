@@ -1,0 +1,44 @@
+{% extends "tutor/base.html" %}
+
+{% block meta %}
+    <title>Become a Tutor - Tip Top Tutors - Cape Town tutors, results guaranteed.</title>
+    <meta name="description"
+          content="Fill out our online application with all the relevant forms attached, and if we like you we will contact you.">
+{% endblock %}
+
+{% block content %}
+
+    <!--BODY/MAIN-->
+    <section id="tutor">
+
+        <div class="row">
+            <div class="large-16 columns container">
+                <div class="row">
+                    <!-- Contact Details -->
+                    <div class="large-12 columns">
+
+
+                        <h3>Pupil Progress Report</h3>
+
+                        <p>Please fill out the pupil's progress report. This gets emailed to the parent/guardian of the
+                        pupil</p>
+
+                        <section class="section">
+                            <h5 class="title">details</h5>
+
+                            <div class="content" data-slug="panel1">
+                                {% url "registerlesson" as form_action %}
+                                {% include "common/form.html" %}
+                            </div>
+                        </section>
+                    </div>
+                    <!-- End Contact Details -->
+                </div>
+
+                <!-- End Main Content and Sidebar -->
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}

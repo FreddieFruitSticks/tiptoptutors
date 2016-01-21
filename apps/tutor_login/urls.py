@@ -11,7 +11,7 @@ urlpatterns = patterns('',
                        url(r'^invalidlogin/', views.invalid_login, name="invalidlogin"),
 
                        url(r'^tutorfaq/', views.tutor_faq, name="tutorfaq"),
-                       url(r'^registerlesson/', views.register_lesson, name="registerlesson"),
+                       # url(r'^registerlesson/', views.register_lesson, name="registerlesson"),
                        url(r'^pupilscredits/', views.pupil_credits, name="pupilscredits"),
                        url(r'^lessonhistory/', views.lesson_history, name="lessonhistory")
                        )
