@@ -11,8 +11,9 @@ class ProgressReportForm(forms.ModelForm):
         exclude = ('lesson',)
 
     def is_valid(self):
-        valid = super(ProgressReportForm,self).is_valid()
+        print('in form_valid in form')
+        valid = super(ProgressReportForm, self).is_valid()
         if not valid:
             return valid
-
+        return valid
 
