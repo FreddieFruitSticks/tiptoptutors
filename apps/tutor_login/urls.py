@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, url
 from tutor_login import views
+from payments.views import LessonHistory
 
 urlpatterns = patterns('',
                        url(r'^login/$', views.register_user, name='login'),
@@ -13,5 +14,5 @@ urlpatterns = patterns('',
                        url(r'^tutorfaq/', views.tutor_faq, name="tutorfaq"),
                        # url(r'^registerlesson/', views.register_lesson, name="registerlesson"),
                        url(r'^pupilscredits/', views.pupil_credits, name="pupilscredits"),
-                       url(r'^lessonhistory/', views.lesson_history, name="lessonhistory")
+                       url(r'^lessonhistory/', LessonHistory.as_view(), name="lessonhistory")
                        )

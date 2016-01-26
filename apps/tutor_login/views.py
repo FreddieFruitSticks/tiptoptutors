@@ -17,7 +17,6 @@ def register_user(request):
     if form.is_valid():
         form.save()
         user = auth.authenticate(username=request.POST.get('username', ''), password=request.POST.get('password1', ''))
-
         if user is not None:
             auth.login(request, user)
             return HttpResponseRedirect('/tutor/')
@@ -82,13 +81,6 @@ def tutor_faq(request):
 
 
 @login_required(login_url="/")
-def register_lesson(request):
-    args = {}
-    args.update(csrf(request))
-    return render_to_response('regiter-lesson.html', args)
-
-
-@login_required(login_url="/")
 def pupil_credits(request):
     args = {}
     args.update(csrf(request))
@@ -97,8 +89,3 @@ def pupil_credits(request):
 
     args['pupils'] = pupils
     return render_to_response('pupils-credits.html', args)
-
-
-@login_required(login_url="/")
-def lesson_history(request):
-    return render_to_response('lesson-history.html')

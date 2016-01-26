@@ -1,4 +1,5 @@
 from django.db import models
+# from payments.models import TutorFee
 
 
 class City(models.Model):
@@ -10,9 +11,10 @@ class City(models.Model):
 
 class LevelOfStudy(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False)
+    rate_category = models.ForeignKey('payments.TutorFee', null=True, blank=True)
 
     def __unicode__(self):
-        return self.name
+        return '%s - Rate of: %s' % (self.name, self.rate_category)
 
 
 #

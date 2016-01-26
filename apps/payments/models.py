@@ -5,20 +5,12 @@ from tutor.models import Tutor
 from option.models import AvailableTutorSubject
 
 
-class PendingPayment(models.Model):
-    tutor = models.OneToOneField(Tutor)
-    amount_owing = models.IntegerField(null=True, blank=True, verbose_name="amount owing")
-
-    def __unicode__(self):
-        return '%s - R%s' % (self.tutor, self.amount_owing)
-
-
 class LessonRecord(models.Model):
     datetime = models.DateTimeField(auto_now=True, verbose_name='date/time')
     pupil = models.ForeignKey(Pupil, null=True)
     tutor = models.ForeignKey(Tutor, null=True)
-    subject = models.ForeignKey(AvailableTutorSubject,null=True)
-    amount = models.IntegerField(verbose_name='amount',null=True)
+    subject = models.ForeignKey(AvailableTutorSubject, null=True)
+    amount = models.IntegerField(verbose_name='amount', null=True)
     paid_status = models.BooleanField(verbose_name='Paid', default=False)
     payment_record = models.ForeignKey('PaymentRecord', null=True, blank=True)
 
@@ -34,14 +26,14 @@ class LessonRecord(models.Model):
 
 
 class PaymentRecord(models.Model):
-    amount = models.IntegerField(verbose_name='amount')
+    amount = models.IntegerField(verbose_name='amount', null=True)
     date = models.DateTimeField(auto_now=True, null=True)
     tutor = models.ForeignKey(Tutor, null=False, blank=False)
     paid = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return '%s %s - R%s' % (self.datetime.strftime('%d-%m-%Y %H:%M'),
-                                self.tutor, self.amount_paid)
+        return '%s %s - Paid:%s' % (self.date.strftime('%d-%m-%Y %H:%M'),
+                                    self.tutor, self.paid)
 
 
 class ProgressReport(models.Model):
@@ -59,4 +51,15 @@ class ProgressReport(models.Model):
                                        help_text='Indicate how student is coping with work, what needs '
                                                  'improving, tutor advice, etc',
                                        verbose_name='Summary of student progress')
-    lesson = models.OneToOneField(LessonRecord, null=True)
+    lesson = models.OneToOneField(LessonRecord, null=True, blank=True)
+
+    def __unicode__(self):
+        return '%s' % self.lesson
+
+
+class TutorFee(models.Model):
+    rate_category = models.CharField(unique=True, max_length=20)
+    rate = models.IntegerField()
+
+    def __unicode__(self):
+        return '%s - R%s' % (self.rate_category, self.rate)

@@ -29,6 +29,10 @@ class PupilTutorMatch(models.Model):
         return (self.lessons_bought > 0) \
                and (self.lessons_bought - self.lessons_taught > 0)
 
+    @property
+    def get_prog_report_unicode(self):
+        return '%s %s (%s)' % (self.pupil.name, self.pupil.surname, self.subject.name)
+
     def __unicode__(self):
         return '%s - %s (%s)' % (self.pupil, self.tutor, self.subject)
 
@@ -62,3 +66,12 @@ class Pupil(models.Model):
     @property
     def full_name(self):
         return '%s %s' % (self.name, self.surname)
+
+
+class PupilPin(models.Model):
+    pin = models.CharField(max_length=4)
+    pupil = models.ForeignKey(Pupil)
+    readonly_fields = (pin, pupil,)
+
+    def __unicode__(self):
+        return '%s %s: %s' % (self.pupil.name, self.pupil.surname, self.pin)

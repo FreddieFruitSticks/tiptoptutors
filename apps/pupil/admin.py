@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Pupil, PupilTutorMatch
+from models import Pupil, PupilTutorMatch, PupilPin
 
 
 class PupilTutorMatchAdmin(admin.StackedInline):
@@ -14,3 +14,4 @@ class PupilAdmin(admin.ModelAdmin):
 
 admin.site.register(Pupil, PupilAdmin)
 admin.site.register(PupilTutorMatch)
+admin.site.register(PupilPin)
