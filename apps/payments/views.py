@@ -44,7 +44,6 @@ class ProgressReportView(CreateView):
                 subject = pupil_tutor_match.subject
 
                 amount = pupil.level_of_study.rate_category.rate
-                print(amount)
 
                 if form.cleaned_data['pupil_pin'] == pupil_pin.pin:
                     try:
@@ -123,10 +122,17 @@ def get_pupils_for_tutors(request):
 
 
 class LessonHistory(CreateView):
-
     @method_decorator(login_required(login_url='/'))
     def dispatch(self, *args, **kwargs):
         return super(LessonHistory, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        return render_to_response('progress_reports/lesson_history.html')
+        # user = User.objects.get(username=request.user)
+        # tutor = Tutor.objects.get(user__id=User.objects.get(username=request.user).id)
+        lesson_records = LessonRecord.objects.filter(
+            tutor=Tutor.objects.get(user__id=User.objects.get(username=request.user).id))
+
+        args = {}
+        args.update(csrf(request))
+        args['lesson_records'] = lesson_records
+        return render_to_response('progress_reports/lesson_history_comingsoon.html', args)

@@ -16,23 +16,15 @@
                         <div>
 {#                            <h2><a href="/emoney/get/{{ account.id }}"> {{ account.firstname }} </a></h2>#}
                         </div>
-                        <table border="2" style="width:100%">
+                        <table border="2" style="width:100%">{%csrf_token%}
                             <tr border="1" style="width:50%">
-                                <td>Datetime</td>
-{#                                <td>Last Name</td>#}
-                                <td>Pupil</td>
-                                <td>Subject</td>
-                                <td>Level of study</td>
-                                <td>Amount</td>
+                                <td>Lesson</td>
                             </tr>
-{#                            {% for pupil in pupils %}#}
-{#                                <tr>#}
-{#                                    <td>{{ pupil.pupil }}</td>#}
-{#                                    <td>{{ pupil.surname }}</td>#}
-{#                                    <td>{{ pupil.subject }}</td>#}
-{#                                    <td>{{ pupil.lessons_remaining }}</td>#}
-{#                                </tr>#}
-{#                            {% endfor %}#}
+                            {% for lesson_record in lesson_records %}
+                                <tr>
+                                    <td>{{ lesson_record }}</td>
+                                </tr>
+                            {% endfor %}
                         </table>
                         </body>
                         </html>
