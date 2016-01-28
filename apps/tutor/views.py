@@ -11,9 +11,9 @@ class TutorView(CreateView):
     template_name = "tutor/tutor.html"
 
     def form_valid(self, form):
-        tutor = form.save(commit=False)
+        tutor = form.save()
         tutor.user = User.objects.get(username=self.request.user)
-        tutor.save()
+        super(TutorView, self).form_valid(form)
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
