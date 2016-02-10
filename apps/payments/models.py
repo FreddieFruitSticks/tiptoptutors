@@ -32,8 +32,8 @@ class PaymentRecord(models.Model):
     paid = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return '%s %s - Paid:%s' % (self.date.strftime('%d-%m-%Y %H:%M'),
-                                    self.tutor, self.paid)
+        return '%s %s - R%s Paid:%s' % (self.date.strftime('%d-%m-%Y %H:%M'),
+                                        self.tutor, self.amount, self.paid)
 
 
 class ProgressReport(models.Model):

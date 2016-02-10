@@ -5,7 +5,9 @@ from django.shortcuts import render_to_response
 from django.template.context_processors import csrf
 from django.views.decorators.http import require_http_methods
 
-from common.forms import UserTutorSignupForm
+# from common.forms import UserTutorSignupForm
+from forms import UserTutorSignupForm
+from payments.models import PaymentRecord
 from tutor.models import Tutor
 from pupil.models import Pupil
 from matchmaker.models import PupilTutorMatch
@@ -21,8 +23,8 @@ def register_user(request):
             auth.login(request, user)
             return HttpResponseRedirect('/tutor/')
         return HttpResponseRedirect('/tutor-invalid/')
-    elif not request.POST.get('password1', '') == request.POST.get('password2', ''):
-        return HttpResponseRedirect('/tutor-invalid-pass/')
+    # elif not request.POST.get('password1', '') == request.POST.get('password2', ''):
+    #     return HttpResponseRedirect('/tutor-invalid-pass/')
     else:
         return invalid_registration(request)
 
@@ -85,7 +87,8 @@ def pupil_credits(request):
     args = {}
     args.update(csrf(request))
 
-    pupils = PupilTutorMatch.objects.filter(tutor_id=Tutor.objects.filter(user_id=request.user.id))
-
+    pupils = PupilTutorMatch.objects.filter(tutor__id=Tutor.objects.filter(user__id=request.user.id))
+    money = PaymentRecord.objects.filter(tutor__id=Tutor.objects.filter(user__id=request.user.id)).get(paid=False)
+    args['money'] = money
     args['pupils'] = pupils
     return render_to_response('pupils-credits.html', args)

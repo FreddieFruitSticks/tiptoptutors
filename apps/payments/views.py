@@ -135,4 +135,4 @@ class LessonHistory(CreateView):
         args = {}
         args.update(csrf(request))
         args['lesson_records'] = lesson_records
-        return render_to_response('progress_reports/lesson_history_comingsoon.html', args)
+        return render_to_response('progress_reports/lesson_history.html', args)

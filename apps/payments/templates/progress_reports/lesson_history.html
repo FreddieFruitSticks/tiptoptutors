@@ -18,11 +18,13 @@
                         </div>
                         <table border="2" style="width:100%">{%csrf_token%}
                             <tr border="1" style="width:50%">
-                                <td>Lesson</td>
+                                <td>Datetime</td>
+                                <td>Pupil</td>
                             </tr>
                             {% for lesson_record in lesson_records %}
                                 <tr>
-                                    <td>{{ lesson_record }}</td>
+                                    <td>{{ lesson_record.datetime }}</td>
+                                    <td>{{ lesson_record.pupil.surname}}, {{ lesson_record.pupil.name}}</td>
                                 </tr>
                             {% endfor %}
                         </table>
