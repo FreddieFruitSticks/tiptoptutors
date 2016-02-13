@@ -29,6 +29,7 @@ def register_user(request):
         return invalid_registration(request)
 
 
+# @login_required(login_url="/")
 def auth_view(request):
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
@@ -42,7 +43,7 @@ def auth_view(request):
         return invalid_login(request)
 
 
-@login_required(login_url="/")
+# @login_required(login_url="/")
 def loggedin(request):
     return render_to_response('loggedin.html', {'firstname': request.user.username})
 
@@ -70,7 +71,7 @@ def invalid_pass(request):
     return render_to_response('invalid-tutor-pass.html', args)
 
 
-@login_required(login_url="/")
+# @login_required(login_url="/")
 def tutor_pupil_summary(request):
     return HttpResponseRedirect('/loggedin/')
 
@@ -88,7 +89,11 @@ def pupil_credits(request):
     args.update(csrf(request))
 
     pupils = PupilTutorMatch.objects.filter(tutor__id=Tutor.objects.filter(user__id=request.user.id))
-    money = PaymentRecord.objects.filter(tutor__id=Tutor.objects.filter(user__id=request.user.id)).get(paid=False)
+    try:
+        money = PaymentRecord.objects.filter(tutor__id=Tutor.objects.filter(user__id=request.user.id)).get(paid=False)
+    except PaymentRecord.DoesNotExist:
+        money = None
+
     args['money'] = money
     args['pupils'] = pupils
     return render_to_response('pupils-credits.html', args)

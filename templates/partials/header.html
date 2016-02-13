@@ -30,6 +30,16 @@
                 </ul>
                 -->
             </section>
+            <script>
+                function checkForm(form1){
+                    if(form1.password1.value != form1.password2.value){
+                        alert("Passwords did not match!")
+                    }
+                    if(form1.username.value != form1.email.value){
+                        alert("Emails did not match!")
+                    }
+                }
+            </script>
 
             <!--Sign Up Window-->
             <div id="signUp" class="reveal-modal small" data-reveal>
@@ -106,7 +116,7 @@
                         </div>
                         <div class="row">
                             <div class="large-16 columns">
-                                <button class="button expand radius">submit</button>
+                                <button class="button expand radius" onclick="return checkForm(this.parentNode)">submit</button>
                             </div>
                         </div>
                         <div class="row">

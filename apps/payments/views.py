@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.mail import send_mail, BadHeaderError, EmailMultiAlternatives
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.utils.decorators import method_decorator
@@ -92,6 +93,25 @@ class ProgressReportView(CreateView):
                             return render_to_response('progress_reports/out_of_lessons.html',
                                                       {'pupil': pupil.name})
 
+                    email_subject = 'Progress report for ' + pupil.name
+                    email_message = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title></title></head><body><p>Dear parent/guardian<p><p>Please see below progress report for <strong>' + pupil.name + '</strong>.</p><p><strong>Homework completion status: </strong>' + \
+                                    form.cleaned_data[
+                                        'homework_status'] + '<p><p><strong>Tutor summary of ' + pupil.name + '\'s progress: </strong>' + \
+                                    form.cleaned_data[
+                                        'student_summary'] + '. We encourage you to discuss further with ' + pupil_tutor_match.tutor.name + '.' + '<p><p><strong>Homework given: </strong>' + \
+                                    form.cleaned_data[
+                                        'homework_summary'] + '<p>Homework should <strong>always</strong> be given as it is the most important part in the process of improvement. It is absolutely necessary that the homework is not only completed, but that it is completed properly. <strong>Please see to it that homework is completed appropriately</strong>. The best time to start is either right after the lesson or the very next day. The homework should be spread evenly over the period between lessons.<p><p><em>Work hard, work smart.</em> That is the only route to success.<p></body></html>'
+                    email_recipient = 'freddieodonnell@gmail.com'
+                    try:
+                        mesg = EmailMultiAlternatives(email_subject, 'blah', 'info@tiptoptutors.co.za',
+                                                      [email_recipient])
+                        mesg.attach_alternative(email_message, 'text/html')
+                        mesg.send()
+                        # send_mail(email_subject, email_message, 'info@tiptoptutors.co.za', [email_recipient],
+                        #           fail_silently=False)
+                    except BadHeaderError:
+                        pass
+                    form.save()
                     return render_to_response('progress_reports/registered_lesson_success.html')
                 return render_to_response('progress_reports/incorrect_pin.html')
             else:
@@ -107,6 +127,7 @@ class ProgressReportView(CreateView):
         return reverse('registerlessonsuccess')
 
 
+@login_required(login_url='/')
 def prog_report_success(request):
     return render_to_response('progress_reports/registered_lesson_success.html')
 
