@@ -1,0 +1,38 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    {% block meta %}
+        <title>Tip Top Tutors - Cape Town tutors, results guaranteed.</title>
+        <meta name="description"
+              content="Get the right tutor to help you. Tip Top Tutors guarantees results or we tutor for free. School and university tutors in Cape Town.">
+    {% endblock %}
+    <link rel="stylesheet" href="/static/css/normalize.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/css/foundation.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/css/base.css" type="text/css"/>
+    <link rel="shortcut icon" href="/static/img/favicon.ico?v=1.0"/>
+    <script type="text/javascript" src="/static/js/jquery.js"></script>
+    <script src="/static/js/modernizr.js" type="text/javascript"></script>
+    {% include "partials/ga.html" %}
+</head>
+<body>
+
+{% block header %}
+    {% include "tutor/../../../tutor_login/templates/tutor-signup-header.html" %}
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block footer %}
+    {% include "partials/footer.html" %}
+{% endblock %}
+
+{% block js %}
+    {% include "partials/js.html" %}
+{% endblock %}
+
+
+</body>
+</html>

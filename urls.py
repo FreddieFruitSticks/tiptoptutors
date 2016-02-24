@@ -18,6 +18,7 @@ urlpatterns = patterns('',
                        url(r'', include('quote.urls')),
                        url(r'', include('tutor_login.urls')),
                        url(r'', include('payments.urls')),
+                       url(r'', include('password_reset.urls')),
                        )
 
 if settings.DEBUG:

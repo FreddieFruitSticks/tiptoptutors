@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from password_reset.forms import PasswordRecoveryForm
 
 
 class UserTutorSignupForm(UserCreationForm):
@@ -30,3 +31,6 @@ class UserTutorSignupForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+
+# class MyPasswordRecoveryForm(PasswordRecoveryForm):

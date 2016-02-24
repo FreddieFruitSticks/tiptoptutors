@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Password recovery sent" %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="large-16 columns container">
+            <div class="row">
+                <!-- Contact Details -->
+                <div class="large-12 columns">
+
+                    <p>{% blocktrans with ago=timestamp|timesince %}An email was sent to <strong>{{ email }}</strong>
+                        {{ ago }} ago. Use the link in it to set a new password.{% endblocktrans %}</p>
+
+
+                </div>
+            </div>
+
+            <!-- End Main Content and Sidebar -->
+        </div>
+    </div>
+{% endblock %}

@@ -1,5 +1,6 @@
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.context_processors import csrf
@@ -9,7 +10,6 @@ from django.views.decorators.http import require_http_methods
 from forms import UserTutorSignupForm
 from payments.models import PaymentRecord
 from tutor.models import Tutor
-from pupil.models import Pupil
 from matchmaker.models import PupilTutorMatch
 
 
@@ -34,6 +34,8 @@ def auth_view(request):
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
     user = auth.authenticate(username=username, password=password)
+
+    print(get_current_site(request))
     if user is not None:
         auth.login(request, user)
         if Tutor.objects.filter(user=user.id).count() > 0:
@@ -71,9 +73,9 @@ def invalid_pass(request):
     return render_to_response('invalid-tutor-pass.html', args)
 
 
-# @login_required(login_url="/")
+@login_required(login_url="/")
 def tutor_pupil_summary(request):
-    return HttpResponseRedirect('/loggedin/')
+    return HttpResponseRedirect('/progressreport/')
 
 
 @login_required(login_url="/")
@@ -97,3 +99,10 @@ def pupil_credits(request):
     args['money'] = money
     args['pupils'] = pupils
     return render_to_response('pupils-credits.html', args)
+
+
+# class RecoveryPage(Recover):
+#     form_class = PasswordRecoveryForm
+#
+#     def get(self, request, *args, **kwargs):
+

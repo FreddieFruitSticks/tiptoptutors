@@ -82,6 +82,10 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_PASSWORD = '0f6GjAAponwMy4XqCeAh'
 EMAIL_HOST_USER = 'no-reply@tiptoptutors.co.za'
 
+# comment this out for production site - this is only for testing.
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = '/tmp/app-messages'
+
 # ==============================================================================
 # project settings
 # ==============================================================================
@@ -93,7 +97,7 @@ LANGUAGE_CODE = 'en_uk'
 
 SECRET_KEY = 'zi@=&o6gf&5g4g7%s4wxcr!^z$d!o$3#s_u7)mp9qa)$p7^&in'
 
-SITE_ID = 1
+SITE_ID = 2
 USE_L10N = False
 USE_I18N = False
 USE_TZ = True
@@ -166,6 +170,7 @@ PROJECT_APPS = (
     'matchmaker',
     'tutor_login',
     'payments',
+    'password_reset',
 )
 
 THIRD_PARTY_APPS = (

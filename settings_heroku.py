@@ -23,3 +23,5 @@ STATICFILES_DIRS = (
 )
 
 INSTALLED_APPS += ('gunicorn', )
+
+SITE_ID = 2
