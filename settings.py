@@ -97,7 +97,7 @@ LANGUAGE_CODE = 'en_uk'
 
 SECRET_KEY = 'zi@=&o6gf&5g4g7%s4wxcr!^z$d!o$3#s_u7)mp9qa)$p7^&in'
 
-SITE_ID = 2
+SITE_ID = 1
 USE_L10N = False
 USE_I18N = False
 USE_TZ = True

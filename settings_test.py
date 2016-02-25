@@ -7,5 +7,3 @@ DATABASES['default'].update({
     'USER': '',
     'PASSWORD': '',
 })
-
-SITE_ID = 1
