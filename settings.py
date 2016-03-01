@@ -106,7 +106,7 @@ MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 MEDIA_URL = '/media/'
 STATIC_ROOT = '/static/'
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (PROJECT_DIR + '/static/',)
+# STATICFILES_DIRS = (PROJECT_DIR + '/static/',)
 
 ADMIN_TOOLS_MEDIA_URL = ''
 ADMIN_MEDIA_PREFIX = '/static/admin/'
