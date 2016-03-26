@@ -31,13 +31,16 @@
                 -->
             </section>
             <script>
-                function checkForm(form1){
-                    if(form1.password1.value != form1.password2.value){
-                        alert("Passwords did not match!")
+                function checkForm(){
+                    if($('#Password').val() != $('#ConfirmPassword').val()){
+                        alert("Passwords did not match!");
+                        return false;
                     }
-                    if(form1.username.value != form1.email.value){
-                        alert("Emails did not match!")
-                    }
+{#                    if($('#emailForm').val() != $('#emailConfirmForm').val()){#}
+{#                        alert("Emails did not match!");#}
+{#                        return false;#}
+{#                    }#}
+                    return true;
                 }
             </script>
 
@@ -47,25 +50,25 @@
                     <small>Sign up to create your Tip Top account</small>
                 </h2>
                 <div class="signup">
-                    <form action="/login/" method="post">{%csrf_token%}
+                    <form action="/login/" method="post" onsubmit="return checkForm();">{%csrf_token%}
                         <div class="row">
+{#                            <div class="large-8 columns">#}
+{#                                <div class="row collapse">#}
+{#                                    <div class="small-3 columns">#}
+{#                                        <span class="prefix"><i class="icon-mail"></i></span>#}
+{#                                    </div>#}
+{#                                    <div class="small-13 columns">#}
+{#                                        <input id="emailForm" type="email" name="username" placeholder="Email" required/>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
                             <div class="large-8 columns">
                                 <div class="row collapse">
                                     <div class="small-3 columns">
                                         <span class="prefix"><i class="icon-mail"></i></span>
                                     </div>
                                     <div class="small-13 columns">
-                                        <input type="email" name="username" placeholder="Email" required/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="large-8 columns">
-                                <div class="row collapse">
-                                    <div class="small-3 columns">
-                                        <span class="prefix"><i class="icon-mail"></i></span>
-                                    </div>
-                                    <div class="small-13 columns">
-                                        <input type="email" name="email" placeholder="Confirm email" required/>
+                                        <input id="emailConfirmForm" type="email" name="email" placeholder="Confirm email" required/>
                                     </div>
                                 </div>
                             </div>
@@ -99,7 +102,7 @@
                                         <span class="prefix"><i class="icon-lock"></i></span>
                                     </div>
                                     <div class="small-13 columns">
-                                        <input type="password" name="password1" placeholder="Password" required/>
+                                        <input id="Password" type="password" name="password1" placeholder="Password" required/>
                                     </div>
                                 </div>
                             </div>
@@ -109,14 +112,14 @@
                                         <span class="prefix"><i class="icon-lock"></i></span>
                                     </div>
                                     <div class="small-13 columns">
-                                        <input type="password" name="password2" placeholder="Confirm Password" required/>
+                                        <input id="ConfirmPassword" type="password" name="password2" placeholder="Confirm Password" required/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="large-16 columns">
-                                <button class="button expand radius" onclick="return checkForm(this.parentNode)">submit</button>
+                                <button id="SubmitRegistration" class="button expand radius">submit</button>
                             </div>
                         </div>
                         <div class="row">

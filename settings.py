@@ -104,12 +104,18 @@ USE_TZ = True
 
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 MEDIA_URL = '/media/'
-STATIC_ROOT = '/static/'
+# STATIC_ROOT = os.path.join(PROJECT_ROOT,"static")
+STATIC_ROOT = "/static/"
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = (PROJECT_DIR + '/static/',)
+
+# need to comment this out for prod and dev servers. I think it has something to do with how static files are served
+# using "runserver" locally versus how whitenoise runs it on dev.
+STATICFILES_DIRS = (PROJECT_DIR + '/static/',)
 
 ADMIN_TOOLS_MEDIA_URL = ''
 ADMIN_MEDIA_PREFIX = '/static/admin/'
+
+AUTH_USER_MODEL = 'customuser.CustomAuthUser'
 
 INTERNAL_IPS = ('127.0.0.1',)
 
@@ -142,6 +148,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 DJANGO_CONTRIB_APPS = (
@@ -170,6 +177,8 @@ PROJECT_APPS = (
     'matchmaker',
     'tutor_login',
     'payments',
+    'customuser',
+    # 'django_custom_user_migration',
     'password_reset',
 )
 

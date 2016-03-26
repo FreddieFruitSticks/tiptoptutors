@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.mail import send_mail, BadHeaderError, EmailMultiAlternatives
@@ -117,11 +118,11 @@ def prog_report_success(request):
 
 def get_pupils_for_tutors(request):
     try:
-        user = User.objects.get(username=request.user)
+        user = get_user_model().objects.get(username=request.user)
         tutor = Tutor.objects.get(user__id=user.id)
         return [(matches.id, matches.get_prog_report_unicode) for matches in
                 PupilTutorMatch.objects.filter(tutor__id=tutor.id).filter(lessons_remaining__gt=0)]
-    except (User.DoesNotExist, Tutor.DoesNotExist):
+    except (get_user_model().DoesNotExist, Tutor.DoesNotExist):
         return PupilTutorMatch.objects.none()
 
 
@@ -131,12 +132,12 @@ class LessonHistory(CreateView):
         return super(LessonHistory, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        # user = User.objects.get(username=request.user)
-        # tutor = Tutor.objects.get(user__id=User.objects.get(username=request.user).id)
+        # user = get_user_model().objects.get(username=request.user)
+        # tutor = Tutor.objects.get(user__id=get_user_model().objects.get(username=request.user).id)
         try:
             lesson_records = LessonRecord.objects.filter(
-                tutor=Tutor.objects.get(user__id=User.objects.get(username=request.user).id))
-        except (LessonRecord.DoesNotExist, Tutor.DoesNotExist, User.DoesNotExist):
+                tutor=Tutor.objects.get(user__id=get_user_model().objects.get(username=request.user).id))
+        except (LessonRecord.DoesNotExist, Tutor.DoesNotExist, get_user_model().DoesNotExist):
             lesson_records = None
 
         args = {}

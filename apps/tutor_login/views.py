@@ -18,7 +18,10 @@ def register_user(request):
     form = UserTutorSignupForm(request.POST)
     if form.is_valid():
         form.save()
-        user = auth.authenticate(username=request.POST.get('username', ''), password=request.POST.get('password1', ''))
+        user = auth.authenticate(email=request.POST.get('username', ''), password=request.POST.get('password1', ''))
+        print(request.POST.get('password1', ''))
+        print('I am here')
+        print(user)
         if user is not None:
             auth.login(request, user)
             return HttpResponseRedirect('/tutor/')
@@ -33,6 +36,7 @@ def register_user(request):
 def auth_view(request):
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
+    print (password)
     user = auth.authenticate(username=username, password=password)
 
     print(get_current_site(request))

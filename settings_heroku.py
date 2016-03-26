@@ -9,8 +9,12 @@ TEMPLATE_DEBUG = DEBUG
 
 DATABASES['default'] = dj_database_url.config()
 
-# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+# Honor the 'X-Forwarded-Proto' header for request.is_secure(). These are all security settings to ensure sending over
+# https instead of http.
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 # Allow all host headers
 ALLOWED_HOSTS = ['*']
@@ -22,5 +26,4 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 #     os.path.join(PROJECT_ROOT, 'static'),
 # )
 
-INSTALLED_APPS += ('gunicorn', )
-
+INSTALLED_APPS += ('gunicorn',)
