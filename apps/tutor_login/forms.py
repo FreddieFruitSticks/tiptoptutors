@@ -1,14 +1,14 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from customuser.forms import UserCreationForm
+from customuser.forms import CustomUserCreationForm
 
 
-class UserTutorSignupForm(UserCreationForm):
+class UserTutorSignupForm(CustomUserCreationForm):
     # email2 = forms.EmailField(required=True)
 
     class Meta:
         model = get_user_model()
-        fields = ("first_name", "last_name", "email", "password1", "password2")
+        fields = ("first_name", "last_name", "username", "password1", "password2")
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
@@ -26,7 +26,9 @@ class UserTutorSignupForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super(UserTutorSignupForm, self).save(commit=False)
-        user.email = self.cleaned_data["email"]
+        user.email = self.cleaned_data["username"]
+        user.set_password(self.cleaned_data['password2'])
+        print "password2", self.cleaned_data['password2']
         if commit:
             user.save()
         return user

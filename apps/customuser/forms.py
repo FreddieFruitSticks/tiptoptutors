@@ -1,21 +1,22 @@
 from django import forms
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserCreationForm
 from models import CustomAuthUser
 
 __author__ = 'freddie'
 
 
-class UserCreationForm(forms.ModelForm):
+class CustomUserCreationForm(UserCreationForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password Confirmation', widget=forms.PasswordInput)
 
+    print "password1", password1
     class Meta:
         model = CustomAuthUser
         fields = ('email',)
 
     def clean_password2(self):
-        password1 = self.cleaned_data.get('Password1')
-        password2 = self.cleaned_data.get('Password2')
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
 
         if password1 and password2 and password1!=password2:
             raise forms.ValidationError('Passwords do not match')
@@ -23,6 +24,7 @@ class UserCreationForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super(UserCreationForm,self).save(commit=False)
+        print "password: ", self.cleaned_data['password2']
         user.set_password(self.cleaned_data['password2'])
         if commit:
             user.save()

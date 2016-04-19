@@ -18,7 +18,9 @@ def register_user(request):
     form = UserTutorSignupForm(request.POST)
     if form.is_valid():
         form.save()
-        user = auth.authenticate(email=request.POST.get('username', ''), password=request.POST.get('password1', ''))
+        print 'username in reg: ', request.POST.get('username', '')
+        print 'password1 in reg: ', request.POST.get('password1', '')
+        user = auth.authenticate(username=request.POST.get('username', ''), password=request.POST.get('password1', ''))
         print(request.POST.get('password1', ''))
         print('I am here')
         print(user)

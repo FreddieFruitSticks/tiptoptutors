@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from forms import UserChangeForm, UserCreationForm
+from forms import UserChangeForm, CustomUserCreationForm
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from models import CustomAuthUser
 
@@ -8,7 +8,7 @@ from models import CustomAuthUser
 class UserAdmin(BaseUserAdmin):
     # The forms to add and change user instances
     form = UserChangeForm
-    add_form = UserCreationForm
+    add_form = CustomUserCreationForm
 
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin

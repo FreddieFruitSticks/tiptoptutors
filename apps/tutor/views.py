@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
@@ -12,7 +13,7 @@ class TutorView(CreateView):
 
     def form_valid(self, form):
         tutor = form.save(commit=False)
-        user = User.objects.get(username=self.request.user);
+        user = get_user_model().objects.get(username=self.request.user);
         tutor.user = user
         tutor.name = user.first_name
         tutor.surname = user.last_name

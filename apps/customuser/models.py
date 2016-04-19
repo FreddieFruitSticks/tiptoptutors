@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin, AbstractBaseUser
+from django.contrib.auth.models import BaseUserManager, PermissionsMixin, AbstractBaseUser
 from django.core.mail import send_mail
 from django.db import models
 from django.utils import timezone
@@ -10,9 +10,9 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError('Users must have an email address')
 
-        user = self.model(email=self.normalize_email(email))
+        user = self.model(email=self.normalize_email(email),)
 
-        user.set_password(password)
+        user.set_password(self.cleaned_data["password"])
         user.save(using=self._db)
         return user
 
