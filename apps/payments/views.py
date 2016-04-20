@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.core.mail import send_mail, BadHeaderError, EmailMultiAlternatives
+from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.utils.decorators import method_decorator
@@ -55,20 +54,7 @@ class ProgressReportView(CreateView):
 
                     if payment_record is not None:
                         if pupil_tutor_match.lessons_remaining > 0:
-                            lesson = LessonRecord(pupil=pupil, tutor=tutor, subject=subject, amount=amount,
-                                                  payment_record=payment_record)
-                            lesson.save()
-                            payment_record.amount += amount
-                            payment_record.save()
-
-                            # Update lessons taught
-                            pupil_tutor_match.lessons_taught += 1
-                            pupil_tutor_match.save()
-
-                            # saving form
-                            prog = form.save(commit=False)
-                            prog.lesson = lesson
-                            prog.save()
+                            register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor)
                         else:
                             return render_to_response('progress_reports/out_of_lessons.html',
                                                       {'pupil': pupil.name})
@@ -76,25 +62,12 @@ class ProgressReportView(CreateView):
                         if pupil_tutor_match.lessons_remaining > 0:
                             payment_record = PaymentRecord(amount=0, tutor=tutor, paid=False)
                             payment_record.save()
-                            lesson = LessonRecord(pupil=pupil, tutor=tutor, subject=subject, amount=amount,
-                                                  payment_record=payment_record)
-                            lesson.save()
-                            payment_record.amount += amount
-                            payment_record.save()
-
-                            # Update lessons taught
-                            pupil_tutor_match.lessons_taught += 1
-                            pupil_tutor_match.save()
-
-                            # saving form
-                            prog = form.save(commit=False)
-                            prog.lesson = lesson
-                            prog.save()
+                            register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor)
                         else:
                             return render_to_response('progress_reports/out_of_lessons.html',
                                                       {'pupil': pupil.name})
 
-                    send_email_to_parent(form, pupil, pupil_tutor_match)
+                    send_email_to_pupil(form, pupil, pupil_tutor_match)
                     form.save()
                     return render_to_response('progress_reports/registered_lesson_success.html')
                 return render_to_response('progress_reports/incorrect_pin.html')
@@ -114,6 +87,21 @@ class ProgressReportView(CreateView):
 @login_required(login_url='/')
 def prog_report_success(request):
     return render_to_response('progress_reports/registered_lesson_success.html')
+
+
+def register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor):
+    lesson = LessonRecord(pupil=pupil, tutor=tutor, subject=subject, amount=amount,
+                          payment_record=payment_record)
+    lesson.save()
+    payment_record.amount += amount
+    payment_record.save()
+    # Update lessons taught
+    pupil_tutor_match.lessons_taught += 1
+    pupil_tutor_match.save()
+    # saving form
+    prog = form.save(commit=False)
+    prog.lesson = lesson
+    prog.save()
 
 
 def get_pupils_for_tutors(request):
@@ -146,7 +134,7 @@ class LessonHistory(CreateView):
         return render_to_response('progress_reports/lesson_history.html', args)
 
 
-def send_email_to_parent(form, pupil, pupil_tutor_match):
+def send_email_to_pupil(form, pupil, pupil_tutor_match):
     email_subject = 'Progress report for ' + pupil.name
     email_message = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title></title></head><body><p>Dear parent/guardian<p><p>Please see below progress report for <strong>' + pupil.name + '</strong>.</p><p><strong>Homework completion status: </strong>' + \
                     form.cleaned_data[
@@ -157,11 +145,9 @@ def send_email_to_parent(form, pupil, pupil_tutor_match):
                         'homework_summary'] + '<p>Homework should <strong>always</strong> be given as it is the most important part in the process of improvement. It is absolutely necessary that the homework is not only completed, but that it is completed properly. <strong>Please see to it that homework is completed appropriately</strong>. The best time to start is either right after the lesson or the very next day. The homework should be spread evenly over the period between lessons.<p><p><em>Work hard, work smart.</em> That is the only route to success.<p></body></html>'
     email_recipient = 'freddieodonnell@gmail.com'
     try:
-        mesg = EmailMultiAlternatives(email_subject, 'blah', 'info@tiptoptutors.co.za',
+        mesg = EmailMultiAlternatives(email_subject, '', 'info@tiptoptutors.co.za',
                                       [email_recipient])
         mesg.attach_alternative(email_message, 'text/html')
         mesg.send()
-        # send_mail(email_subject, email_message, 'info@tiptoptutors.co.za', [email_recipient],
-        #           fail_silently=False)
     except BadHeaderError:
         pass
