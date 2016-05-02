@@ -6,13 +6,14 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None):
+    def create_user(self, first_name, last_name, email, password=None):
         if not email:
             raise ValueError('Users must have an email address')
 
-        user = self.model(email=self.normalize_email(email),)
+        user = self.model(email=self.normalize_email(email), username=self.normalize_email(email),
+                          first_name=first_name, last_name=last_name)
 
-        user.set_password(self.cleaned_data["password"])
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
@@ -59,15 +60,15 @@ class CustomAuthUser(AbstractBaseUser, PermissionsMixin):
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
-    # def __unicode__(self):
-    #     return self.email
-    #
-    # def has_perm(self, perm, obj=None):
-    #     return True
-    #
-    # def has_module_perms(self, app_label):
-    #     return True
-    #
-    # @property
-    # def is_staff(self):
-    #     return self.is_admin
+        # def __unicode__(self):
+        #     return self.email
+        #
+        # def has_perm(self, perm, obj=None):
+        #     return True
+        #
+        # def has_module_perms(self, app_label):
+        #     return True
+        #
+        # @property
+        # def is_staff(self):
+        #     return self.is_admin
