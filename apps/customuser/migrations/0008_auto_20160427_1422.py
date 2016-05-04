@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.contrib.auth import get_user_model
 # import pdb; pdb.set_trace()
 
-from django.db import models, migrations
+from django.db import migrations
+from customuser.forms import CustomUserCreationForm
 
 
 def create_user_for_each_tutor(apps, schema_editor):
@@ -17,8 +17,9 @@ def create_user_for_each_tutor(apps, schema_editor):
             user = None
 
         if user is None:
-            user = users.objects.create(first_name=tutor.name, last_name=tutor.surname,
-                                        email=tutor.email, password=tutor.name)
+            data = {'email': tutor.email, 'first_name': tutor.name, 'last_name': tutor.surname,
+                    'password1': tutor.name + '$123', 'password2': tutor.name + '$123'}
+            user = CustomUserCreationForm(data)
             user.save()
 
 

@@ -14,5 +14,5 @@ urlpatterns = patterns('',
                        url(r'^tutorfaq/', views.tutor_faq, name="tutorfaq"),
                        # url(r'^registerlesson/', views.register_lesson, name="registerlesson"),
                        url(r'^pupilscredits/', views.pupil_credits, name="pupilscredits"),
-                       url(r'^lessonhistory/', LessonHistory.as_view(), name="lessonhistory")
+                       # url(r'^lessonhistory/', LessonHistory.as_view(), name="lessonhistory")
                        )
