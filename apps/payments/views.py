@@ -54,10 +54,7 @@ class ProgressReportView(CreateView):
 
                     if payment_record is not None:
                         if pupil_tutor_match.lessons_remaining > 0:
-                            if payment_record.count == 1:
-                                register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor)
-                            else:
-                                register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor)
+                            register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor)
                         else:
                             return render_to_response('progress_reports/out_of_lessons.html',
                                                       {'pupil': pupil.name})
