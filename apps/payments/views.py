@@ -48,16 +48,15 @@ class ProgressReportView(CreateView):
 
                 if form.cleaned_data['pupil_pin'] == pupil_pin.pin:
                     try:
-                        payment_record = PaymentRecord.objects.filter(paid=False).filter(tutor=tutor)
+                        payment_record = PaymentRecord.objects.filter(paid=False).filter(tutor=tutor).first()
                     except PaymentRecord.DoesNotExist:
                         payment_record = None
 
                     if payment_record is not None:
                         if pupil_tutor_match.lessons_remaining > 0:
                             if payment_record.count == 1:
-                                register_lesson(amount, form, payment_record.get(), pupil, pupil_tutor_match, subject, tutor)
+                                register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor)
                             else:
-                                payment_record = payment_record.latest('id')
                                 register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor)
                         else:
                             return render_to_response('progress_reports/out_of_lessons.html',
