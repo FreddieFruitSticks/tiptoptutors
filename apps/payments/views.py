@@ -37,16 +37,23 @@ class ProgressReportView(CreateView):
         form = self.form_class(request.POST, student=get_pupils_for_tutors(request))
 
         if form.is_valid():
-            pupil_tutor_match = PupilTutorMatch.objects.get(id=form.cleaned_data['pupil'])
+            try:
+                pupil_tutor_match = PupilTutorMatch.objects.get(id=form.cleaned_data['pupil'])
+            except PupilTutorMatch.DoesNotExist:
+                pupil_tutor_match = None
             if pupil_tutor_match is not None:
-                pupil_pin = PupilPin.objects.get(pupil__id=pupil_tutor_match.pupil.id)
+                try:
+                    pupil_pin = PupilPin.objects.get(pupil__id=pupil_tutor_match.pupil.id)
+                except PupilPin.DoesNotExist:
+                    pupil_pin = None
+
                 pupil = pupil_tutor_match.pupil
                 tutor = pupil_tutor_match.tutor
                 subject = pupil_tutor_match.subject
 
                 amount = pupil.level_of_study.rate_category.rate
 
-                if form.cleaned_data['pupil_pin'] == pupil_pin.pin:
+                if form.cleaned_data['pupil_pin'] == pupil_pin.pin and pupil_pin is not None:
                     try:
                         payment_record = PaymentRecord.objects.filter(paid=False).filter(tutor=tutor).first()
                     except PaymentRecord.DoesNotExist:
