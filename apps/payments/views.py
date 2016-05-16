@@ -53,7 +53,7 @@ class ProgressReportView(CreateView):
 
                 amount = pupil.level_of_study.rate_category.rate
 
-                if form.cleaned_data['pupil_pin'] == pupil_pin.pin and pupil_pin is not None:
+                if form.cleaned_data['pupil_pin'] == pupil_pin.pin and pupil_pin:
                     try:
                         payment_record = PaymentRecord.objects.filter(paid=False).filter(tutor=tutor).first()
                     except PaymentRecord.DoesNotExist:
