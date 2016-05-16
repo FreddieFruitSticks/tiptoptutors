@@ -13,7 +13,7 @@ class TutorView(CreateView):
 
     def form_valid(self, form):
         tutor = form.save(commit=False)
-        user = get_user_model().objects.get(username=self.request.user.email)
+        user = get_user_model().objects.get(email=self.request.user.email)
         print 'user type ', type(user)
         tutor.user = user
         tutor.name = user.first_name

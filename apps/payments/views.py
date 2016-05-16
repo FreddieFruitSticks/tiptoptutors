@@ -131,7 +131,7 @@ class LessonHistory(CreateView):
         # tutor = Tutor.objects.get(user__id=get_user_model().objects.get(username=request.user).id)
         try:
             lesson_records = LessonRecord.objects.filter(
-                tutor=Tutor.objects.get(user__id=get_user_model().objects.get(username=request.user).id))
+                tutor=Tutor.objects.get(user__id=get_user_model().objects.get(email=request.user.email).id))
         except (LessonRecord.DoesNotExist, Tutor.DoesNotExist, get_user_model().DoesNotExist):
             lesson_records = None
 

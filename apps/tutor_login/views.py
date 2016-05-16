@@ -18,27 +18,18 @@ def register_user(request):
     form = UserTutorSignupForm(request.POST)
     if form.is_valid():
         form.save()
-        print 'username in reg: ', request.POST.get('username', '')
-        print 'password1 in reg: ', request.POST.get('password1', '')
         user = auth.authenticate(username=request.POST.get('username', ''), password=request.POST.get('password1', ''))
-        print(request.POST.get('password1', ''))
-        print('I am here')
-        print(user)
         if user is not None:
             auth.login(request, user)
             return HttpResponseRedirect('/tutor/')
         return HttpResponseRedirect('/tutor-invalid/')
-    # elif not request.POST.get('password1', '') == request.POST.get('password2', ''):
-    #     return HttpResponseRedirect('/tutor-invalid-pass/')
     else:
         return invalid_registration(request)
 
 
-# @login_required(login_url="/")
 def auth_view(request):
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
-    print (password)
     user = auth.authenticate(username=username, password=password)
 
     print(get_current_site(request))
