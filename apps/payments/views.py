@@ -45,7 +45,7 @@ class ProgressReportView(CreateView):
                 try:
                     pupil_pin = PupilPin.objects.get(pupil__id=pupil_tutor_match.pupil.id)
                 except PupilPin.DoesNotExist:
-                    pupil_pin = None
+                    return render_to_response('progress_reports/pupil_has_no_pin.html')
 
                 pupil = pupil_tutor_match.pupil
                 tutor = pupil_tutor_match.tutor
@@ -53,7 +53,7 @@ class ProgressReportView(CreateView):
 
                 amount = pupil.level_of_study.rate_category.rate
 
-                if form.cleaned_data['pupil_pin'] == pupil_pin.pin and pupil_pin:
+                if form.cleaned_data['pupil_pin'] == pupil_pin.pin:
                     try:
                         payment_record = PaymentRecord.objects.filter(paid=False).filter(tutor=tutor).first()
                     except PaymentRecord.DoesNotExist:
