@@ -35,51 +35,51 @@ class ProgressReportView(CreateView):
             return render_to_response('progress_reports/user_does_not_exist.html')
 
         form = self.form_class(request.POST, student=get_pupils_for_tutors(request))
-
         if form.is_valid():
             try:
                 pupil_tutor_match = PupilTutorMatch.objects.get(id=form.cleaned_data['pupil'])
             except PupilTutorMatch.DoesNotExist:
                 pupil_tutor_match = None
             if pupil_tutor_match is not None:
-                try:
-                    pupil_pin = PupilPin.objects.get(pupil__id=pupil_tutor_match.pupil.id)
-                except PupilPin.DoesNotExist:
-                    return render_to_response('progress_reports/pupil_has_no_pin.html')
+                # try:
+                #     pupil_pin = PupilPin.objects.get(pupil__id=pupil_tutor_match.pupil.id)
+                # except PupilPin.DoesNotExist:
+                #     return render_to_response('progress_reports/pupil_has_no_pin.html')
 
                 pupil = pupil_tutor_match.pupil
                 tutor = pupil_tutor_match.tutor
                 subject = pupil_tutor_match.subject
 
                 amount = pupil.level_of_study.rate_category.rate
+                # pupil_pin_string = find_pupil_pin_in_request(request)
+                # if form.cleaned_data[pupil_pin_string] == pupil_pin.pin:
+                try:
+                    payment_record = PaymentRecord.objects.filter(paid=False).filter(tutor=tutor).first()
+                except PaymentRecord.DoesNotExist:
+                    payment_record = None
 
-                if form.cleaned_data['pupil_pin'] == pupil_pin.pin:
-                    try:
-                        payment_record = PaymentRecord.objects.filter(paid=False).filter(tutor=tutor).first()
-                    except PaymentRecord.DoesNotExist:
-                        payment_record = None
-
-                    if payment_record is not None:
-                        if pupil_tutor_match.lessons_remaining > 0:
-                            register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor)
-                        else:
-                            return render_to_response('progress_reports/out_of_lessons.html',
-                                                      {'pupil': pupil.name})
+                if payment_record is not None:
+                    if pupil_tutor_match.lessons_remaining > 0:
+                        register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor)
                     else:
-                        if pupil_tutor_match.lessons_remaining > 0:
-                            payment_record = PaymentRecord(amount=0, tutor=tutor, paid=False)
-                            payment_record.save()
-                            register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor)
-                        else:
-                            return render_to_response('progress_reports/out_of_lessons.html',
-                                                      {'pupil': pupil.name})
+                        return render_to_response('progress_reports/out_of_lessons.html',
+                                                  {'pupil_name': pupil.name})
+                else:
+                    if pupil_tutor_match.lessons_remaining > 0:
+                        payment_record = PaymentRecord(amount=0, tutor=tutor, paid=False)
+                        payment_record.save()
+                        register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor)
+                    else:
+                        return render_to_response('progress_reports/out_of_lessons.html',
+                                                  {'pupil_name': pupil.name})
 
-                    send_email_to_pupil(form, pupil, pupil_tutor_match)
-                    form.save()
-                    return render_to_response('progress_reports/registered_lesson_success.html')
-                return render_to_response('progress_reports/incorrect_pin.html')
+                send_email_to_pupil(form, pupil, pupil_tutor_match)
+                form.save()
+                return render_to_response('progress_reports/registered_lesson_success.html')
+                # return render_to_response('progress_reports/incorrect_pin.html')
             else:
                 return render_to_response('progress_reports/user_dne.html')
+
         else:
             dictionary = {}
             dictionary.update(csrf(request))
@@ -87,8 +87,9 @@ class ProgressReportView(CreateView):
 
             return render_to_response('progress_reports/progress_report.html', dictionary)
 
-    def get_success_url(self):
-        return reverse('registerlessonsuccess')
+
+def get_success_url(self):
+    return reverse('registerlessonsuccess')
 
 
 @login_required(login_url='/')
@@ -116,7 +117,7 @@ def get_pupils_for_tutors(request):
         user = get_user_model().objects.get(email=request.user.email)
         tutor = Tutor.objects.get(user__id=user.id)
         return [(matches.id, matches.get_prog_report_unicode) for matches in
-                PupilTutorMatch.objects.filter(tutor__id=tutor.id).filter(lessons_remaining__gt=0)]
+                PupilTutorMatch.objects.filter(tutor__id=tutor.id)]
     except (get_user_model().DoesNotExist, Tutor.DoesNotExist):
         return PupilTutorMatch.objects.none()
 
@@ -158,3 +159,10 @@ def send_email_to_pupil(form, pupil, pupil_tutor_match):
         mesg.send()
     except BadHeaderError:
         pass
+
+
+def find_pupil_pin_in_request(request):
+    for value in request.POST:
+        if 'pupil_pin' in value:
+            return value
+    return None

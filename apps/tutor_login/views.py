@@ -8,7 +8,7 @@ from django.views.decorators.http import require_http_methods
 
 # from common.forms import UserTutorSignupForm
 from forms import UserTutorSignupForm
-from payments.models import PaymentRecord
+from payments.models import PaymentRecord, TutorFee
 from tutor.models import Tutor
 from matchmaker.models import PupilTutorMatch
 
@@ -77,7 +77,9 @@ def tutor_pupil_summary(request):
 
 @login_required(login_url="/")
 def tutor_faq(request):
-    args = {}
+    high_school_rates = TutorFee.objects.get(rate_category='High School')
+    university_rates = TutorFee.objects.get(rate_category='University')
+    args = {'high_school': high_school_rates, 'uni':university_rates}
     args.update(csrf(request))
     return render_to_response('faq.html', args)
 
