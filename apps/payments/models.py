@@ -43,6 +43,12 @@ class ProgressReport(models.Model):
         ('Not Complete', 'Not Complete'),
         ('First Lesson', 'First Lesson')
     )
+    NUMBER_OF_HOURS = (
+        (0.5, '30min'),
+        (1, '1 hour'),
+        (1.5, '1hour30min'),
+        (2, '2 hours')
+    )
     homework_status = models.CharField(max_length=20, choices=HOMEWORK_STATUS_CHOICE,
                                        verbose_name='Homework completed?')
     homework_summary = models.TextField(max_length=160, help_text="give a week's worth of HW (160 Characters)",
@@ -51,6 +57,7 @@ class ProgressReport(models.Model):
                                        help_text='Indicate how student is coping with work, what needs '
                                                  'improving, tutor advice, etc',
                                        verbose_name='Summary of student progress')
+    duration = models.DecimalField(max_digits=3, decimal_places=1, choices=NUMBER_OF_HOURS, default=1)
     lesson = models.OneToOneField(LessonRecord, null=True, blank=True)
 
     def __unicode__(self):
