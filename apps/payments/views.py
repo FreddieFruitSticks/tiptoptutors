@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.mail import BadHeaderError, EmailMultiAlternatives
@@ -51,7 +52,13 @@ class ProgressReportView(CreateView):
                 pupil = pupil_tutor_match.pupil
                 tutor = pupil_tutor_match.tutor
                 subject = pupil_tutor_match.subject
-                amount = pupil.level_of_study.rate_category.rate
+                duration_ = form.cleaned_data['duration']
+                amount = pupil.level_of_study.rate_category.rate * duration_
+                last_lesson_time = LessonRecord.objects.filter(pupil=pupil_tutor_match.pupil).latest(
+                    field_name='datetime').datetime.time()
+
+                print 'date ', last_lesson_time
+                print 'now', datetime.datetime.now().time()
 
                 if form.cleaned_data['pupil_pin'] == pupil_pin.pin:
                     try:
@@ -61,7 +68,8 @@ class ProgressReportView(CreateView):
 
                     if payment_record is not None:
                         if pupil_tutor_match.lessons_remaining > 0:
-                            register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor)
+                            register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor,
+                                            duration_)
                         else:
                             return render_to_response('progress_reports/out_of_lessons.html',
                                                       {'pupil': pupil.name})
@@ -69,7 +77,8 @@ class ProgressReportView(CreateView):
                         if pupil_tutor_match.lessons_remaining > 0:
                             payment_record = PaymentRecord(amount=0, tutor=tutor, paid=False)
                             payment_record.save()
-                            register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor)
+                            register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor,
+                                            duration_)
                         else:
                             return render_to_response('progress_reports/out_of_lessons.html',
                                                       {'pupil': pupil.name})
@@ -96,14 +105,14 @@ def prog_report_success(request):
     return render_to_response('progress_reports/registered_lesson_success.html')
 
 
-def register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor):
+def register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor, duration):
     lesson = LessonRecord(pupil=pupil, tutor=tutor, subject=subject, amount=amount,
                           payment_record=payment_record)
     lesson.save()
     payment_record.amount += amount
     payment_record.save()
     # Update lessons taught
-    pupil_tutor_match.lessons_taught += 1
+    pupil_tutor_match.lessons_taught += duration
     pupil_tutor_match.save()
     # saving form
     prog = form.save(commit=False)

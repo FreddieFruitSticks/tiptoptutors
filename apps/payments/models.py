@@ -13,6 +13,7 @@ class LessonRecord(models.Model):
     amount = models.IntegerField(verbose_name='amount', null=True)
     paid_status = models.BooleanField(verbose_name='Paid', default=False)
     payment_record = models.ForeignKey('PaymentRecord', null=True, blank=True)
+    # duration = models.DecimalField(max_digits=5, decimal_places=1, default=1)
 
     def __unicode__(self):
         return '%s: %s (%s %s) taught by %s - R%s' % (
@@ -21,8 +22,16 @@ class LessonRecord(models.Model):
             self.pupil.level_of_study,
             self.subject,
             self.tutor,
-            self.amount
+            self.amount,
         )
+
+    def delete(self, *args, **kwargs):
+        payment_record1 = PaymentRecord.objects.get(pk=self.payment_record.id)
+        print 'payment record', payment_record1
+        if not payment_record1.paid:
+            payment_record1.amount -= self.amount
+            payment_record1.save()
+        super(LessonRecord, self).delete()
 
 
 class PaymentRecord(models.Model):
@@ -34,6 +43,15 @@ class PaymentRecord(models.Model):
     def __unicode__(self):
         return '%s %s - R%s Paid:%s' % (self.date.strftime('%d-%m-%Y %H:%M'),
                                         self.tutor, self.amount, self.paid)
+
+    def save(self, *args, **kwargs):
+        # if I change paid to true I want to hcange all its lesson records paid to be true too
+        # if self.paid:
+        lessons = LessonRecord.objects.filter(payment_record=self)
+        for lesson in lessons:
+            lesson.paid_status = self.paid
+            lesson.save()
+        super(PaymentRecord, self).save(*args, **kwargs)
 
 
 class ProgressReport(models.Model):

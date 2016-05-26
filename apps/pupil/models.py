@@ -16,12 +16,13 @@ class PupilTutorMatch(models.Model):
 
     price = models.CharField(max_length=20, null=True, blank=True)
     lesson = models.CharField(max_length=20, verbose_name="number of lessons", null=True, blank=True)
-    lessons_bought = models.DecimalField(max_digits=5,decimal_places=1,blank=True, null=True, default=0)
+    lessons_bought = models.DecimalField(max_digits=5, decimal_places=1, blank=True, null=True, default=0)
     last_bought_updated = models.DateField(verbose_name="bought updated", null=True, blank=True, db_index=True)
-    lessons_taught = models.DecimalField(max_digits=5,decimal_places=1, blank=True, null=True, default=0)
+    lessons_taught = models.DecimalField(max_digits=5, decimal_places=1, blank=True, null=True, default=0)
     last_taught_updated = models.DateField(verbose_name="taught updated", null=True, blank=True, db_index=True)
 
-    lessons_remaining = models.IntegerField(verbose_name="lessons remaining", null=True, blank=True)
+    lessons_remaining = models.DecimalField(max_digits=5, decimal_places=1, verbose_name="lessons remaining", null=True,
+                                            blank=True)
     readonly_fields = (lessons_remaining,)
 
     @property
