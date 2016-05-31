@@ -153,13 +153,23 @@ class LessonHistory(CreateView):
 
 def send_email_to_pupil(form, pupil, pupil_tutor_match):
     email_subject = 'Progress report for ' + pupil.name
-    email_message = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title></title></head><body><p>Dear parent/guardian<p><p>Please see below progress report for <strong>' + pupil.name + '</strong>.</p><p><strong>Homework completion status: </strong>' + \
+    email_message = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title></title></head><body><p>Dear ' \
+                    'parent/guardian<p><p>Please see below progress report for <strong>' + pupil.name + '</strong>.</p><p>' \
+                                                                    '<strong>Homework completion status: </strong>' + \
                     form.cleaned_data[
                         'homework_status'] + '<p><p><strong>Tutor summary of ' + pupil.name + '\'s progress: </strong>' + \
                     form.cleaned_data[
-                        'student_summary'] + '. We encourage you to discuss further with ' + pupil_tutor_match.tutor.name + '.' + '<p><p><strong>Homework given: </strong>' + \
+                        'student_summary'] + '. We encourage you to discuss further with ' + pupil_tutor_match.tutor\
+                        .name + '.' + '<p><p><strong>Homework given: </strong>' + \
                     form.cleaned_data[
-                        'homework_summary'] + '<p>Homework should <strong>always</strong> be given as it is the most important part in the process of improvement. It is absolutely necessary that the homework is not only completed, but that it is completed properly. <strong>Please see to it that homework is completed appropriately</strong>. The best time to start is either right after the lesson or the very next day. The homework should be spread evenly over the period between lessons.<p><p><em>Work hard, work smart.</em> That is the only route to success.<p></body></html>'
+                        'homework_summary'] + \
+                        '<p>Homework should <strong>always</strong> be given as it is the most important part in the ' \
+                        'process of improvement. It is absolutely necessary that the homework is not only completed, but ' \
+                        'that it is completed properly. <strong>Please see to it that homework is completed appropriately' \
+                        '</strong>. The best time to start is either right after the lesson or the very next day. The ' \
+                        'homework should be spread evenly over the period between lessons.<p><p><em>Work hard, work smart.' \
+                        '</em> That is the only route to success.<p></body></html>' + \
+                        '<p><strong>Duration of Lesson: </strong><p>'+form.cleaned_data['duration']
     email_recipient = 'freddieodonnell@gmail.com'
     try:
         mesg = EmailMultiAlternatives(email_subject, '', 'info@tiptoptutors.co.za',
