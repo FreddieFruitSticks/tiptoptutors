@@ -67,23 +67,24 @@ class ProgressReportView(CreateView):
                         payment_record = None
 
                     if payment_record is not None:
-                        if pupil_tutor_match.lessons_remaining > 0:
+                        if pupil_tutor_match.lessons_remaining > duration_:
                             register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor,
                                             duration_)
+                            send_email_to_pupil(form, pupil, pupil_tutor_match)
                         else:
                             return render_to_response('progress_reports/out_of_lessons.html',
                                                       {'pupil': pupil.name})
                     else:
-                        if pupil_tutor_match.lessons_remaining > 0:
+                        if pupil_tutor_match.lessons_remaining > duration_:
                             payment_record = PaymentRecord(amount=0, tutor=tutor, paid=False)
                             payment_record.save()
                             register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor,
                                             duration_)
+                            send_email_to_pupil(form, pupil, pupil_tutor_match)
                         else:
                             return render_to_response('progress_reports/out_of_lessons.html',
                                                       {'pupil': pupil.name})
 
-                    send_email_to_pupil(form, pupil, pupil_tutor_match)
                     form.save()
                     return render_to_response('progress_reports/registered_lesson_success.html')
                 return render_to_response('progress_reports/incorrect_pin.html')
