@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 
 from pupil.models import PupilTutorMatch, Pupil
@@ -6,7 +7,7 @@ from option.models import AvailableTutorSubject
 
 
 class LessonRecord(models.Model):
-    datetime = models.DateTimeField(auto_now=True, verbose_name='date/time')
+    datetime = models.DateTimeField(default=datetime.datetime.now(), verbose_name='date/time')
     pupil = models.ForeignKey(Pupil, null=True)
     tutor = models.ForeignKey(Tutor, null=True)
     subject = models.ForeignKey(AvailableTutorSubject, null=True)
@@ -25,14 +26,6 @@ class LessonRecord(models.Model):
             self.amount,
         )
 
-    def delete(self, *args, **kwargs):
-        payment_record1 = PaymentRecord.objects.get(pk=self.payment_record.id)
-        print 'payment record', payment_record1
-        if not payment_record1.paid:
-            payment_record1.amount -= self.amount
-            payment_record1.save()
-        super(LessonRecord, self).delete()
-
 
 class PaymentRecord(models.Model):
     amount = models.IntegerField(verbose_name='amount', null=True)
@@ -43,15 +36,6 @@ class PaymentRecord(models.Model):
     def __unicode__(self):
         return '%s %s - R%s Paid:%s' % (self.date.strftime('%d-%m-%Y %H:%M'),
                                         self.tutor, self.amount, self.paid)
-
-    def save(self, *args, **kwargs):
-        # if I change paid to true I want to hcange all its lesson records paid to be true too
-        # if self.paid:
-        lessons = LessonRecord.objects.filter(payment_record=self)
-        for lesson in lessons:
-            lesson.paid_status = self.paid
-            lesson.save()
-        super(PaymentRecord, self).save(*args, **kwargs)
 
 
 class ProgressReport(models.Model):

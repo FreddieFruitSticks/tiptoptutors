@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 
+from pupil.admin import PupilTutorMatchAdmin
 from models import Tutor
 
 
@@ -25,6 +26,7 @@ class TutorAdmin(admin.ModelAdmin):
                     'related_information', 'documents')
     list_filter = ['status', FilterByTutorActive]
     raw_id_fields = ('id_doc', 'cv', 'academic')
+    inlines = [PupilTutorMatchAdmin]
 
     fieldsets = (
         ('Admin', {

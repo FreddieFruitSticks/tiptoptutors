@@ -1,11 +1,12 @@
-import datetime
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.utils.decorators import method_decorator
+
 from django.views.generic import CreateView
+
 from django.template.context_processors import csrf
 
 from forms import ProgressReportForm
@@ -55,39 +56,39 @@ class ProgressReportView(CreateView):
                 duration_ = form.cleaned_data['duration']
                 amount = pupil.level_of_study.rate_category.rate * duration_
                 last_lesson_time = LessonRecord.objects.filter(pupil=pupil_tutor_match.pupil).latest(
-                    field_name='datetime').datetime.time()
+                    field_name='datetime').datetime
+                # if (timezone.now() - last_lesson_time).seconds > 3600:
+                if True:
+                    if form.cleaned_data['pupil_pin'] == pupil_pin.pin:
+                        try:
+                            payment_record = PaymentRecord.objects.filter(paid=False).filter(tutor=tutor).first()
+                        except PaymentRecord.DoesNotExist:
+                            payment_record = None
 
-                print 'date ', last_lesson_time
-                print 'now', datetime.datetime.now().time()
-
-                if form.cleaned_data['pupil_pin'] == pupil_pin.pin:
-                    try:
-                        payment_record = PaymentRecord.objects.filter(paid=False).filter(tutor=tutor).first()
-                    except PaymentRecord.DoesNotExist:
-                        payment_record = None
-
-                    if payment_record is not None:
-                        if pupil_tutor_match.lessons_remaining > duration_:
-                            register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor,
-                                            duration_)
-                            send_email_to_pupil(form, pupil, pupil_tutor_match)
+                        if payment_record is not None:
+                            if pupil_tutor_match.lessons_remaining > duration_:
+                                register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor,
+                                                duration_)
+                                send_email_to_pupil(form, pupil, pupil_tutor_match)
+                            else:
+                                return render_to_response('progress_reports/out_of_lessons.html',
+                                                          {'pupil_name': pupil.name})
                         else:
-                            return render_to_response('progress_reports/out_of_lessons.html',
-                                                      {'pupil': pupil.name})
-                    else:
-                        if pupil_tutor_match.lessons_remaining > duration_:
-                            payment_record = PaymentRecord(amount=0, tutor=tutor, paid=False)
-                            payment_record.save()
-                            register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor,
-                                            duration_)
-                            send_email_to_pupil(form, pupil, pupil_tutor_match)
-                        else:
-                            return render_to_response('progress_reports/out_of_lessons.html',
-                                                      {'pupil': pupil.name})
+                            if pupil_tutor_match.lessons_remaining > duration_:
+                                payment_record = PaymentRecord(amount=0, tutor=tutor, paid=False)
+                                payment_record.save()
+                                register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor,
+                                                duration_)
+                                send_email_to_pupil(form, pupil, pupil_tutor_match)
+                            else:
+                                return render_to_response('progress_reports/out_of_lessons.html',
+                                                          {'pupil_name': pupil.name})
 
-                    form.save()
-                    return render_to_response('progress_reports/registered_lesson_success.html')
-                return render_to_response('progress_reports/incorrect_pin.html')
+                        form.save()
+                        return render_to_response('progress_reports/registered_lesson_success.html')
+                    return render_to_response('progress_reports/incorrect_pin.html')
+                return render_to_response('progress_reports/simple_message_format.html',
+                                          {'message': 'Can not register lessons in short succession'})
             else:
                 return render_to_response('progress_reports/user_dne.html')
         else:
@@ -155,21 +156,21 @@ def send_email_to_pupil(form, pupil, pupil_tutor_match):
     email_subject = 'Progress report for ' + pupil.name
     email_message = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title></title></head><body><p>Dear ' \
                     'parent/guardian<p><p>Please see below progress report for <strong>' + pupil.name + '</strong>.</p><p>' \
-                                                                    '<strong>Homework completion status: </strong>' + \
+                                                                                                        '<strong>Homework completion status: </strong>' + \
                     form.cleaned_data[
                         'homework_status'] + '<p><p><strong>Tutor summary of ' + pupil.name + '\'s progress: </strong>' + \
                     form.cleaned_data[
-                        'student_summary'] + '. We encourage you to discuss further with ' + pupil_tutor_match.tutor\
+                        'student_summary'] + '. We encourage you to discuss further with ' + pupil_tutor_match.tutor \
                         .name + '.' + '<p><p><strong>Homework given: </strong>' + \
                     form.cleaned_data[
                         'homework_summary'] + \
-                        '<p>Homework should <strong>always</strong> be given as it is the most important part in the ' \
-                        'process of improvement. It is absolutely necessary that the homework is not only completed, but ' \
-                        'that it is completed properly. <strong>Please see to it that homework is completed appropriately' \
-                        '</strong>. The best time to start is either right after the lesson or the very next day. The ' \
-                        'homework should be spread evenly over the period between lessons.<p><p><em>Work hard, work smart.' \
-                        '</em> That is the only route to success.<p></body></html>' + \
-                        '<p><strong>Duration of Lesson: </strong><p>'+form.cleaned_data['duration']
+                    '<p>Homework should <strong>always</strong> be given as it is the most important part in the ' \
+                    'process of improvement. It is absolutely necessary that the homework is not only completed, but ' \
+                    'that it is completed properly. <strong>Please see to it that homework is completed appropriately' \
+                    '</strong>. The best time to start is either right after the lesson or the very next day. The ' \
+                    'homework should be spread evenly over the period between lessons.<p><p><em>Work hard, work smart.' \
+                    '</em> That is the only route to success.<p></body></html>' + \
+                    '<p><strong>Duration of Lesson: </strong><p>' + str(form.cleaned_data['duration'])
     email_recipient = 'freddieodonnell@gmail.com'
     try:
         mesg = EmailMultiAlternatives(email_subject, '', 'info@tiptoptutors.co.za',

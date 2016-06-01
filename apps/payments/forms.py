@@ -14,20 +14,8 @@ class ProgressReportForm(forms.ModelForm):
 
         super(ProgressReportForm, self).__init__(*args, **kwargs)
         self.fields['pupil'] = forms.ChoiceField(choices=pupils)
-        # self.fields['duration'] = forms.ChoiceField(choices=num_of_hours)
-
-
-        # self.fields['pass'] = forms.CharField(widget=forms.PasswordInput, widget=forms.HiddenInput)
 
         self.fields['pupil_pin'] = forms.CharField(widget=forms.PasswordInput, label='Pupil pin')
-        # self.fields['pupil_pin11'] = forms.CharField(widget=forms.PasswordInput, label='Pupil pin')
-        # self.fields['pupil_pin'+random_num] = self.fields['pupil_pin']
-        # del self.fields['pupil_pin']
-
-        # self.fields['pupil_pin'].widget.attrs \
-        #     .update({
-        #     'autocomplete': 'off'
-        # })
 
 
 def get_random_number():
