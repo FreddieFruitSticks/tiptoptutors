@@ -1,3 +1,9 @@
+{#<link type="text/css" media="screen" rel="stylesheet" href="../../../static/js/foundation/responsive-tables.js" />#}
+{#<script type="text/javascript" src="../../../static/css/responsive-tables.css"></script>#}
+
+<link rel="stylesheet" href="../../../static/css/responsive-tables.css">
+<script src="../../../static/js/foundation/responsive-tables.js"></script>
+
 {% extends "tutor/base.html" %}
 {% block content %}
     <div class="row">
@@ -13,26 +19,32 @@
                             <title></title>
                         </head>
                         <body>
+                        <h3>Summary</h3>
+                        <p></p>
                         <div>
 {#                            <h2><a href="/emoney/get/{{ account.id }}"> {{ account.firstname }} </a></h2>#}
                         </div>
-                        Credits:{{ money.amount }}<br/>
-                        Pupils:
+                        Amount due: R{{ money.amount }}<br/>
+                        <p></p>
                         <table border="2" style="width:100%">
-                            <tr border="1" style="width:50%">
-                                <td>Pupil Name</td>
-{#                                <td>Last Name</td>#}
-                                <td>Subject</td>
-                                <td>Remaining Lessons</td>
-                            </tr>
-                            {% for pupil in pupils %}
-                                <tr>
-                                    <td>{{ pupil.pupil }}</td>
-{#                                    <td>{{ pupil.surname }}</td>#}
-                                    <td>{{ pupil.subject }}</td>
-                                    <td>{{ pupil.lessons_remaining }}</td>
+                            <thead>
+                                <tr border="1" style="width:50%">
+                                    <td>Pupil Name</td>
+                                    {#                                <td>Last Name</td>#}
+                                    <td>Subject</td>
+                                    <td>Remaining Lessons</td>
                                 </tr>
-                            {% endfor %}
+                            </thead>
+                            <tbody>
+                                {% for pupil in pupils %}
+                                    <tr>
+                                        <td>{{ pupil.pupil }}</td>
+                                        {#                                    <td>{{ pupil.surname }}</td>#}
+                                        <td>{{ pupil.subject }}</td>
+                                        <td>{{ pupil.lessons_remaining }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
                         </table>
                         </body>
                         </html>
