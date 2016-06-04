@@ -18,5 +18,6 @@ src/*.egg-info
 *.pyo
 settings_local.py
 media/*
+*.dump
 *~
 *.dump
