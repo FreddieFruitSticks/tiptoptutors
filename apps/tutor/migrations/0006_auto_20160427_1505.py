@@ -15,7 +15,7 @@ def set_user_on_tutor(apps, schema_editor):
             user = users.objects.get(email=tutor.email)
         except get_user_model().DoesNotExist:
             user = None
-        print 'user: ', user
+        print 'user: ', user.first_name, user.last_name, user.email
         tutor.user = user
         tutor.save()
 
