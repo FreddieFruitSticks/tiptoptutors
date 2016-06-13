@@ -12,7 +12,6 @@ class UserTutorSignupForm(CustomUserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
-        print(email)
         # username = self.cleaned_data.get("username")
         # print(username)
         #
@@ -28,7 +27,6 @@ class UserTutorSignupForm(CustomUserCreationForm):
         user = super(UserTutorSignupForm, self).save(commit=False)
         user.email = self.cleaned_data["username"]
         user.set_password(self.cleaned_data['password2'])
-        print "password2", self.cleaned_data['password2']
         if commit:
             user.save()
         return user

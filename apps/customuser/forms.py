@@ -9,8 +9,6 @@ class CustomUserCreationForm(UserCreationForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password Confirmation', widget=forms.PasswordInput)
 
-    print "password1", password1
-
     class Meta:
         model = CustomAuthUser
         fields = ('email','first_name', 'last_name')
@@ -25,7 +23,6 @@ class CustomUserCreationForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
-        print "password: ", self.cleaned_data['password2']
         user.set_password(self.cleaned_data['password2'])
         if commit:
             user.save()

@@ -32,7 +32,6 @@ def auth_view(request):
     password = request.POST.get('password', '')
     user = auth.authenticate(username=username, password=password)
 
-    print(get_current_site(request))
     if user is not None:
         auth.login(request, user)
         if Tutor.objects.filter(user=user.id).count() > 0:
