@@ -7,7 +7,7 @@ from option.models import AvailableTutorSubject
 
 
 class LessonRecord(models.Model):
-    datetime = models.DateTimeField(default=datetime.datetime.now(), verbose_name='date/time')
+    datetime = models.DateTimeField(auto_now=True, verbose_name='date/time')
     pupil = models.ForeignKey(Pupil, null=True)
     tutor = models.ForeignKey(Tutor, null=True)
     subject = models.ForeignKey(AvailableTutorSubject, null=True)
@@ -20,7 +20,7 @@ class LessonRecord(models.Model):
         return '%s: %s (%s %s) taught by %s - R%s' % (
             self.datetime.strftime('%d-%m-%Y %H:%M'),
             self.pupil,
-            self.pupil.level_of_study,
+            self.pupil.level_of_study.name,
             self.subject,
             self.tutor,
             self.amount,

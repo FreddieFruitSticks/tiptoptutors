@@ -36,10 +36,10 @@
                         alert("Passwords did not match!");
                         return false;
                     }
-{#                    if($('#emailForm').val() != $('#emailConfirmForm').val()){#}
-{#                        alert("Emails did not match!");#}
-{#                        return false;#}
-{#                    }#}
+                    if($('#emailForm').val() != $('#emailConfirmForm').val()){
+                        alert("Emails did not match!");
+                        return false;
+                    }
                     return true;
                 }
             </script>
@@ -52,23 +52,23 @@
                 <div class="signup">
                     <form action="/login/" method="post" onsubmit="return checkForm();">{%csrf_token%}
                         <div class="row">
-{#                            <div class="large-8 columns">#}
-{#                                <div class="row collapse">#}
-{#                                    <div class="small-3 columns">#}
-{#                                        <span class="prefix"><i class="icon-mail"></i></span>#}
-{#                                    </div>#}
-{#                                    <div class="small-13 columns">#}
-{#                                        <input id="emailForm" type="email" name="username" placeholder="Email" required/>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
                             <div class="large-8 columns">
                                 <div class="row collapse">
                                     <div class="small-3 columns">
                                         <span class="prefix"><i class="icon-mail"></i></span>
                                     </div>
                                     <div class="small-13 columns">
-                                        <input id="emailConfirmForm" type="email" name="username" placeholder="Confirm email" required/>
+                                        <input id="emailForm" type="email" name="username" placeholder="Email" required/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="large-8 columns">
+                                <div class="row collapse">
+                                    <div class="small-3 columns">
+                                        <span class="prefix"><i class="icon-mail"></i></span>
+                                    </div>
+                                    <div class="small-13 columns">
+                                        <input id="emailConfirmForm" type="email" name="username1" placeholder="Confirm email" required/>
                                     </div>
                                 </div>
                             </div>

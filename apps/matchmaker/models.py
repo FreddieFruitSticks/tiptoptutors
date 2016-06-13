@@ -2,6 +2,7 @@ import random
 import re
 
 from django.db import models
+
 from django.db.models import Q
 
 from django.dispatch import receiver
@@ -11,6 +12,8 @@ from pupil.models import Pupil, PupilTutorMatch
 from sms.models import SMS
 from sms.api import sms_reply_received
 from tutor.models import Tutor
+
+
 
 
 
@@ -130,12 +133,13 @@ class PupilProxy(Pupil):
         ordering = ('-created_at', 'surname', 'name')
 
     def __unicode__(self):
-        return '%s: %s, %s for %s (%s)' % (
+        return '%s: %s, %s for %s (%s - Rate of: %s)' % (
             self.created_at.strftime('%d-%m-%Y %H:%M'),
             self.surname,
             self.name,
             ', '.join(s.name for s in self.subject.all()),
-            self.level_of_study
+            self.level_of_study,
+            self.level_of_study.rate_category
         )
 
     def get_number_of_tutors(self):

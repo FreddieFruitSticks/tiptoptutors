@@ -16,6 +16,9 @@ django-fsm==2.2.1
 django-invoice==0.3.1
 django-nested-inline==0.3.5
 django-password-reset==0.8.2
+django-secure==1.0.1
+django-sslify==0.2.7
+django-sslserver==0.19
 django-toolbelt==0.0.1
 gunicorn==19.3.0
 kombu==3.0.35

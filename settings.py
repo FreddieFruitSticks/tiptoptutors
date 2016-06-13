@@ -1,5 +1,8 @@
-import os.path, sys, site
+import os.path
+import sys
+import site
 
+# SECRET_KEY = 'sdafas88d*&ASD98asda897sda*&(*!@)*&^@'
 sys.path.append(os.path.join(os.path.dirname(__file__), 'apps'))
 
 # ==============================================================================
@@ -15,7 +18,7 @@ PROJECT_FOLDER = 'tiptoptutors'
 PROJECT_NAME = 'tiptoptutors'
 PROJECT_DOMAIN = "tiptoptutors.co.za"
 
-SITE_DOMAIN = "http://%s" % PROJECT_DOMAIN
+SITE_DOMAIN = "https://%s" % PROJECT_DOMAIN
 
 ROOT_URLCONF = "urls"
 
@@ -107,7 +110,7 @@ STATIC_URL = '/static/'
 
 # need to comment this out for prod and dev servers. I think it has something to do with how static files are served
 # using "runserver" locally versus how whitenoise runs it on dev.
-# STATICFILES_DIRS = (PROJECT_DIR + '/static/',)
+STATICFILES_DIRS = (PROJECT_DIR + '/static/',)
 # comment this out for production site - this is only for testing.
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = '/tmp/app-messages'
@@ -142,6 +145,7 @@ STATICFILES_FINDERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'djangosecure.middleware.SecurityMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -180,6 +184,8 @@ PROJECT_APPS = (
     'customuser',
     # 'django_custom_user_migration',
     'password_reset',
+    'sslserver',
+    'djangosecure',
 )
 
 THIRD_PARTY_APPS = (
