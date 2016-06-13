@@ -1,3 +1,4 @@
+from time import timezone
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.mail import BadHeaderError, EmailMultiAlternatives
@@ -57,8 +58,8 @@ class ProgressReportView(CreateView):
                 amount = pupil.level_of_study.rate_category.rate * duration_
                 last_lesson_time = LessonRecord.objects.filter(pupil=pupil_tutor_match.pupil).latest(
                     field_name='datetime').datetime
-                # if (timezone.now() - last_lesson_time).seconds > 3600:
-                if True:
+                if (timezone.now() - last_lesson_time).seconds > 3600:
+                # if True:
                     if form.cleaned_data['pupil_pin'] == pupil_pin.pin:
                         try:
                             payment_record = PaymentRecord.objects.filter(paid=False).filter(tutor=tutor).first()
@@ -154,6 +155,8 @@ class LessonHistory(CreateView):
 
 def send_email_to_pupil(form, pupil, pupil_tutor_match):
     email_subject = 'Progress report for ' + pupil.name
+
+    # I've got to make the kak better
     email_message = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title></title></head><body><p>Dear ' \
                     'parent/guardian<p><p>Please see below progress report for <strong>' + pupil.name + '</strong>.</p><p>' \
                                                                                                         '<strong>Homework completion status: </strong>' + \

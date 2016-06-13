@@ -29,4 +29,4 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 #     os.path.join(PROJECT_ROOT, 'static'),
 # )
 
-INSTALLED_APPS += ('gunicorn',)
+INSTALLED_APPS += ('gunicorn','djangosecure',)
