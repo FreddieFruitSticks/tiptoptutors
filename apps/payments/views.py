@@ -56,10 +56,15 @@ class ProgressReportView(CreateView):
                 subject = pupil_tutor_match.subject
                 duration_ = form.cleaned_data['duration']
                 amount = pupil.level_of_study.rate_category.rate * duration_
-                last_lesson_time = LessonRecord.objects.filter(pupil=pupil_tutor_match.pupil).latest(
-                    field_name='datetime').datetime
-                if (timezone.now() - last_lesson_time).seconds > 3600:
-                # if True:
+                try:
+                    last_lesson_time = LessonRecord.objects.filter(pupil=pupil_tutor_match.pupil).latest(
+                        field_name='datetime').datetime
+                    time_between_lessons = (timezone.now() - last_lesson_time).seconds
+                except LessonRecord.DoesNotExist:
+                    #poor cheap hack becasue its 1:30am
+                    time_between_lessons = 3601
+
+                if time_between_lessons > 3600:
                     if form.cleaned_data['pupil_pin'] == pupil_pin.pin:
                         try:
                             payment_record = PaymentRecord.objects.filter(paid=False).filter(tutor=tutor).first()
