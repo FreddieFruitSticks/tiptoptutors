@@ -1,4 +1,5 @@
 from time import timezone
+import datetime
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.mail import BadHeaderError, EmailMultiAlternatives
@@ -59,7 +60,10 @@ class ProgressReportView(CreateView):
                 try:
                     last_lesson_time = LessonRecord.objects.filter(pupil=pupil_tutor_match.pupil).latest(
                         field_name='datetime').datetime
-                    time_between_lessons = (timezone.now() - last_lesson_time).seconds
+                    time_between_lessons = (datetime.datetime.now() - last_lesson_time.replace(tzinfo=None) ).seconds -7200
+                    print 'timezone' + str(time_between_lessons)
+                    print 'now' + str(datetime.datetime.now())
+                    print 'lastlesson' + str(last_lesson_time.replace(tzinfo=None))
                 except LessonRecord.DoesNotExist:
                     #poor cheap hack becasue its 1:30am
                     time_between_lessons = 3601
