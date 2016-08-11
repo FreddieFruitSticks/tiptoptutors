@@ -7,7 +7,7 @@ from option.models import AvailableTutorSubject
 
 
 class LessonRecord(models.Model):
-    datetime = models.DateTimeField(auto_now=True, verbose_name='date/time')
+    datetime = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name='date/time')
     pupil = models.ForeignKey(Pupil, null=True)
     tutor = models.ForeignKey(Tutor, null=True)
     subject = models.ForeignKey(AvailableTutorSubject, null=True)

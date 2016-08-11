@@ -61,9 +61,6 @@ class ProgressReportView(CreateView):
                     last_lesson_time = LessonRecord.objects.filter(pupil=pupil_tutor_match.pupil).latest(
                         field_name='datetime').datetime
                     time_between_lessons = (datetime.datetime.now() - last_lesson_time.replace(tzinfo=None) ).seconds -7200
-                    print 'timezone' + str(time_between_lessons)
-                    print 'now' + str(datetime.datetime.now())
-                    print 'lastlesson' + str(last_lesson_time.replace(tzinfo=None))
                 except LessonRecord.DoesNotExist:
                     #poor cheap hack becasue its 1:30am
                     time_between_lessons = 3601
@@ -98,7 +95,7 @@ class ProgressReportView(CreateView):
                         return render_to_response('progress_reports/registered_lesson_success.html')
                     return render_to_response('progress_reports/incorrect_pin.html')
                 return render_to_response('progress_reports/simple_message_format.html',
-                                          {'message': 'Can not register lessons in short succession'})
+                                          {'message': 'Cannot register lessons in short succession'})
             else:
                 return render_to_response('progress_reports/user_dne.html')
         else:

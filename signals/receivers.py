@@ -11,8 +11,9 @@ def update_lessons_records(sender, **kwargs):
     payment_record = kwargs.get('instance')
     lessons = LessonRecord.objects.filter(payment_record=payment_record)
     for lesson in lessons:
-        lesson.paid_status = payment_record.paid
-        lesson.save()
+        if lesson.paid_status != payment_record.paid:
+            lesson.paid_status = payment_record.paid
+            lesson.save()
 
 
 @receiver(pre_delete, sender=LessonRecord)
