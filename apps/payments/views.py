@@ -1,16 +1,15 @@
-from time import timezone
 import datetime
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.utils.decorators import method_decorator
-
 from django.views.generic import CreateView
 
 from django.template.context_processors import csrf
 
+from PaymentsUtil import get_pupils_for_tutors, register_and_email, send_email_for_short_lesson_register
 from forms import ProgressReportForm
 from models import LessonRecord, PaymentRecord
 from pupil.models import PupilTutorMatch, PupilPin
@@ -60,9 +59,10 @@ class ProgressReportView(CreateView):
                 try:
                     last_lesson_time = LessonRecord.objects.filter(pupil=pupil_tutor_match.pupil).latest(
                         field_name='datetime').datetime
-                    time_between_lessons = (datetime.datetime.now() - last_lesson_time.replace(tzinfo=None) ).seconds -7200
+                    time_between_lessons = (datetime.datetime.now() - last_lesson_time.replace(
+                        tzinfo=None)).seconds - 7200
                 except LessonRecord.DoesNotExist:
-                    #poor cheap hack becasue its 1:30am
+                    # poor cheap hack becasue its 1:30am
                     time_between_lessons = 3601
 
                 if time_between_lessons > 3600:
@@ -73,10 +73,9 @@ class ProgressReportView(CreateView):
                             payment_record = None
 
                         if payment_record is not None:
-                            if pupil_tutor_match.lessons_remaining > duration_:
-                                register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor,
-                                                duration_)
-                                send_email_to_pupil(form, pupil, pupil_tutor_match)
+                            if pupil_tutor_match.lessons_remaining >= duration_:
+                                register_and_email(amount, duration_, form, payment_record, pupil,
+                                                        pupil_tutor_match, subject, tutor)
                             else:
                                 return render_to_response('progress_reports/out_of_lessons.html',
                                                           {'pupil_name': pupil.name})
@@ -84,9 +83,8 @@ class ProgressReportView(CreateView):
                             if pupil_tutor_match.lessons_remaining > duration_:
                                 payment_record = PaymentRecord(amount=0, tutor=tutor, paid=False)
                                 payment_record.save()
-                                register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor,
-                                                duration_)
-                                send_email_to_pupil(form, pupil, pupil_tutor_match)
+                                register_and_email(amount, duration_, form, payment_record, pupil,
+                                                        pupil_tutor_match, subject, tutor)
                             else:
                                 return render_to_response('progress_reports/out_of_lessons.html',
                                                           {'pupil_name': pupil.name})
@@ -94,7 +92,10 @@ class ProgressReportView(CreateView):
                         form.save()
                         return render_to_response('progress_reports/registered_lesson_success.html')
                     return render_to_response('progress_reports/incorrect_pin.html')
-                return render_to_response('progress_reports/simple_message_format.html',
+                else:
+                    send_email_for_short_lesson_register({'name':tutor.name, 'pupil':pupil.name, 'last_lesson_time':str(last_lesson_time), 'now':str(datetime.datetime.now())
+                                                          , 'time_between_lessons': str(time_between_lessons)})
+                    return render_to_response('progress_reports/simple_message_format.html',
                                           {'message': 'Cannot register lessons in short succession'})
             else:
                 return render_to_response('progress_reports/user_dne.html')
@@ -112,31 +113,6 @@ class ProgressReportView(CreateView):
 @login_required(login_url='/')
 def prog_report_success(request):
     return render_to_response('progress_reports/registered_lesson_success.html')
-
-
-def register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor, duration):
-    lesson = LessonRecord(pupil=pupil, tutor=tutor, subject=subject, amount=amount,
-                          payment_record=payment_record)
-    lesson.save()
-    payment_record.amount += amount
-    payment_record.save()
-    # Update lessons taught
-    pupil_tutor_match.lessons_taught += duration
-    pupil_tutor_match.save()
-    # saving form
-    prog = form.save(commit=False)
-    prog.lesson = lesson
-    prog.save()
-
-
-def get_pupils_for_tutors(request):
-    try:
-        user = get_user_model().objects.get(email=request.user.email)
-        tutor = Tutor.objects.get(user__id=user.id)
-        return [(matches.id, matches.get_prog_report_unicode) for matches in
-                PupilTutorMatch.objects.filter(tutor__id=tutor.id).filter(lessons_remaining__gt=0)]
-    except (get_user_model().DoesNotExist, Tutor.DoesNotExist):
-        return PupilTutorMatch.objects.none()
 
 
 class LessonHistory(CreateView):
@@ -157,41 +133,3 @@ class LessonHistory(CreateView):
         args.update(csrf(request))
         args['lesson_records'] = lesson_records.order_by('-datetime')
         return render_to_response('progress_reports/lesson_history.html', args)
-
-
-def send_email_to_pupil(form, pupil, pupil_tutor_match):
-    email_subject = 'Progress report for ' + pupil.name
-
-    # I've got to make the kak better
-    email_message = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title></title></head><body><p>Dear ' \
-                    'parent/guardian<p><p>Please see below progress report for <strong>' + pupil.name + '</strong>.</p><p>' \
-                                                                                                        '<strong>Homework completion status: </strong>' + \
-                    form.cleaned_data[
-                        'homework_status'] + '<p><p><strong>Tutor summary of ' + pupil.name + '\'s progress: </strong>' + \
-                    form.cleaned_data[
-                        'student_summary'] + '. We encourage you to discuss further with ' + pupil_tutor_match.tutor \
-                        .name + '.' + '<p><p><strong>Homework given: </strong>' + \
-                    form.cleaned_data[
-                        'homework_summary'] + \
-                    '<p><strong>Duration of Lesson: </strong><p>' + str(form.cleaned_data['duration']) + ' hour(s).'\
-                    '<p>Homework should <strong>always</strong> be given as it is the most important part in the ' \
-                    'process of improvement. It is absolutely necessary that the homework is not only completed, but ' \
-                    'that it is completed properly. <strong>Please see to it that homework is completed appropriately' \
-                    '</strong>. The best time to start is either right after the lesson or the very next day. The ' \
-                    'homework should be spread evenly over the period between lessons.<p><p><em>Work hard, work smart.' \
-                    '</em> That is the only route to success.<p></body></html>'
-    email_recipient = 'freddieodonnell@gmail.com'
-    try:
-        mesg = EmailMultiAlternatives(email_subject, '', 'info@tiptoptutors.co.za',
-                                      [email_recipient])
-        mesg.attach_alternative(email_message, 'text/html')
-        mesg.send()
-    except BadHeaderError:
-        pass
-
-
-def find_pupil_pin_in_request(request):
-    for value in request.POST:
-        if 'pupil_pin' in value:
-            return value
-    return None
