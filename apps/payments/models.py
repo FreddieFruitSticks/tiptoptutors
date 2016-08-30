@@ -1,5 +1,6 @@
 import datetime
 from django.db import models
+from django.utils import timezone
 
 from pupil.models import PupilTutorMatch, Pupil
 from tutor.models import Tutor
@@ -7,7 +8,7 @@ from option.models import AvailableTutorSubject
 
 
 class LessonRecord(models.Model):
-    datetime = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name='date/time')
+    datetime = models.DateTimeField(auto_now=False, default=timezone.now, verbose_name='date/time')
     pupil = models.ForeignKey(Pupil, null=True)
     tutor = models.ForeignKey(Tutor, null=True)
     subject = models.ForeignKey(AvailableTutorSubject, null=True)
@@ -18,7 +19,7 @@ class LessonRecord(models.Model):
 
     def __unicode__(self):
         return '%s: %s (%s %s) taught by %s - R%s' % (
-            self.datetime.strftime('%d-%m-%Y %H:%M'),
+            timezone.localtime(self.datetime).strftime('%d-%m-%Y %H:%M'),
             self.pupil,
             self.pupil.level_of_study.name,
             self.subject,
@@ -29,12 +30,12 @@ class LessonRecord(models.Model):
 
 class PaymentRecord(models.Model):
     amount = models.IntegerField(verbose_name='amount', null=True)
-    date = models.DateTimeField(auto_now=True, null=True)
+    date = models.DateTimeField(auto_now=False, default=timezone.now, null=True)
     tutor = models.ForeignKey(Tutor, null=False, blank=False)
     paid = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return '%s %s - R%s Paid:%s' % (self.date.strftime('%d-%m-%Y %H:%M'),
+        return '%s %s - R%s Paid:%s' % (timezone.localtime(self.date).strftime('%d-%m-%Y %H:%M'),
                                         self.tutor, self.amount, self.paid)
 
 
