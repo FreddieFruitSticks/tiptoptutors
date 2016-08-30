@@ -3,7 +3,6 @@ from django.core.mail import EmailMultiAlternatives, BadHeaderError
 
 from pupil.models import PupilTutorMatch
 from tutor.models import Tutor
-from models import LessonRecord
 
 __author__ = 'freddie'
 
@@ -18,9 +17,7 @@ def get_pupils_for_tutors(request):
         return PupilTutorMatch.objects.none()
 
 
-def register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor, duration):
-    lesson = LessonRecord(pupil=pupil, tutor=tutor, subject=subject, amount=amount,
-                          payment_record=payment_record)
+def register_lesson(lesson, amount, form, payment_record, pupil_tutor_match, duration):
     lesson.save()
     payment_record.amount += amount
     payment_record.save()
@@ -66,7 +63,6 @@ def send_email_to_pupil(form, pupil, pupil_tutor_match):
 
 def send_email_for_short_lesson_register(dict):
     email_subject = 'Lessons register in short Succession!'
-    print 'in short succession'
 
     email_message = dict['name'] + ' registered a lessons with' + dict['pupil'] + ' at ' + dict[
         'now'] + '. Last lesson was ' + dict['last_lesson_time'] \
@@ -74,15 +70,11 @@ def send_email_for_short_lesson_register(dict):
 
     email_recipient = 'freddieodonnell@gmail.com'
     try:
-        print 'sending email'
         mesg = EmailMultiAlternatives(email_subject, '', 'info@tiptoptutors.co.za',
                                       [email_recipient])
         mesg.attach_alternative(email_message, 'text/html')
         mesg.send()
-        print'after email sent'
     except BadHeaderError:
-
-        print 'exception : ' + str(BadHeaderError)
         pass
 
 
@@ -91,9 +83,3 @@ def find_pupil_pin_in_request(request):
         if 'pupil_pin' in value:
             return value
     return None
-
-
-def register_and_email(amount, duration_, form, payment_record, pupil, pupil_tutor_match, subject, tutor):
-    register_lesson(amount, form, payment_record, pupil, pupil_tutor_match, subject, tutor,
-                    duration_)
-    send_email_to_pupil(form, pupil, pupil_tutor_match)
