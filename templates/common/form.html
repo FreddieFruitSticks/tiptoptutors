@@ -1,6 +1,6 @@
 {% load i18n %}
 <form method="post" action="{% if form_action %}{{ form_action }}{% else %}.{% endif %}"{% if form.is_multipart %}
-      enctype="multipart/form-data"{% endif %}>{% csrf_token %}
+      enctype="multipart/form-data"{% endif %} onsubmit="return lockoutSubmit(this);">{% csrf_token %}
     {% if include_hidden_user %}
         <input type="hidden" name="user_id" value="{{ user.id }}">
     {% endif %}
@@ -38,3 +38,17 @@
         </div>
     </div>
 </form>
+
+<script>
+    function lockoutSubmit(form) {
+        var oldValue = form.submit.value;
+        form.submit.disabled = true;
+        form.submit.value = "Please wait...";
+
+        setTimeout(function () {
+            form.submit.value = oldValue;
+            form.submit.removeAttribute('disabled');
+        }, 20000)
+        return true;
+    }
+</script>
