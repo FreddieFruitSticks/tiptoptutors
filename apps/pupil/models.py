@@ -46,6 +46,7 @@ class Pupil(models.Model):
     tutor = models.ManyToManyField(Tutor, null=True, blank=True,
                                    through=PupilTutorMatch)
     name = models.CharField(max_length=20, verbose_name="Pupil name")
+    guardian_name = models.CharField(default='', max_length=20, verbose_name="Guardian name")
     surname = models.CharField(max_length=20)
     email = models.EmailField()
     contact_number = models.CharField(max_length=15)

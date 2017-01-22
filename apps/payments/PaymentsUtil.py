@@ -3,6 +3,7 @@ from django.core.mail import EmailMultiAlternatives, BadHeaderError
 
 from pupil.models import PupilTutorMatch
 from tutor.models import Tutor
+from django.conf import settings
 
 __author__ = 'freddie'
 
@@ -17,6 +18,7 @@ def get_pupils_for_tutors(request):
         return PupilTutorMatch.objects.none()
 
 
+# This is awful - too many side effects. Lesson save should take parameters and trigger saves of other models via signals - or many in the save method
 def register_lesson(lesson, amount, form, payment_record, pupil_tutor_match, duration):
     lesson.save()
     payment_record.amount += amount
@@ -30,7 +32,7 @@ def register_lesson(lesson, amount, form, payment_record, pupil_tutor_match, dur
     prog.save()
 
 
-def send_email_to_pupil(form, pupil, pupil_tutor_match):
+def send_prog_report_to_pupil(form, pupil, pupil_tutor_match):
     email_subject = 'Progress report for ' + pupil.name
 
     # I've got to make the kak better
@@ -43,7 +45,8 @@ def send_email_to_pupil(form, pupil, pupil_tutor_match):
                         'student_summary'] + '. We encourage you to discuss further with ' + pupil_tutor_match.tutor \
                         .name + '.' + '<p><p><strong>Homework given: </strong>' + \
                     form.cleaned_data[
-                        'homework_summary'] + \
+                        'homework_summary'] + '<p><p><strong>Lessons remaining: </strong>' + \
+                    str(pupil_tutor_match.lessons_remaining) + \
                     '<p><strong>Duration of Lesson: </strong><p>' + str(form.cleaned_data['duration']) + ' hour(s).' \
                                                                                                          '<p>Homework should <strong>always</strong> be given as it is the most important part in the ' \
                                                                                                          'process of improvement. It is absolutely necessary that the homework is not only completed, but ' \
@@ -51,10 +54,16 @@ def send_email_to_pupil(form, pupil, pupil_tutor_match):
                                                                                                          '</strong>. The best time to start is either right after the lesson or the very next day. The ' \
                                                                                                          'homework should be spread evenly over the period between lessons.<p><p><em>Work hard, work smart.' \
                                                                                                          '</em> That is the only route to success.<p></body></html>'
-    email_recipient = 'freddieodonnell@gmail.com'
+    if not settings.DEBUG:
+        email_recipient_pupil = str(pupil.email)
+        email_recipient_tutor = str(pupil_tutor_match.tutor.email)
+    else:
+        print 'sending to freddie'
+        email_recipient_pupil = 'freddieodonnell@gmail.com'
+        email_recipient_tutor = 'info@tiptoptutors.co.za'
     try:
         mesg = EmailMultiAlternatives(email_subject, '', 'info@tiptoptutors.co.za',
-                                      [email_recipient])
+                                      [email_recipient_pupil, email_recipient_tutor])
         mesg.attach_alternative(email_message, 'text/html')
         mesg.send()
     except BadHeaderError:
@@ -68,7 +77,7 @@ def send_email_for_short_lesson_register(dict):
         'now'] + '. Last lesson was ' + dict['last_lesson_time'] \
                     + ' and time between lessons was ' + dict['time_between_lessons']
 
-    email_recipient = 'freddieodonnell@gmail.com'
+    email_recipient = 'info@tiptoptutors.co.za'
     try:
         mesg = EmailMultiAlternatives(email_subject, '', 'info@tiptoptutors.co.za',
                                       [email_recipient])

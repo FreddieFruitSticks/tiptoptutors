@@ -9,7 +9,7 @@ from django.views.generic import CreateView
 from django.template.context_processors import csrf
 
 from PaymentsUtil import get_pupils_for_tutors, send_email_for_short_lesson_register, \
-    register_lesson, send_email_to_pupil
+    register_lesson, send_prog_report_to_pupil
 from forms import ProgressReportForm
 from models import LessonRecord, PaymentRecord
 from pupil.models import PupilTutorMatch, PupilPin
@@ -56,7 +56,7 @@ class ProgressReportView(CreateView):
                 subject = pupil_tutor_match.subject
                 duration_ = form.cleaned_data['duration']
                 amount = pupil.level_of_study.rate_category.rate * duration_
-                minTimeBetweenLessons = 3600
+                minTimeBetweenLessons = 0
 
                 try:
                     last_lesson_time = LessonRecord.objects.filter(pupil=pupil_tutor_match.pupil).latest(
@@ -79,7 +79,7 @@ class ProgressReportView(CreateView):
                                 lesson = LessonRecord(pupil=pupil, tutor=tutor, subject=subject, amount=amount,
                                                       payment_record=payment_record)
                                 register_lesson(lesson, amount, form, payment_record, pupil_tutor_match, duration_)
-                                send_email_to_pupil(form, pupil, pupil_tutor_match)
+                                send_prog_report_to_pupil(form, pupil, pupil_tutor_match)
 
                             else:
                                 return render_to_response('progress_reports/out_of_lessons.html',
@@ -91,7 +91,7 @@ class ProgressReportView(CreateView):
                                 payment_record = PaymentRecord(amount=0, tutor=tutor, paid=False)
                                 payment_record.save()
                                 register_lesson(lesson, amount, form, payment_record, pupil_tutor_match, duration_)
-                                send_email_to_pupil(form, pupil, pupil_tutor_match)
+                                send_prog_report_to_pupil(form, pupil, pupil_tutor_match)
                             else:
                                 return render_to_response('progress_reports/out_of_lessons.html',
                                                           {'pupil_name': pupil.name})

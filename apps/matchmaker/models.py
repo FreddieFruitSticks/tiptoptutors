@@ -130,7 +130,7 @@ class PupilProxy(Pupil):
         proxy = True
         verbose_name = 'pupil'
         verbose_name_plural = 'pupils'
-        ordering = ('-created_at', 'surname', 'name')
+        ordering = ('-created_at', 'surname', 'name', 'guardian_name')
 
     def __unicode__(self):
         return '%s: %s, %s for %s (%s - Rate of: %s)' % (

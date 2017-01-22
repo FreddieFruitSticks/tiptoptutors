@@ -110,7 +110,8 @@ STATIC_URL = '/static/'
 
 # need to comment this out for prod and dev servers. I think it has something to do with how static files are served
 # using "runserver" locally versus how whitenoise runs it on dev.
-# STATICFILES_DIRS = (PROJECT_DIR + '/static/',)
+STATICFILES_DIRS = (PROJECT_DIR + '/static/',)
+
 # comment this out for production site - this is only for testing.
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = '/tmp/app-messages'
